@@ -33,12 +33,12 @@ function LoginPage() {
               required
             />
           </div>
-          <div className="pl-3 pr-3 mt-2">
+          <div className="pl-3 pr-3 mt-3">
             <p>
               Create new account? <Link to="/signup">Sign up</Link>
             </p>
           </div>
-          <div className="p-3">
+          <div className="pt-3 pb-3">
             <button className="btn btn-primary w-100 p-2">Login</button>
           </div>
         </form>

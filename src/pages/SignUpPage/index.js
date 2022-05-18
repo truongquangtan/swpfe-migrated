@@ -76,7 +76,7 @@ function SignUpPage() {
               Already have an account? <Link to="/login">Login</Link>
             </p>
           </div>
-          <div className="p-3">
+          <div className="pt-3 pb-3">
             <button className="btn btn-primary w-100 p-2">Sign up</button>
           </div>
         </form>
