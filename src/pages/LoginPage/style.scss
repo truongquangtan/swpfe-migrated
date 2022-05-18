@@ -1,12 +1,8 @@
 .login-input {
-    border-bottom: 3px solid #d9d9d9 !important;
+    border-bottom: 2.5px solid #d9d9d9 !important;
     padding-left: 0.2rem;
 
     &:focus {
-        border-bottom: 3px solid black !important;
+        border-bottom: 2.5px solid black !important;
     }
-}
-
-.button {
-    font-size: 1.25rem;
 }

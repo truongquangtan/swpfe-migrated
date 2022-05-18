@@ -1,12 +1,9 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  NavLink,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.scss";
 import LoginPage from "./pages/LoginPage";
+import NotFoundPage from "./pages/NotFound";
+import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
 
 function App() {
@@ -16,6 +13,8 @@ function App() {
         <Routes>
           <Route exact path="/" element={<WelcomePage />}></Route>
           <Route exact path="/login" element={<LoginPage />}></Route>
+          <Route exact path="/signup" element={<SignUpPage />}></Route>
+          <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
       </div>
     </Router>

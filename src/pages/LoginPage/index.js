@@ -9,22 +9,28 @@ function LoginPage() {
     <div className="row align-items-center justify-content-center text-center">
       <div className="col-4 pt-5">
         <h3 className=" bold size-4 pt-5">Welcome</h3>
-        <img src={user} alt="user" className="width-120 mt-5" />
-        <form className="mt-3">
-          <div className="p-3">
+        <img src={user} alt="user" className="width-120 mt-4" />
+        <form className="mt-5">
+          <div className="row p-2">
+            <span className="col-1 lh-44 signup__icon-wrapper">
+              <i className="fas fa-envelope"></i>
+            </span>
             <input
-              id="email-login"
-              className="border-0 border-bottom w-100 border-secondary outline-none login-input"
+              className="col-11 outline-none p-2 signup__input-border"
               type="text"
               placeholder="Email"
+              required
             />
           </div>
-          <div className="p-3">
+          <div className="row p-2">
+            <span className="col-1 lh-44 signup__icon-wrapper">
+              <i className="fas fa-lock"></i>
+            </span>
             <input
-              id="password-login"
-              className="border-0 border-bottom w-100 border-secondary outline-none login-input"
+              className="col-11 outline-none p-2 signup__input-border"
               type="password"
               placeholder="Password"
+              required
             />
           </div>
           <div className="pl-3 pr-3 mt-2">
