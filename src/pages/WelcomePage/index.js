@@ -13,7 +13,7 @@ function WelcomePage() {
         </h1>
         <Link to="/login">
           <button className="btn btn-primary mt-5 plr-2 booking-btn">
-            Booking Now!
+            Get Started
           </button>
         </Link>
       </div>

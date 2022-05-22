@@ -1,0 +1,16 @@
+.home-title {
+    font-size: 1.25rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.profile-icon {
+    right: 1.5rem;
+    top: 0.5rem;
+    cursor: pointer;
+
+    &:hover {
+        color: rgb(154, 154, 154);
+    }
+}

@@ -54,7 +54,7 @@ function SignUpPage() {
           </div>
           <div className="row p-2">
             <span className="col-1 lh-44 signup__icon-wrapper">
-              <i class="fas fa-phone-alt"></i>
+              <i className="fas fa-phone-alt"></i>
             </span>
             <input
               className="col-11 outline-none p-2 signup__input-border"
@@ -62,7 +62,7 @@ function SignUpPage() {
               placeholder="Phone number"
             />
           </div>
-          <div className="row p-2">
+          {/* <div className="row p-2">
             <span className="col-1 lh-42 signup__icon-wrapper">
               <i className="fas fa-image"></i>
             </span>
@@ -70,7 +70,7 @@ function SignUpPage() {
               className="col-11 outline-none custom-file-input p-0"
               type="file"
             />
-          </div>
+          </div> */}
           <div className="pl-3 pr-3 mt-3">
             <p>
               Already have an account? <Link to="/login">Login</Link>

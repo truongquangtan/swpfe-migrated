@@ -1,0 +1,17 @@
+.features {
+    height: calc(100vh - 64px);
+    padding-top: 10rem;
+}
+
+.feature-container {
+    width: 125px;
+    height: 125px;
+    border-radius: 10px;
+    border: 1px solid rgb(208, 208, 208);
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgb(238, 238, 238);
+        border: none;
+    }
+}
