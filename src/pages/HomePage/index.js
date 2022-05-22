@@ -1,7 +1,7 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 import "./style.scss";
-import DashboardFeatures from "../../components/DashboardFeatures";
 import DockFeature from "../../components/DockFeature";
 import Header from "../../components/Header";
 
@@ -9,7 +9,9 @@ function HomePage() {
   return (
     <div>
       <Header />
-      <DashboardFeatures />
+      <div className="container d-flex justify-content-center features">
+        <Outlet />
+      </div>
       <div className="home-dock p-5 pt-2 pb-2 d-flex">
         <DockFeature />
         <DockFeature />

@@ -4,7 +4,7 @@ import "./style.scss";
 function Header() {
   return (
     <div>
-      <div className="d-flex align-content-center">
+      <div className="d-flex align-content-center nav-brand">
         <span className="p-2 size-2 ps-4 pe-3">
           <i className="fas fa-basketball-ball"></i>
         </span>

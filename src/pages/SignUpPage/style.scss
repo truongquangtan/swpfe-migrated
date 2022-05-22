@@ -25,6 +25,9 @@
     border: 1px solid #999;
     border-right: none;
     border-radius: 3px 0 0 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .signup__input-border {

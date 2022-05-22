@@ -1,0 +1,50 @@
+.booking__icon-wrapper {
+    width: 2.5rem;
+}
+
+.yard__result-wrapper {
+    height: 12rem;
+
+    & > .yard-result {
+        border: 1px solid rgb(208, 208, 208);
+        height: 100%;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+
+        & > img {
+            width: 11rem;
+            height: 100%;
+            border-radius: 5px 0 0 5px;
+        }
+
+        &:hover {
+            background-color: rgba(208, 208, 208, 0.2);
+        }
+    }
+}
+
+.yard-pagination {
+    text-align: end;
+
+    & .pagination-statistic {
+        display: inline-block;
+        width: 5rem;
+        text-align: center;
+
+        & > input {
+            display: inline;
+            width: 1.5rem;
+            text-align: center;
+            border: none;
+        }
+    }
+
+    & .pagination-arrow {
+        cursor: pointer;
+
+        &:hover {
+            color: #999;
+        }
+    }
+}
