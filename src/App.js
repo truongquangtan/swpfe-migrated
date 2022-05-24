@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.scss";
 import BookingWidget from "./components/BookingWidget";
 import DashboardFeatures from "./components/DashboardFeatures";
+import Yard from "./components/Yard";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFound";
@@ -18,6 +19,7 @@ function App() {
           <Route exact path="/home" element={<HomePage />}>
             <Route exact path="/home" element={<DashboardFeatures />}></Route>
             <Route path="/home/booking" element={<BookingWidget />}></Route>
+            <Route path="/home/yard/:id" element={<Yard />}></Route>
           </Route>
           <Route exact path="/login" element={<LoginPage />}></Route>
           <Route exact path="/signup" element={<SignUpPage />}></Route>

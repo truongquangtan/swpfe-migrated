@@ -34,8 +34,11 @@ function LoginPage() {
             />
           </div>
           <div className="pl-3 pr-3 mt-3">
-            <p>
-              Create new account? <Link to="/signup">Sign up</Link>
+            <p className="link">
+              Create new account?{" "}
+              <Link to="/signup">
+                Sign up
+              </Link>
             </p>
           </div>
           <div className="pt-3 pb-3">

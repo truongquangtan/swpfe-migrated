@@ -2,6 +2,10 @@
     width: 2.5rem;
 }
 
+.yard__result-container {
+    height: 390px;
+}
+
 .yard__result-wrapper {
     height: 12rem;
 
@@ -47,4 +51,15 @@
             color: #999;
         }
     }
+}
+
+.nodata-img {
+    width: 300px;
+}
+
+.nodata-text {
+    color: #999;
+    font-weight: 600;
+    font-size: 1.35rem;
+    margin-top: -6rem;
 }
