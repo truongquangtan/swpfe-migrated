@@ -72,7 +72,7 @@ function SignUpPage() {
             />
           </div> */}
           <div className="pl-3 pr-3 mt-3">
-            <p>
+            <p className="link">
               Already have an account? <Link to="/login">Login</Link>
             </p>
           </div>

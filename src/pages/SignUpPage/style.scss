@@ -22,15 +22,44 @@
 }
 
 .signup__icon-wrapper {
-    border: 1px solid #999;
-    border-right: none;
-    border-radius: 3px 0 0 3px;
+    border-right: 2px solid;
     display: flex;
+    margin: 0;
     justify-content: center;
     align-items: center;
 }
 
 .signup__input-border {
     border-radius: 0 3px 3px 0;
-    border: 1px solid #999;
+    border: none;
+}
+
+.signup__filed-group{
+    margin: 4px 0 8px 0;
+    border-color: inherit;
+    border: 2px solid;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.signup__filed--error{
+    min-height: 4px;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+.form-group{
+    position: relative;
+    margin-bottom: 12px;
+    z-index: 1;
+    background-color: #f9f9f9;
+}
+
+
+
+.error{
+    z-index: 0;
+    position: absolute;
+    top: 80%;
+    margin: 0;
+    background-color: #999;
 }
