@@ -11,19 +11,59 @@ const features = [
     allowedRoles: [USER, ADMIN, OWNER],
     path: "booking",
   },
+  {
+    title: "Incoming Matches",
+    icon: "far fa-calendar-check",
+    allowedRoles: [USER, ADMIN, OWNER],
+    path: "incoming-matches",
+  },
+  {
+    title: "Pending Payments",
+    icon: "fas fa-file-invoice-dollar",
+    allowedRoles: [USER],
+    path: "pending-payments",
+  },
+  {
+    title: "Billing History",
+    icon: "fas fa-history",
+    allowedRoles: [USER, ADMIN, OWNER],
+    path: "billing-history",
+  },
+  {
+    title: "Users",
+    icon: "far fa-user",
+    allowedRoles: [OWNER],
+    path: "users",
+  },
+  {
+    title: "Manage Yards",
+    icon: "fas fa-columns",
+    allowedRoles: [ADMIN, OWNER],
+    path: "yards",
+  },
+  {
+    title: "Statistic",
+    icon: "fas fa-chart-line",
+    allowedRoles: [OWNER],
+    path: "statistic",
+  },
 ];
 
 function DashboardFeatures() {
   return (
-    <div className="row pt-12">
+    <div className="row pt-10 w-100 height-mincontent">
       {features.map((feature) => {
         return (
-          <NavLink key={feature.title} to={feature.path} className="col-2">
-            <div className="feature-container d-flex align-items-center justify-content-center flex-column pt-3 m-auto">
-              <i className="far fa-calendar-alt size-2 mb-2"></i>
+          <div className="col-2 mb-5">
+            <NavLink
+              key={feature.title}
+              to={feature.path}
+              className="feature-container d-flex align-items-center justify-content-center flex-column m-auto"
+            >
+              <i className={"size-2 mb-3 " + feature.icon}></i>
               <p>{feature.title}</p>
-            </div>
-          </NavLink>
+            </NavLink>
+          </div>
         );
       })}
     </div>

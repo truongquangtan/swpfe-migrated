@@ -18,3 +18,40 @@
 .nav-brand {
     cursor: pointer;
 }
+
+.profile-popup {
+    border: 1px solid rgb(208, 208, 208);
+    height: min-content;
+    position: absolute;
+    width: 150px;
+    right: 3rem;
+    border-radius: 5px;
+    top: 3rem;
+}
+
+.profile__popup-feature {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+        border-radius: 5px 5px 0 0;
+    }
+
+    &:last-child {
+        border-radius: 0 0 5px 5px;
+    }
+
+    &:not(:last-child) {
+        border-bottom: 1px solid rgb(208, 208, 208);
+    }
+
+    & > i {
+        font-size: 1.25rem;
+    }
+
+    &:hover {
+        background: black;
+        color: white;
+    }
+}
