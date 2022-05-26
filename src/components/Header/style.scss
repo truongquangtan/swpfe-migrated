@@ -17,6 +17,7 @@
 
 .nav-brand {
     cursor: pointer;
+    width: fit-content;
 }
 
 .profile-popup {
@@ -27,6 +28,7 @@
     right: 3rem;
     border-radius: 5px;
     top: 3rem;
+    background-color: white;
 }
 
 .profile__popup-feature {

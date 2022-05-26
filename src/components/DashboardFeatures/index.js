@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 
 import "./style.scss";
 import { USER, ADMIN, OWNER } from "../../constants/roles";
+import player from "../../assets/images/player-3.png";
+import congratulation from "../../assets/images/fire-cracker.png";
 
 const features = [
   {
@@ -47,11 +49,21 @@ const features = [
     allowedRoles: [OWNER],
     path: "statistic",
   },
+  {
+    title: "Rating",
+    icon: "far fa-star",
+    allowedRoles: [USER],
+    path: "statistic",
+  },
 ];
 
 function DashboardFeatures() {
   return (
-    <div className="row pt-10 w-100 height-mincontent">
+    <div className="row pt-5 w-100 height-mincontent">
+      <h2 className="mb-5 text-center">
+        Welcome to Basketball Playground{" "}
+        <img src={congratulation} alt="congratulation" width="40" />
+      </h2>
       {features.map((feature) => {
         return (
           <div className="col-2 mb-5">
@@ -66,6 +78,7 @@ function DashboardFeatures() {
           </div>
         );
       })}
+      <img className="dashboard-player" src={player} alt="Player" />
     </div>
   );
 }

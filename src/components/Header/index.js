@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import "./style.scss";
 
 const popupFeatures = [
@@ -18,12 +19,12 @@ function Header() {
   const [showPopup, setShowPopup] = useState(false);
   return (
     <div>
-      <div className="d-flex align-content-center nav-brand">
+      <Link to="/home" className="d-flex align-content-center nav-brand">
         <span className="p-2 size-2 ps-4 pe-3">
           <i className="fas fa-basketball-ball"></i>
         </span>
         <b className="home-title">Basketball Playground</b>
-      </div>
+      </Link>
       <div
         className="size-2 position-fixed top-1 right-1 profile-icon"
         onClick={() => setShowPopup(() => !showPopup)}

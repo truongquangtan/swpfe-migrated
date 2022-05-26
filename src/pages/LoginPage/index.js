@@ -33,12 +33,12 @@ function LoginPage() {
               required
             />
           </div>
-          <div className="pl-3 pr-3 mt-3">
-            <p className="link">
-              Create new account?{" "}
-              <Link to="/signup">
-                Sign up
-              </Link>
+          <div className="pl-3 pr-3 mt-3 row">
+            <p className="link text-start col-6">
+              Create new account? <Link to="/signup">Sign up</Link>
+            </p>
+            <p className="link text-end col-6">
+              <Link to="/signup">Forgot password?</Link>
             </p>
           </div>
           <div className="pt-3 pb-3">

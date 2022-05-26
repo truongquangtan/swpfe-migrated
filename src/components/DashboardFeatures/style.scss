@@ -14,3 +14,11 @@
         border: none;
     }
 }
+
+.dashboard-player {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+    z-index: -10;
+}

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.scss";
 import BookingWidget from "./components/BookingWidget";
 import DashboardFeatures from "./components/DashboardFeatures";
+import IncomingMatchesWidget from "./components/IncomingMatchesWidget";
 import PendingPaymentsWidget from "./components/PendingPaymentsWidget";
 import Yard from "./components/Yard";
 import HomePage from "./pages/HomePage";
@@ -21,6 +22,10 @@ function App() {
             <Route exact path="/home" element={<DashboardFeatures />}></Route>
             <Route path="/home/booking" element={<BookingWidget />}></Route>
             <Route path="/home/yard/:id" element={<Yard />}></Route>
+            <Route
+              path="/home/incoming-matches"
+              element={<IncomingMatchesWidget />}
+            ></Route>
             <Route
               path="/home/pending-payments"
               element={<PendingPaymentsWidget />}
