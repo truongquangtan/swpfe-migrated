@@ -1,162 +1,168 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import ReactTooltip from 'react-tooltip';
 
 import "./style.scss";
+import { EMPTY } from "../../constants/default";
+import { PHONE_PATTERN } from "../../constants/regex";
 
-import { useState } from 'react'
+
+const validation = yup.object({
+    email: yup
+        .string('Enter your email')
+        .email('Enter a valid email')
+        .required('Email is required'),
+    password: yup
+        .string('Enter your password')
+        .min(8, 'Password should be of minimum 8 characters length')
+        .required('Password is required'),
+    confirmPassword: yup
+        .string('Enter your confirm password')
+        .required('Confirm password is required')
+        .oneOf([yup.ref('password'), null], "Confirm password not matches"),
+    fullName: yup
+        .string('Enter your full name')
+        .required('full name is required'),
+    phone: yup
+        .string('Enter your email')
+        .required('full name is required')
+        .matches(PHONE_PATTERN, 'Phone number is not valid')
+
+
+});
+
+
+
 
 function SignUpPage() {
 
-
-    const [signForm, setSignForm] = useState(
-        {
-            email: "",
-            fullName: "",
-            password: "",
-            confirmPassword: "",
-            phone: ""
-        }
-    )
-
-    
-
-    const handleInputOnchange = e => {
-        setSignForm(prevState => {
-            return {
-                ...prevState,
-                [e.target.name]: e.target.value
-            }
-        })
-    }
-
-    const checkValidation = e => {
-        e.preventDefault() // ngan khong cho submit form 
-        let isFullInput = true;
-        let validation = false;
-        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;;
-        for (const key of Object.keys(signForm)) {
-            if (!isFullInput) {
-                break;
-            }
-            isFullInput = signForm[key].length > 0;
-        }
-
-        if (!isFullInput) {
-           
-            alert('your input not full fill!')
-            return validation
-
-        } else if (!signForm.email.match(mailformat)) {
-            
-            alert('You have entered an invalid email address!')
-            return validation
-        }
-        else if (signForm.confirmPassword != signForm.password) {
-            
-            alert('your password not match!')
-            return validation
-
-        } else if (!signForm.phone.match(phoneno)) {
-           
-            alert('phone number invalid!')
-            return validation
-        }
-        else {
-            
-            alert('validation ok!')
-            return validation = true
-
-        }
-
-    }
-
-
-    
-
-
-
-
-
+    const formik = useFormik({
+        initialValues: {
+            email: EMPTY,
+            password: EMPTY,
+            confirmPassword: EMPTY,
+            fullName: EMPTY,
+            phone: EMPTY
+        },
+        validationSchema: validation,
+        onSubmit: values => {
+            alert(JSON.stringify(values, null, 2));
+        },
+    });
 
 
     return (
         <div className="row align-items-center justify-content-center text-center">
             <div className="col-4 pt-5">
                 <h3 className=" bold size-4 pt-3">Register</h3>
-                <form className="mt-5"> 
-                    <div className="row p-2">
+                <form className="mt-5" onSubmit={formik.handleSubmit}>
+                    <div className="row p-2"     >
                         <span className="col-1 lh-44 signup__icon-wrapper">
                             <i className="fas fa-envelope"></i>
                         </span>
                         <input
-                            value={signForm.email}
+                            data-for="custom-event"
+                            data-tip={formik.touched.email ? formik.errors.email : ''}
+                            data-event="blur"
+                            data-place="right"
+                            data-type="error"
+                            data-class="tooltip"
+                            onBlur={formik.handleBlur}
+                            value={formik.values.email}
                             name="email"
-                            onChange={e => handleInputOnchange(e)}
+                            onChange={formik.handleChange}
                             className="col-11 outline-none p-2 signup__input-border"
                             type="text"
                             placeholder="Email"
                             required
                         />
-                       
+                        <ReactTooltip id="custom-event" globalEventOff="blur" />
                     </div>
                     <div className="row p-2">
                         <span className="col-1 lh-44 signup__icon-wrapper">
                             <i className="fas fa-lock"></i>
                         </span>
                         <input
-                            value={signForm.password}
+                            data-for="custom-event"
+                            data-tip={formik.touched.password ? formik.errors.password : ''}
+                            data-event="blur"
+                            data-place="right"
+                            data-type="error"
+                            data-class="tooltip"                           
+                            onBlur={formik.handleBlur}
+                            value={formik.values.password}
                             name="password"
-                            onChange={e => handleInputOnchange(e)}
+                            onChange={formik.handleChange}
                             className="col-11 outline-none p-2 signup__input-border"
                             type="password"
                             placeholder="Password"
                             required
                         />
-                        
+
                     </div>
                     <div className="row p-2">
                         <span className="col-1 lh-44 signup__icon-wrapper">
                             <i className="fas fa-lock"></i>
                         </span>
                         <input
-                            value={signForm.confirmPassword}
+                            data-for="custom-event"
+                            data-tip={formik.touched.confirmPassword ? formik.errors.confirmPassword : ''}
+                            data-event="blur"
+                            data-place="right"
+                            data-type="error"
+                            data-class="tooltip"
+                            onBlur={formik.handleBlur}
+                            value={formik.values.confirmPassword}
                             name="confirmPassword"
-                            onChange={e => handleInputOnchange(e)}
+                            onChange={formik.handleChange}
                             className="col-11 outline-none p-2 signup__input-border"
                             type="password"
                             placeholder="Input password again"
                             required
                         />
-                       
                     </div>
                     <div className="row p-2">
                         <span className="col-1 lh-44 signup__icon-wrapper">
                             <i className="fas fa-address-card"></i>
                         </span>
                         <input
-                            value={signForm.fullName}
+                            data-for="custom-event"
+                            data-tip={formik.touched.fullName ? formik.errors.fullName : ''}
+                            data-event="blur"
+                            data-place="right"
+                            data-type="error"
+                            data-class="tooltip"
+                            onBlur={formik.handleBlur}
+                            value={formik.values.fullName}
                             name="fullName"
-                            onChange={e => handleInputOnchange(e)}
+                            onChange={formik.handleChange}
                             className="col-11 outline-none p-2 signup__input-border"
                             type="text"
                             placeholder="Full name"
                         />
-                        
                     </div>
                     <div className="row p-2">
                         <span className="col-1 lh-44 signup__icon-wrapper">
                             <i className="fas fa-phone-alt"></i>
                         </span>
                         <input
-                            value={signForm.phone}
+                            data-for="custom-event"
+                            data-tip={formik.touched.phone ? formik.errors.phone : ''}
+                            data-event="blur"
+                            data-place="right"
+                            data-type="error"
+                            data-class="tooltip"
+                            onBlur={formik.handleBlur}
+                            value={formik.values.phone}
                             name="phone"
-                            onChange={e => handleInputOnchange(e)}
+                            onChange={formik.handleChange}
                             className="col-11 outline-none p-2 signup__input-border"
                             type="text"
                             placeholder="Phone number"
                         />
-                        
+
                     </div>
                     {/* <div className="row p-2">
             <span className="col-1 lh-42 signup__icon-wrapper">
@@ -175,7 +181,7 @@ function SignUpPage() {
                     <div className="pt-3 pb-3">
                         <button
                             className="btn btn-primary w-100 p-2"
-                            onClick={e => checkValidation(e)}>Sign up</button>
+                            /*onClick={e => checkValidation(e)}*/>Sign up</button>
                     </div>
                 </form>
             </div>
