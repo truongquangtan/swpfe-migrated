@@ -6,18 +6,22 @@ import ReactTooltip from 'react-tooltip';
 
 import "./style.scss";
 import user from "../../assets/images/user.png";
-
+import {EMPTY} from "../../constants/default";
+import { REQUEST_EMAIL } from "../../constants/default";
+import { REQUEST_PASSWORD } from "../../constants/default";
+import { REQUIRED_EMAIL } from "../../constants/default";
+import { REQUIRED_PASSWORD } from "../../constants/default";
 
 
 const validation = yup.object({
   username: yup
-    .string('Enter your email')
+    .string(REQUEST_EMAIL)
     .email('Enter a valid email')
-    .required('Email is required'),
+    .required(REQUIRED_EMAIL),
   password: yup
-    .string('Enter your password')
+    .string(REQUEST_PASSWORD)
     .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required')
+    .required(REQUIRED_PASSWORD)
 });
 
 
@@ -26,8 +30,8 @@ function LoginPage() {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      password: ''
+      username: EMPTY,
+      password: EMPTY
     },
     validationSchema: validation,
     onSubmit: values => {

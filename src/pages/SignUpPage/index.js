@@ -7,17 +7,21 @@ import ReactTooltip from 'react-tooltip';
 import "./style.scss";
 import { EMPTY } from "../../constants/default";
 import { PHONE_PATTERN } from "../../constants/regex";
+import { REQUEST_EMAIL } from "../../constants/default";
+import { REQUEST_PASSWORD } from "../../constants/default";
+import { REQUIRED_EMAIL } from "../../constants/default";
+import { REQUIRED_PASSWORD } from "../../constants/default";
 
 
 const validation = yup.object({
     email: yup
-        .string('Enter your email')
+        .string(REQUEST_EMAIL)
         .email('Enter a valid email')
-        .required('Email is required'),
+        .required(REQUIRED_EMAIL),
     password: yup
-        .string('Enter your password')
+        .string(REQUEST_PASSWORD)
         .min(8, 'Password should be of minimum 8 characters length')
-        .required('Password is required'),
+        .required(REQUIRED_PASSWORD),
     confirmPassword: yup
         .string('Enter your confirm password')
         .required('Confirm password is required')
@@ -32,8 +36,6 @@ const validation = yup.object({
 
 
 });
-
-
 
 
 function SignUpPage() {
