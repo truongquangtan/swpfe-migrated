@@ -35,6 +35,16 @@
     border: 1px solid #999;
 }
 
-.tooltip{
-   width: fit-content; 
+
+
+.signup_tooltip--error{
+   position: absolute;
+    border-radius: 100px 100px 100px 1px;
+   color: #f9f9f9;
+   left: 100%;
+   z-index: 1;
+   width: fit-content;
+   background: rgba(255, 0, 0, 0.681);
+   top: 25%;
+   transform: translateY(-50%);
 }
