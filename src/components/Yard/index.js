@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Slide } from "react-slideshow-image";
 
 import yard from "../../assets/images/basketball-court-1.jpeg";
-import basket from "../../assets/images/basketball-1.png";
 import "./style.scss";
 
 function Yard() {
@@ -53,7 +52,22 @@ function Yard() {
       </div>
       <div className="row justify-content-center mt-5">
         <div className="col-7 pt-4">
-          <h4 className="text-center mb-4">Slots</h4>
+          <div className="text-center mb-4 row">
+            <div className="col-7 d-flex align-items-center justify-content-center size-2">
+              Slots
+            </div>
+            <div className="row p-2 col-5 justify-content-end size-1">
+              <span className="col-1 lh-44 signup__icon-wrapper booking__icon-wrapper">
+                <i className="far fa-clock"></i>
+              </span>
+              <input
+                className="col-9 outline-none p-2 signup__input-border"
+                type="date"
+                placeholder="Date"
+                required
+              />
+            </div>
+          </div>
           <div className="row">
             <div className="col-2 slot-details-container">
               <div className="slot-details flex-column">
@@ -432,8 +446,10 @@ function Yard() {
           <div className="matches-container">
             <div className="match-container row mb-2">
               <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p>
+                <p className="text-center">
                   <b>4:00 - 5:00</b>
+                  <br />
+                  <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
                 </p>
               </div>
               <div className="p-3 ps-0 pe-1 col-6">
@@ -453,8 +469,10 @@ function Yard() {
             </div>
             <div className="match-container row mb-2">
               <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p>
+                <p className="text-center">
                   <b>4:00 - 5:00</b>
+                  <br />
+                  <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
                 </p>
               </div>
               <div className="p-3 ps-0 pe-1 col-6">
@@ -474,8 +492,10 @@ function Yard() {
             </div>
             <div className="match-container row mb-2">
               <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p>
+                <p className="text-center">
                   <b>4:00 - 5:00</b>
+                  <br />
+                  <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
                 </p>
               </div>
               <div className="p-3 ps-0 pe-1 col-6">
@@ -495,8 +515,10 @@ function Yard() {
             </div>
             <div className="match-container row mb-2">
               <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p>
+                <p className="text-center">
                   <b>4:00 - 5:00</b>
+                  <br />
+                  <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
                 </p>
               </div>
               <div className="p-3 ps-0 pe-1 col-6">

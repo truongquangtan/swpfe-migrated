@@ -7,9 +7,29 @@ import { Link } from "react-router-dom";
 
 function BookingWidget() {
   return (
-    <div className="w-100 pt-4">
-      <form className="row justify-content-center w-75 m-auto">
-        <div className="row p-2 col-5 justify-content-center">
+    <div className="w-100 pt-5">
+      <form className="row justify-content-center w-100 m-auto">
+        <div className="row p-2 col-3 justify-content-center">
+          <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
+            <i className="far fa-map"></i>
+          </span>
+          <input
+            className="col-9 outline-none p-2 signup__input-border"
+            type="text"
+            placeholder="Province"
+          />
+        </div>
+        <div className="row p-2 col-3 justify-content-center">
+          <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
+            <i className="fas fa-map-marker-alt"></i>
+          </span>
+          <input
+            className="col-9 outline-none p-2 signup__input-border"
+            type="text"
+            placeholder="District"
+          />
+        </div>
+        <div className="row p-2 col-3 justify-content-center">
           <span className="col-1 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="far fa-clock"></i>
           </span>
@@ -20,7 +40,7 @@ function BookingWidget() {
             required
           />
         </div>
-        <div className="row p-2 col-3 justify-content-center">
+        <div className="row p-2 col-2 justify-content-center">
           <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="fas fa-expand-arrows-alt"></i>
           </span>
@@ -30,11 +50,102 @@ function BookingWidget() {
             placeholder="Size"
           />
         </div>
+
         <div className="row p-2 col-2 justify-content-center">
           <button className="btn btn-primary w-75 p-2">Search</button>
         </div>
       </form>
       <div className="row mt-5 yard__result-container">
+        <Link className="yard__result-wrapper col-4 p-3 pe-2" to="/home/yard/1">
+          <div className="yard-result">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">Sân quận 9</b>
+              <p className="row mb-1">
+                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">3 : 3</span>
+              </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </div>
+        </Link>
+        <Link className="yard__result-wrapper col-4 p-3 pe-2" to="/home/yard/1">
+          <div className="yard-result">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">Sân quận 9</b>
+              <p className="row mb-1">
+                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">3 : 3</span>
+              </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </div>
+        </Link>
+        <Link className="yard__result-wrapper col-4 p-3 pe-2" to="/home/yard/1">
+          <div className="yard-result">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">Sân quận 9</b>
+              <p className="row mb-1">
+                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">3 : 3</span>
+              </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </div>
+        </Link>
+        <Link className="yard__result-wrapper col-4 p-3 pe-2" to="/home/yard/1">
+          <div className="yard-result">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">Sân quận 9</b>
+              <p className="row mb-1">
+                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">3 : 3</span>
+              </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </div>
+        </Link>
+        <Link className="yard__result-wrapper col-4 p-3 pe-2" to="/home/yard/1">
+          <div className="yard-result">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">Sân quận 9</b>
+              <p className="row mb-1">
+                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">3 : 3</span>
+              </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </div>
+        </Link>
         <Link className="yard__result-wrapper col-4 p-3 pe-2" to="/home/yard/1">
           <div className="yard-result">
             <img src={yard} alt="basketball yard" />
