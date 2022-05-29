@@ -7,13 +7,6 @@ import basketball from "../../assets/images/basketball-2.png";
 import player1 from "../../assets/images/player-1.gif";
 import player2 from "../../assets/images/player-2.gif";
 
-const options = {
-  labels: {
-    confirmable: "Confirm",
-    cancellable: "Cancel",
-  },
-};
-
 function IncomingMatchesWidget() {
   const onClick = async () => {
     confirmAlert({

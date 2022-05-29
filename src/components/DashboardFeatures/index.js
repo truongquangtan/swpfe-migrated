@@ -26,10 +26,10 @@ const features = [
     path: "pending-payments",
   },
   {
-    title: "Billing History",
+    title: "Transaction History",
     icon: "fas fa-history",
     allowedRoles: [USER, ADMIN, OWNER],
-    path: "billing-history",
+    path: "transaction-history",
   },
   {
     title: "Users",

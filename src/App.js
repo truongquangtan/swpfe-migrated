@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.scss";
+import TransactionHistoryWidget from "./components/TransactionHistoryWidget";
 import BookingWidget from "./components/BookingWidget";
 import DashboardFeatures from "./components/DashboardFeatures";
 import IncomingMatchesWidget from "./components/IncomingMatchesWidget";
@@ -29,6 +30,10 @@ function App() {
             <Route
               path="/home/pending-payments"
               element={<PendingPaymentsWidget />}
+            ></Route>
+            <Route
+              path="/home/transaction-history"
+              element={<TransactionHistoryWidget />}
             ></Route>
           </Route>
           <Route exact path="/login" element={<LoginPage />}></Route>
