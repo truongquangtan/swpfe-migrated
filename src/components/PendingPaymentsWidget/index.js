@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 
 import "./style.scss";
@@ -37,7 +36,7 @@ function PendingPaymentsWidget() {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <div className="custom-confirm">
+          <div className="custom-confirm" style={{width: 600}}>
             <h4>Payment Details</h4>
             <div className="flex-column pt-4">
               <div className="matches-container">

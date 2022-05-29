@@ -12,6 +12,8 @@ import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFound";
 import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
+import ManageUsersWidget from "./components/ManageUsersWidget";
+import ManageYardsWidget from "./components/ManageYardsWidget";
 
 function App() {
   return (
@@ -34,6 +36,14 @@ function App() {
             <Route
               path="/home/transaction-history"
               element={<TransactionHistoryWidget />}
+            ></Route>
+            <Route
+              path="/home/users"
+              element={<ManageUsersWidget />}
+            ></Route>
+            <Route
+              path="/home/yards"
+              element={<ManageYardsWidget />}
             ></Route>
           </Route>
           <Route exact path="/login" element={<LoginPage />}></Route>

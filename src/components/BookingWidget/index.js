@@ -2,7 +2,6 @@ import React from "react";
 
 import "./style.scss";
 import yard from "../../assets/images/bg-wall.jpg";
-import noData from "../../assets/images/no-data.jpg";
 import { Link } from "react-router-dom";
 
 function BookingWidget() {
