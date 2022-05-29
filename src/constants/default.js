@@ -1,10 +1,12 @@
 const EMPTY = "";
-module.exports = {EMPTY};
-const REQUEST_EMAIL = 'Enter your email';
-module.exports = {REQUEST_EMAIL};
-const REQUEST_PASSWORD = 'Enter your password';
-module.exports = {REQUEST_PASSWORD};
-const REQUIRED_EMAIL = 'Email is required';
-module.exports = {REQUIRED_EMAIL};
-const REQUIRED_PASSWORD = 'Password is required';
-module.exports = {REQUIRED_PASSWORD};
+const REQUEST_EMAIL = "Enter your email";
+const REQUEST_PASSWORD = "Enter your password";
+const REQUIRED_EMAIL = "Email is required";
+const REQUIRED_PASSWORD = "Password is required";
+module.exports = {
+  EMPTY,
+  REQUEST_EMAIL,
+  REQUEST_PASSWORD,
+  REQUIRED_EMAIL,
+  REQUIRED_PASSWORD,
+};
