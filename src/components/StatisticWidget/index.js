@@ -5,7 +5,7 @@ import chart from "../../assets/images/chart.png";
 
 function StatisticWidget() {
   return (
-    <div className="pt-4 w-100">
+    <div className="pt-5 w-100">
       <div className="row">
         <h4 className="mb-4 d-inline-block col-5">
           <img src={chart} alt="Statistic" className="width-60 pe-3" />

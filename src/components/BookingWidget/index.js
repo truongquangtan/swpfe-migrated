@@ -1,15 +1,145 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
 
 import "./style.scss";
 import yard from "../../assets/images/bg-wall.jpg";
-import { Link } from "react-router-dom";
+import noData from "../../assets/images/no-data.jpg";
 
 function BookingWidget() {
+  const onCartClick = async () => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className="custom-confirm" style={{width: 600}}>
+            <h4>Your Cart</h4>
+            <div className="flex-column pt-4">
+              <div className="matches-container">
+                <div className="match-container row mb-2">
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p className="text-center">
+                      <b>4:00 - 5:00</b>
+                      <br />
+                      <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
+                    </p>
+                  </div>
+                  <div className="p-3 ps-0 pe-1 col-6">
+                    <p>
+                      <b>Sân quận 9</b> - (3 vs 3)
+                    </p>
+                    <p className="color-blur">
+                      Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ
+                      Đức, Thành phố Hồ Chí Minh 700000
+                    </p>
+                  </div>
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p>
+                      <b>100.000 VND</b>
+                    </p>
+                  </div>
+                </div>
+                <div className="match-container row mb-2">
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p className="text-center">
+                      <b>4:00 - 5:00</b>
+                      <br />
+                      <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
+                    </p>
+                  </div>
+                  <div className="p-3 ps-0 pe-1 col-6">
+                    <p>
+                      <b>Sân quận 9</b> - (3 vs 3)
+                    </p>
+                    <p className="color-blur">
+                      Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ
+                      Đức, Thành phố Hồ Chí Minh 700000
+                    </p>
+                  </div>
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p>
+                      <b>100.000 VND</b>
+                    </p>
+                  </div>
+                </div>
+                <div className="match-container row mb-2">
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p className="text-center">
+                      <b>4:00 - 5:00</b>
+                      <br />
+                      <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
+                    </p>
+                  </div>
+                  <div className="p-3 ps-0 pe-1 col-6">
+                    <p>
+                      <b>Sân quận 9</b> - (3 vs 3)
+                    </p>
+                    <p className="color-blur">
+                      Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ
+                      Đức, Thành phố Hồ Chí Minh 700000
+                    </p>
+                  </div>
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p>
+                      <b>100.000 VND</b>
+                    </p>
+                  </div>
+                </div>
+                <div className="match-container row mb-2">
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p className="text-center">
+                      <b>4:00 - 5:00</b>
+                      <br />
+                      <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
+                    </p>
+                  </div>
+                  <div className="p-3 ps-0 pe-1 col-6">
+                    <p>
+                      <b>Sân quận 9</b> - (3 vs 3)
+                    </p>
+                    <p className="color-blur">
+                      Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ
+                      Đức, Thành phố Hồ Chí Minh 700000
+                    </p>
+                  </div>
+                  <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <p>
+                      <b>100.000 VND</b>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-3 pb-3 row">
+                <div className="col-3">Total</div>
+                <div className="col-9 text-end">
+                  <b>1.000.000 VND</b>
+                </div>
+              </div>
+            </div>
+            <button
+              className="btn btn-primary me-3"
+              onClick={() => {
+                this.handleClickDelete();
+                onClose();
+              }}
+            >
+              Checkout
+            </button>
+            <button onClick={onClose} className="btn btn-light">
+              Close
+            </button>
+          </div>
+        );
+      },
+      closeOnEscape: true,
+      closeOnClickOutside: true,
+    });
+  };
+
   return (
     <div className="w-100 pt-5">
       <form className="row justify-content-center w-100">
         <div className="cart-container py-3">
-          <i className="fas fa-shopping-basket size-2"></i>
+          <i className="fas fa-shopping-basket size-2 trash-icon" onClick={onCartClick}></i>
           <span className="cart-quantity">3</span>
         </div>
         <div className="row p-2 col-3 justify-content-center px-0">

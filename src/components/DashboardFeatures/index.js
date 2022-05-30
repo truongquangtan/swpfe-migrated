@@ -62,11 +62,23 @@ const features = [
     path: "voucher-management",
   },
   {
-    title: "Rating",
-    icon: "far fa-star",
-    allowedRoles: [USER],
-    path: "rating",
+    title: "Match Management",
+    icon: "fas fa-basketball-ball",
+    allowedRoles: [ADMIN, OWNER],
+    path: "match-management",
   },
+  {
+    title: "Return Payments",
+    icon: "fas fa-cash-register",
+    allowedRoles: [ADMIN, OWNER],
+    path: "return-payments",
+  },
+  // {
+  //   title: "Rating",
+  //   icon: "far fa-star",
+  //   allowedRoles: [USER],
+  //   path: "rating",
+  // },
 ];
 
 function DashboardFeatures() {

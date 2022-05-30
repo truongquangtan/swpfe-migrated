@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Slide } from "react-slideshow-image";
 
 import yard from "../../assets/images/basketball-court-1.jpeg";
@@ -543,8 +544,11 @@ function Yard() {
               <b>1.000.000 VND</b>
             </div>
           </div>
-          <div className="pt-3 pb-3">
-            <button className="btn btn-primary w-100 p-2">Checkout</button>
+          <div className="pt-3 pb-3 row justify-content-around">
+            <button className="btn btn-primary col-5 p-2">Checkout</button>
+            <Link className="col-5" to="/home/booking">
+              <button className="btn btn-primary p-2 w-100">Continue Booking</button>
+            </Link>
           </div>
         </div>
       </div>
