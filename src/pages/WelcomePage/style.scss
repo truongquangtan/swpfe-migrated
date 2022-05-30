@@ -4,4 +4,16 @@
 
 .welcome__page-container {
     padding-left: 3rem;
+
+    & svg {
+        display: none;
+    }
+}
+
+.slide-container > div {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
 }

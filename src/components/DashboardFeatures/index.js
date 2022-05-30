@@ -50,10 +50,22 @@ const features = [
     path: "statistic",
   },
   {
+    title: "Vouchers",
+    icon: "fas fa-money-bill",
+    allowedRoles: [USER, ADMIN, OWNER],
+    path: "vouchers",
+  },
+  {
+    title: "Voucher Management",
+    icon: "fas fa-wallet",
+    allowedRoles: [OWNER],
+    path: "voucher-management",
+  },
+  {
     title: "Rating",
     icon: "far fa-star",
     allowedRoles: [USER],
-    path: "statistic",
+    path: "rating",
   },
 ];
 

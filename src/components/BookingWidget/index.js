@@ -7,8 +7,12 @@ import { Link } from "react-router-dom";
 function BookingWidget() {
   return (
     <div className="w-100 pt-5">
-      <form className="row justify-content-center w-100 m-auto">
-        <div className="row p-2 col-3 justify-content-center">
+      <form className="row justify-content-center w-100">
+        <div className="cart-container py-3">
+          <i className="fas fa-shopping-basket size-2"></i>
+          <span className="cart-quantity">3</span>
+        </div>
+        <div className="row p-2 col-3 justify-content-center px-0">
           <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="far fa-map"></i>
           </span>
@@ -18,7 +22,7 @@ function BookingWidget() {
             placeholder="Province"
           />
         </div>
-        <div className="row p-2 col-3 justify-content-center">
+        <div className="row p-2 col-3 justify-content-center px-0">
           <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="fas fa-map-marker-alt"></i>
           </span>
@@ -28,7 +32,7 @@ function BookingWidget() {
             placeholder="District"
           />
         </div>
-        <div className="row p-2 col-3 justify-content-center">
+        <div className="row p-2 col-3 justify-content-center px-0">
           <span className="col-1 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="far fa-clock"></i>
           </span>
@@ -39,19 +43,22 @@ function BookingWidget() {
             required
           />
         </div>
-        <div className="row p-2 col-2 justify-content-center">
+        <div className="row p-2 col-2 justify-content-center px-3">
           <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="fas fa-expand-arrows-alt"></i>
           </span>
-          <input
+          <select
             className="col-9 outline-none p-2 signup__input-border"
-            type="text"
-            placeholder="Size"
-          />
+            style={{ backgroundColor: "white" }}
+          >
+            <option value="3 vs 3">3 vs 3</option>
+            <option value="5 vs 5">5 vs 5</option>
+          </select>
         </div>
-
-        <div className="row p-2 col-2 justify-content-center">
-          <button className="btn btn-primary w-75 p-2">Search</button>
+        <div className="row p-2 col-1 justify-content-center ps-4">
+          <button className="btn btn-primary w-100 p-2">
+            <i class="fas fa-search"></i>
+          </button>
         </div>
       </form>
       <div className="row mt-5 yard__result-container">

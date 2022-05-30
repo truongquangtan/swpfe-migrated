@@ -1,8 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Slide } from "react-slideshow-image";
 
 import "./style.scss";
-import basketball from "../../assets/images/bg-wall.jpg";
-import { Link } from "react-router-dom";
+import yard1 from "../../assets/images/yard-1.jpg";
+import yard2 from "../../assets/images/yard-2.jpg";
+import yard3 from "../../assets/images/yard-3.jpg";
+
+const slideImages = [yard1, yard2, yard3];
 
 function WelcomePage() {
   return (
@@ -18,7 +23,13 @@ function WelcomePage() {
         </Link>
       </div>
       <div className="col-8">
-        <img className="w-100" src={basketball} alt="Background" />
+        <Slide>
+          {slideImages.map((slideImage, index) => (
+            <div className="slide-container" key={index}>
+              <div style={{ backgroundImage: `url(${slideImage})` }}></div>
+            </div>
+          ))}
+        </Slide>
       </div>
     </div>
   );

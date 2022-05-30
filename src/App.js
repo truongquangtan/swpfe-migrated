@@ -14,6 +14,12 @@ import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
 import ManageUsersWidget from "./components/ManageUsersWidget";
 import ManageYardsWidget from "./components/ManageYardsWidget";
+import StatisticWidget from "./components/StatisticWidget";
+import YardRatingWidget from "./components/YardRatingWidget";
+import VouchersWidget from "./components/VouchersWidget";
+import VoucherManagementWidget from "./components/VoucherManagementWidget";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -45,9 +51,27 @@ function App() {
               path="/home/yards"
               element={<ManageYardsWidget />}
             ></Route>
+            <Route
+              path="/home/statistic"
+              element={<StatisticWidget />}
+            ></Route>
+            <Route
+              path="/home/rating"
+              element={<YardRatingWidget />}
+            ></Route>
+            <Route
+              path="/home/vouchers"
+              element={<VouchersWidget />}
+            ></Route>
+            <Route
+              path="/home/voucher-management"
+              element={<VoucherManagementWidget />}
+            ></Route>
           </Route>
           <Route exact path="/login" element={<LoginPage />}></Route>
           <Route exact path="/signup" element={<SignUpPage />}></Route>
+          <Route exact path="/forgot-password" element={<ForgotPassword />}></Route>
+          <Route exact path="/reset-password" element={<ResetPassword />}></Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
       </div>

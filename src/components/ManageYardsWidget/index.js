@@ -37,7 +37,7 @@ function ManageYardsWidget() {
             customUI: ({ onClose }) => {
                 return (
                     <div className="custom-confirm" style={{ width: "90vw" }}>
-                        <h4>Yard Details</h4>
+                        <h4>{yard ? "Yard Details" : "Create Yard"}</h4>
                         <div className="d-flex">
                             <form className="my-3 col-3 mw-410">
                                 <div className="row p-2">
@@ -453,7 +453,7 @@ function ManageYardsWidget() {
 
     return <div className="pt-4 w-100">
         <h4 className="mb-4 d-inline-block">
-            <img src={playground} alt="Transaction" className="width-60 pe-3" />
+            <img src={playground} alt="Yard" className="width-60 pe-3" />
             Yard Management
         </h4>
         <button className="btn btn-primary px-4 ms-5" onClick={() => onUpdateClick()}>
