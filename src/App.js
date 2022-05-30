@@ -21,6 +21,7 @@ import VoucherManagementWidget from "./components/VoucherManagementWidget";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MatchManagementWidget from "./components/MatchManagementWidget";
+import ReturnPaymentsWidget from "./components/ReturnPaymentsWidget";
 
 function App() {
   return (
@@ -71,6 +72,10 @@ function App() {
             <Route
               path="/home/match-management"
               element={<MatchManagementWidget />}
+            ></Route>
+            <Route
+              path="/home/return-payments"
+              element={<ReturnPaymentsWidget />}
             ></Route>
           </Route>
           <Route exact path="/login" element={<LoginPage />}></Route>
