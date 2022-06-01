@@ -12,6 +12,7 @@ function YardRatingWidget() {
           <div className="custom-confirm">
             <h4>Rating</h4>
             <p className="mb-3">Are you sure to cancel booking this match?</p>
+            <textarea/>
             <button
               className="btn btn-primary me-3"
               onClick={() => {
@@ -33,13 +34,13 @@ function YardRatingWidget() {
   };
 
   return (
-    <div className="col-6 ps-4 pe-4 flex-column pt-4">
+    <div className="w-100 ps-4 pe-4 flex-column pt-4">
       <h4 className="text-center mb-4">
         <img src={rating} alt="basketball" className="width-60 pe-3" />
         Rating
       </h4>
-      <div className="overflow-auto h-75 p-3">
-        <div className="match-container row mb-2">
+      <div className="overflow-auto h-75 p-3 row justify-content-around">
+        <div className="match-container row mb-2 col-5">
           <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
             <p className="text-center">
               <b>4:00 - 5:00</b>
@@ -63,7 +64,7 @@ function YardRatingWidget() {
             <i class="fas fa-user-edit trash-icon" title="Rating" onClick={onClick}></i>
           </div>
         </div>
-        <div className="match-container row mb-2">
+        <div className="match-container row mb-2 col-5">
           <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
             <p className="text-center">
               <b>4:00 - 5:00</b>
@@ -87,7 +88,7 @@ function YardRatingWidget() {
             <i class="fas fa-user-edit"></i>
           </div>
         </div>
-        <div className="match-container row mb-2">
+        <div className="match-container row mb-2 col-5">
           <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
             <p className="text-center">
               <b>4:00 - 5:00</b>
@@ -111,7 +112,7 @@ function YardRatingWidget() {
             <i class="fas fa-user-edit"></i>
           </div>
         </div>
-        <div className="match-container row mb-2">
+        <div className="match-container row mb-2 col-5">
           <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
             <p className="text-center">
               <b>4:00 - 5:00</b>
@@ -135,7 +136,7 @@ function YardRatingWidget() {
             <i class="fas fa-user-edit"></i>
           </div>
         </div>
-        <div className="match-container row mb-2">
+        <div className="match-container row mb-2 col-5">
           <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
             <p className="text-center">
               <b>4:00 - 5:00</b>

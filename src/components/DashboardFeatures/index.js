@@ -73,12 +73,12 @@ const features = [
     allowedRoles: [ADMIN, OWNER],
     path: "return-payments",
   },
-  // {
-  //   title: "Rating",
-  //   icon: "far fa-star",
-  //   allowedRoles: [USER],
-  //   path: "rating",
-  // },
+  {
+    title: "Rating",
+    icon: "far fa-star",
+    allowedRoles: [USER],
+    path: "rating",
+  },
 ];
 
 function DashboardFeatures() {
