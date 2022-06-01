@@ -57,12 +57,14 @@ function LoginPage() {
               placeholder="Email"
               required
             />
-            {formik.errors.username && formik.touched.username ? (
-              <span className="signup_tooltip--error">
-                {formik.errors.username}
-              </span>
-            ) : null}
+
+            <span className="signup__filed--error">
+              {formik.touched.username && formik.errors.username
+                ? formik.errors.username
+                : ""}{" "}
+            </span>
           </div>
+
           <div className="row p-2 position-relative">
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
@@ -77,11 +79,11 @@ function LoginPage() {
               placeholder="Password"
               required
             />
-            {formik.errors.password && formik.touched.password ? (
-              <span className="signup_tooltip--error">
-                {formik.errors.password}
-              </span>
-            ) : null}
+            <span className="signup__filed--error">
+              {formik.touched.password && formik.errors.password
+                ? formik.errors.password
+                : ""}{" "}
+            </span>
           </div>
           <div className="pl-3 pr-3 mt-3">
             <p>

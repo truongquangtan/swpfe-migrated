@@ -70,11 +70,11 @@ function SignUpPage() {
               placeholder="Email"
               required
             />
-            {formik.errors.email && formik.touched.email ? (
-              <span className="signup_tooltip--error">
-                {formik.errors.email}
-              </span>
-            ) : null}
+            <span className="signup__filed--error">
+              {formik.touched.email && formik.errors.email
+                ? formik.errors.email
+                : ""}{" "}
+            </span>
           </div>
           <div className="row p-2 position-relative">
             <span className="col-1 lh-44 signup__icon-wrapper">
@@ -90,11 +90,11 @@ function SignUpPage() {
               placeholder="Password"
               required
             />
-            {formik.errors.password && formik.touched.password ? (
-              <span className="signup_tooltip--error">
-                {formik.errors.password}
-              </span>
-            ) : null}
+            <span className="signup__filed--error">
+              {formik.touched.password && formik.errors.password
+                ? formik.errors.password
+                : ""}{" "}
+            </span>
           </div>
           <div className="row p-2 position-relative">
             <span className="col-1 lh-44 signup__icon-wrapper">
@@ -110,11 +110,11 @@ function SignUpPage() {
               placeholder="Input password again"
               required
             />
-            {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
-              <span className="signup_tooltip--error">
-                {formik.errors.confirmPassword}
-              </span>
-            ) : null}
+            <span className="signup__filed--error">
+              {formik.touched.confirmPassword && formik.errors.confirmPassword
+                ? formik.errors.confirmPassword
+                : ""}{" "}
+            </span>
           </div>
           <div className="row p-2 position-relative">
             <span className="col-1 lh-44 signup__icon-wrapper">
@@ -129,11 +129,11 @@ function SignUpPage() {
               type="text"
               placeholder="Full name"
             />
-            {formik.errors.fullName && formik.touched.fullName ? (
-              <span className="signup_tooltip--error">
-                {formik.errors.fullName}
-              </span>
-            ) : null}
+            <span className="signup__filed--error">
+              {formik.touched.fullName && formik.errors.fullName
+                ? formik.errors.fullName
+                : ""}{" "}
+            </span>
           </div>
           <div className="row p-2 position-relative">
             <span className="col-1 lh-44 signup__icon-wrapper">
@@ -148,11 +148,11 @@ function SignUpPage() {
               type="text"
               placeholder="Phone number"
             />
-            {formik.errors.phone && formik.touched.phone ? (
-              <span className="signup_tooltip--error">
-                {formik.errors.phone}
-              </span>
-            ) : null}
+            <span className="signup__filed--error">
+              {formik.touched.phone && formik.errors.phone
+                ? formik.errors.phone
+                : ""}{" "}
+            </span>
           </div>
           {/* <div className="row p-2">
             <span className="col-1 lh-42 signup__icon-wrapper">
