@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { loginRequest } from "../../services/API/accountServices";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./style.scss";
 import user from "../../assets/images/user.png";
@@ -32,8 +34,13 @@ function LoginPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      const response = await loginRequest(data);
-      console.log(response);
+      try {
+        const response = await loginRequest(data);
+      } catch (error) {
+        if (error.response.status === 400) {
+          toast("Login Fails!");
+        }
+      }
     },
   });
 
@@ -94,6 +101,17 @@ function LoginPage() {
             <button type="submit" className="btn btn-primary w-100 p-2">
               Login
             </button>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
           </div>
         </form>
       </div>
