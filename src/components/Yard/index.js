@@ -19,7 +19,7 @@ function Yard() {
   ]);
 
   return (
-    <div className="w-100 yard-container mt-4">
+    <div className="w-100 yard-container mt-5">
       <div className="row flex-row">
         <div className="col-8">
           <Slide>
@@ -34,10 +34,10 @@ function Yard() {
         </div>
         <div className="col-4 ps-4 pe-4 pt-5 flex-column">
           <b className="size-2 mb-3 d-block text-center">Sân quận 9</b>
-          <div className="row mb-1 yard__details-field">
+          {/* <div className="row mb-1 yard__details-field">
             <span className="col-3 fw-bolder">Size:</span>
             <span className="col-9">3 vs 3</span>
-          </div>
+          </div> */}
           <div className="row mb-1 yard__details-field">
             <span className="col-3 fw-bolder">Address:</span>
             <span className="col-9">
@@ -544,11 +544,8 @@ function Yard() {
               <b>1.000.000 VND</b>
             </div>
           </div>
-          <div className="pt-3 pb-3 row justify-content-around">
-            <button className="btn btn-primary col-5 p-2">Checkout</button>
-            <Link className="col-5" to="/home/booking">
-              <button className="btn btn-primary p-2 w-100">Continue Booking</button>
-            </Link>
+          <div className="pt-3 pb-3 justify-content-around">
+            <button className="btn btn-primary p-2 w-100">Checkout</button>
           </div>
         </div>
       </div>

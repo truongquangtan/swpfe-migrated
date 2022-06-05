@@ -18,8 +18,8 @@ const popupFeatures = [
 function Header() {
   const [showPopup, setShowPopup] = useState(false);
   return (
-    <div>
-      <Link to="/home" className="d-flex align-content-center nav-brand">
+    <div className="header">
+      <Link to="/" className="d-flex align-content-center nav-brand">
         <span className="p-2 size-2 ps-4 pe-3">
           <i className="fas fa-basketball-ball"></i>
         </span>
