@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { signUpResquest } from "../../services/API/accountServices";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./style.scss";
 import { EMPTY } from "../../constants/default";
@@ -11,6 +12,7 @@ import { REQUEST_EMAIL } from "../../constants/default";
 import { REQUEST_PASSWORD } from "../../constants/default";
 import { REQUIRED_EMAIL } from "../../constants/default";
 import { REQUIRED_PASSWORD } from "../../constants/default";
+import { registerUser } from "../../services/auth.service";
 
 const validation = yup.object({
   email: yup
@@ -46,8 +48,18 @@ function SignUpPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      const response = await signUpResquest(data);
-      console.log(response);
+      await registerUser(data).catch((error) => {
+        if (error.response.status === 400) {
+          toast.error(error.response.data, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "colored",
+          });
+        }
+      });
     },
   });
 
@@ -57,10 +69,18 @@ function SignUpPage() {
         <h3 className=" bold size-4 pt-3">Register</h3>
         <form className="mt-5" onSubmit={formik.handleSubmit}>
           <div className="row p-2 position-relative">
+            <label
+              htmlFor="signup-email"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
+              Email
+            </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-envelope"></i>
             </span>
             <input
+              id="signup-email"
               onBlur={formik.handleBlur}
               value={formik.values.email}
               name="email"
@@ -76,11 +96,19 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative">
+          <div className="row p-2 position-relative pt-0">
+            <label
+              htmlFor="signup-password"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
+              Password
+            </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
             </span>
             <input
+              id="signup-password"
               onBlur={formik.handleBlur}
               value={formik.values.password}
               name="password"
@@ -96,11 +124,19 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative">
+          <div className="row p-2 position-relative pt-0">
+            <label
+              htmlFor="signup-password-confirm"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
+              Confirm Password
+            </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
             </span>
             <input
+              id="signup-password-confirm"
               onBlur={formik.handleBlur}
               value={formik.values.confirmPassword}
               name="confirmPassword"
@@ -116,11 +152,19 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative">
+          <div className="row p-2 position-relative pt-0">
+            <label
+              htmlFor="signup-fullname"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
+              Fullname
+            </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-address-card"></i>
             </span>
             <input
+              id="signup-fullname"
               onBlur={formik.handleBlur}
               value={formik.values.fullName}
               name="fullName"
@@ -135,11 +179,19 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative">
+          <div className="row p-2 position-relative pt-0">
+            <label
+              htmlFor="signup-phone"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
+              Phone
+            </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-phone-alt"></i>
             </span>
             <input
+              id="signup-phone"
               onBlur={formik.handleBlur}
               value={formik.values.phone}
               name="phone"
@@ -170,8 +222,18 @@ function SignUpPage() {
           </div>
           <div className="pt-3 pb-3">
             <button type="submit" className="btn btn-primary w-100 p-2">
-              Sign up
+              {!formik.isSubmitting ? (
+                "Sign Up"
+              ) : (
+                <div className="dots-loading">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              )}
             </button>
+            <ToastContainer />
           </div>
         </form>
       </div>

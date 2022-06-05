@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { loginRequest } from "../../services/API/accountServices";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,6 +12,7 @@ import { REQUEST_EMAIL } from "../../constants/default";
 import { REQUEST_PASSWORD } from "../../constants/default";
 import { REQUIRED_EMAIL } from "../../constants/default";
 import { REQUIRED_PASSWORD } from "../../constants/default";
+import { loginRequest } from "../../services/auth.service";
 
 const validation = yup.object({
   username: yup
@@ -34,13 +34,18 @@ function LoginPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      try {
-        const response = await loginRequest(data);
-      } catch (error) {
+      await loginRequest(data).catch((error) => {
         if (error.response.status === 400) {
-          toast("Login Fails!");
+          toast.error(error.response.data, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "colored",
+          });
         }
-      }
+      });
     },
   });
 
@@ -51,10 +56,18 @@ function LoginPage() {
         <img src={user} alt="user" className="width-120 mt-4" />
         <form className="mt-5" onSubmit={formik.handleSubmit}>
           <div className="row p-2 position-relative">
+            <label
+              htmlFor="email"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
+              Email
+            </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-envelope"></i>
             </span>
             <input
+              id="email"
               name="username"
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
@@ -72,11 +85,19 @@ function LoginPage() {
             </span>
           </div>
 
-          <div className="row p-2 position-relative">
+          <div className="row p-2 position-relative pt-0">
+            <label
+              htmlFor="password"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
+              Password
+            </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
             </span>
             <input
+              id="password"
               name="password"
               className="col-11 outline-none p-2 signup__input-border"
               type="password"
@@ -98,20 +119,23 @@ function LoginPage() {
             </p>
           </div>
           <div className="pt-3 pb-3">
-            <button type="submit" className="btn btn-primary w-100 p-2">
-              Login
+            <button
+              disabled={formik.isSubmitting || !formik.isValid}
+              type="submit"
+              className="btn btn-primary w-100 p-2"
+            >
+              {!formik.isSubmitting ? (
+                "Login"
+              ) : (
+                <div className="dots-loading">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              )}
             </button>
-            <ToastContainer
-              position="bottom-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
+            <ToastContainer />
           </div>
         </form>
       </div>
