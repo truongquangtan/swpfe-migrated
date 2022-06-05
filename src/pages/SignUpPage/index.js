@@ -31,10 +31,10 @@ const validation = yup.object({
     .oneOf([yup.ref("password"), null], "Confirm password not matches"),
   fullName: yup
     .string("Enter your full name")
-    .required("full name is required"),
+    .required("Full name is required"),
   phone: yup
-    .string("Enter your email")
-    .required("full name is required")
+    .string("Enter your phone")
+    .required("Phone number is required")
     .matches(PHONE_PATTERN, "Phone number is not valid"),
 });
 
