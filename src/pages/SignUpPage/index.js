@@ -6,12 +6,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./style.scss";
-import { EMPTY } from "../../constants/default";
-import { PHONE_PATTERN } from "../../constants/regex";
-import { REQUEST_EMAIL } from "../../constants/default";
-import { REQUEST_PASSWORD } from "../../constants/default";
-import { REQUIRED_EMAIL } from "../../constants/default";
-import { REQUIRED_PASSWORD } from "../../constants/default";
+import {
+  EMPTY,
+  PHONE_PATTERN,
+  REQUEST_EMAIL,
+  REQUEST_PASSWORD,
+  REQUIRED_EMAIL,
+  REQUIRED_PASSWORD,
+} from "../../constants/default";
 import { registerUser } from "../../services/auth.service";
 
 const validation = yup.object({

@@ -7,11 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./style.scss";
 import user from "../../assets/images/user.png";
-import { EMPTY } from "../../constants/default";
-import { REQUEST_EMAIL } from "../../constants/default";
-import { REQUEST_PASSWORD } from "../../constants/default";
-import { REQUIRED_EMAIL } from "../../constants/default";
-import { REQUIRED_PASSWORD } from "../../constants/default";
+import {
+  EMPTY,
+  REQUEST_EMAIL,
+  REQUEST_PASSWORD,
+  REQUIRED_EMAIL,
+  REQUIRED_PASSWORD,
+} from "../../constants/default";
 import { loginRequest } from "../../services/auth.service";
 
 const validation = yup.object({
