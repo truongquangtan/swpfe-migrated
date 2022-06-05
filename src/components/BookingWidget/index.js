@@ -143,7 +143,7 @@ function BookingWidget() {
           <span className="cart-quantity">3</span>
         </div> */}
         <div className="row p-2 col-3 justify-content-center px-0">
-          <label for="province">Province</label>
+          <label htmlFor="province">Province</label>
           <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="far fa-map"></i>
           </span>
@@ -155,7 +155,7 @@ function BookingWidget() {
           />
         </div>
         <div className="row p-2 col-3 justify-content-center px-0">
-          <label for="district">District</label>
+          <label htmlFor="district">District</label>
           <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
             <i className="fas fa-map-marker-alt"></i>
           </span>
@@ -166,35 +166,12 @@ function BookingWidget() {
             placeholder="District"
           />
         </div>
-        <div className="row p-2 col-3 justify-content-center px-0">
-          <label for="play-date">Play Date</label>
-          <span className="col-1 lh-44 signup__icon-wrapper booking__icon-wrapper">
-            <i className="far fa-clock"></i>
-          </span>
-          <input
-            id="play-date"
-            className="col-9 outline-none p-2 signup__input-border"
-            type="date"
-            required
-          />
-        </div>
-        {/* <div className="row p-2 col-2 justify-content-center px-3">
-          <label for="type">Type</label>
-          <span className="col-2 lh-44 signup__icon-wrapper booking__icon-wrapper">
-            <i className="fas fa-expand-arrows-alt"></i>
-          </span>
-          <select
-            id="type"
-            className="col-7 outline-none p-2 signup__input-border"
-            style={{ backgroundColor: "white" }}
-          >
-            <option value="3 vs 3">3 vs 3</option>
-            <option value="5 vs 5">5 vs 5</option>
-          </select>
-        </div> */}
         <div className="d-flex flex-column p-2 col-1 justify-content-end ps-4">
-          <button className="btn btn-primary w-100 p-2" style={{height: "40px"}}>
-            <i class="fas fa-search"></i>
+          <button
+            className="btn btn-primary w-100 p-2"
+            style={{ height: "40px" }}
+          >
+            <i className="fas fa-search"></i>
           </button>
         </div>
       </form>
@@ -205,9 +182,23 @@ function BookingWidget() {
             <div className="yard-details p-3">
               <b className="d-block mb-2">SÂN QUẬN 9</b>
               <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
+                <i className="fas fa-clock col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
               </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </Link>
+        </div>
+        <div className="yard__result-wrapper col-3 p-3 pe-2">
+          <Link className="yard-result" to="/admin/yard/1">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">SÂN QUẬN 9</b>
               <p className="row mb-1">
                 <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
@@ -227,9 +218,23 @@ function BookingWidget() {
             <div className="yard-details p-3">
               <b className="d-block mb-2">SÂN QUẬN 9</b>
               <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
+                <i className="fas fa-clock col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
               </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </Link>
+        </div>
+        <div className="yard__result-wrapper col-3 p-3 pe-2">
+          <Link className="yard-result" to="/admin/yard/1">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">SÂN QUẬN 9</b>
               <p className="row mb-1">
                 <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
@@ -249,9 +254,23 @@ function BookingWidget() {
             <div className="yard-details p-3">
               <b className="d-block mb-2">SÂN QUẬN 9</b>
               <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
+                <i className="fas fa-clock col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
               </p>
+              <p className="row mb-1">
+                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
+                <span className="ps-2 color-blur col-10">
+                  45F 160 Street, District 9, Ho Chi Minh City
+                </span>
+              </p>
+            </div>
+          </Link>
+        </div>
+        <div className="yard__result-wrapper col-3 p-3 pe-2">
+          <Link className="yard-result" to="/admin/yard/1">
+            <img src={yard} alt="basketball yard" />
+            <div className="yard-details p-3">
+              <b className="d-block mb-2">SÂN QUẬN 9</b>
               <p className="row mb-1">
                 <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
@@ -271,10 +290,6 @@ function BookingWidget() {
             <div className="yard-details p-3">
               <b className="d-block mb-2">SÂN QUẬN 9</b>
               <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
-              </p>
-              <p className="row mb-1">
                 <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
               </p>
@@ -292,76 +307,6 @@ function BookingWidget() {
             <img src={yard} alt="basketball yard" />
             <div className="yard-details p-3">
               <b className="d-block mb-2">SÂN QUẬN 9</b>
-              <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
-              </p>
-              <p className="row mb-1">
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
-              </p>
-              <p className="row mb-1">
-                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  45F 160 Street, District 9, Ho Chi Minh City
-                </span>
-              </p>
-            </div>
-          </Link>
-        </div>
-        <div className="yard__result-wrapper col-3 p-3 pe-2">
-          <Link className="yard-result" to="/admin/yard/1">
-            <img src={yard} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">SÂN QUẬN 9</b>
-              <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
-              </p>
-              <p className="row mb-1">
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
-              </p>
-              <p className="row mb-1">
-                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  45F 160 Street, District 9, Ho Chi Minh City
-                </span>
-              </p>
-            </div>
-          </Link>
-        </div>
-        <div className="yard__result-wrapper col-3 p-3 pe-2">
-          <Link className="yard-result" to="/admin/yard/1">
-            <img src={yard} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">SÂN QUẬN 9</b>
-              <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
-              </p>
-              <p className="row mb-1">
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">04:00 - 22:00</span>
-              </p>
-              <p className="row mb-1">
-                <i className="fas fa-map-marker-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  45F 160 Street, District 9, Ho Chi Minh City
-                </span>
-              </p>
-            </div>
-          </Link>
-        </div>
-        <div className="yard__result-wrapper col-3 p-3 pe-2">
-          <Link className="yard-result" to="/admin/yard/1">
-            <img src={yard} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">SÂN QUẬN 9</b>
-              <p className="row mb-1">
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">3 vs 3</span>
-              </p>
               <p className="row mb-1">
                 <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">04:00 - 22:00</span>

@@ -273,14 +273,14 @@ function VoucherManagementWidget() {
         className="btn btn-primary px-4 ms-5"
         onClick={() => onUpdatePercentClick()}
       >
-        <i class="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
+        <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
         <b>Voucher %</b>
       </button>
       <button
         className="btn btn-primary px-4 ms-3"
         onClick={() => onUpdateCashClick()}
       >
-        <i class="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
+        <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
         <b>Voucher $</b>
       </button>
       <table className="table table-striped">

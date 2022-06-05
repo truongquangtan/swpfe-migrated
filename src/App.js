@@ -13,14 +13,12 @@ import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
 import ManageUsersWidget from "./components/ManageUsersWidget";
 import ManageYardsWidget from "./components/ManageYardsWidget";
-import StatisticWidget from "./components/StatisticWidget";
 import YardRatingWidget from "./components/YardRatingWidget";
 import VouchersWidget from "./components/VouchersWidget";
 import VoucherManagementWidget from "./components/VoucherManagementWidget";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MatchManagementWidget from "./components/MatchManagementWidget";
-import ReturnPaymentsWidget from "./components/ReturnPaymentsWidget";
 import YardDetails from "./components/YardDetails";
 
 function App() {
@@ -50,10 +48,6 @@ function App() {
               element={<ManageYardsWidget />}
             ></Route>
             <Route
-              path="/admin/statistic"
-              element={<StatisticWidget />}
-            ></Route>
-            <Route
               path="/admin/rating"
               element={<YardRatingWidget />}
             ></Route>
@@ -68,10 +62,6 @@ function App() {
             <Route
               path="/admin/match-management"
               element={<MatchManagementWidget />}
-            ></Route>
-            <Route
-              path="/admin/return-payments"
-              element={<ReturnPaymentsWidget />}
             ></Route>
             <Route
               path="/admin/yards/:id"

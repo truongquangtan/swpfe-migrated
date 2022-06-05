@@ -38,7 +38,7 @@ function ForgotPassword() {
           <div className="pl-3 pr-3 mt-3">
             <p className="link">
               <Link to="/login">
-                <i class="fas fa-long-arrow-alt-left"></i> Back to login
+                <i classname="fas fa-long-arrow-alt-left"></i> Back to login
               </Link>
             </p>
           </div>

@@ -76,7 +76,7 @@ function ManageUsersWidget() {
                             </div>
                             <div className="row p-2">
                                 <span className="col-1 lh-44 signup__icon-wrapper">
-                                    <i class="fas fa-user-tag"></i>
+                                    <i className="fas fa-user-tag"></i>
                                 </span>
                                 <select className="col-11 outline-none p-2 signup__input-border" style={{backgroundColor: "white"}}>
                                     <option value="volvo">Customer</option>
@@ -145,7 +145,7 @@ function ManageUsersWidget() {
                             </div>
                             <div className="row p-2">
                                 <span className="col-1 lh-44 signup__icon-wrapper">
-                                    <i class="fas fa-user-tag"></i>
+                                    <i className="fas fa-user-tag"></i>
                                 </span>
                                 <select className="col-11 outline-none p-2 signup__input-border" style={{backgroundColor: "white"}}>
                                     <option value="volvo">Customer</option>
@@ -181,7 +181,7 @@ function ManageUsersWidget() {
                 Users
             </h4>
             <button className="btn btn-primary px-4 ms-5" onClick={onInviteClick}>
-                <i class="fas fa-user-plus me-2" style={{ fontSize: "0.8rem" }}></i>
+                <i className="fas fa-user-plus me-2" style={{ fontSize: "0.8rem" }}></i>
                 <b>Invite</b>
             </button>
         </div>

@@ -1,8 +1,99 @@
+import { useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import { Link } from "react-router-dom";
+import { END, PERIODS, START, TIMELINE } from "../../constants/time";
 import "./style.scss";
 
-function YardDetails() {
+function YardDetails({ yard }) {
+  const [timeSlot, setTimeSlot] = useState({
+    start: START,
+    end: END,
+    period: 0,
+  });
+  const onUpdateSubYard = async (yard) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className="custom-confirm" style={{ width: "90vw" }}>
+            <h4>{yard ? yard.name : "Create New Sub Yard"}</h4>
+            <div className="d-flex">
+              <form className="my-3 col-3 mw-410">
+                <div className="row p-2 py-1">
+                  <label htmlFor="yard-name" style={{ paddingLeft: 0 }}>
+                    Name
+                  </label>
+                  <span
+                    className="col-1 lh-44 signup__icon-wrapper"
+                    title="Name"
+                  >
+                    <i className="fas fa-address-card"></i>
+                  </span>
+                  <input
+                    id="yard-name"
+                    className="col-11 outline-none p-2 signup__input-border"
+                    type="text"
+                    placeholder="Name"
+                  />
+                </div>
+                <div className="row p-2 py-1">
+                  <label htmlFor="yard-name" style={{ paddingLeft: 0 }}>
+                    Type
+                  </label>
+                  <span
+                    className="col-1 lh-44 signup__icon-wrapper"
+                    title="Size"
+                  >
+                    <i className="fas fa-expand-arrows-alt"></i>
+                  </span>
+                  <select
+                    className="col-11 outline-none p-2 signup__input-border"
+                    style={{ backgroundColor: "white" }}
+                  >
+                    <option value="3 vs 3">3 vs 3</option>
+                    <option value="5 vs 5">5 vs 5</option>
+                  </select>
+                </div>
+              </form>
+              <div className="flex-1 ps-3">
+                <div className="row p-3 overflow-y-auto pt-0 mh-550">
+                  <div className="col-2 slot-create-container">
+                    <div className="slot-details flex-column">
+                      <p>
+                        <b>4:00 - 4:30</b>
+                      </p>
+                      <p className="mt-2">
+                        <input
+                          className="w-75 text-center border-none price-input py-2"
+                          type="text"
+                          value="60.000"
+                        />{" "}
+                        VND
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              className="btn btn-primary me-3 px-4"
+              onClick={() => {
+                this.handleClickDelete();
+                onClose();
+              }}
+            >
+              {yard ? "Save" : "Create"}
+            </button>
+            <button onClick={onClose} className="btn btn-light">
+              Cancel
+            </button>
+          </div>
+        );
+      },
+      closeOnEscape: true,
+      closeOnClickOutside: true,
+    });
+  };
+
   const handleDisableYard = () => {};
 
   const handleEnableYard = () => {};
@@ -38,11 +129,11 @@ function YardDetails() {
 
   return (
     <div className="mt-5">
-      <h4>Create Yard</h4>
+      <h4>{yard ? "Yard Details" : "Create Yard"}</h4>
       <div className="d-flex">
         <form className="my-3 col-3 mw-410">
           <div className="row p-2 py-1">
-            <label for="yard-name" style={{ paddingLeft: 0 }}>
+            <label htmlFor="yard-name" style={{ paddingLeft: 0 }}>
               Name
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Name">
@@ -56,7 +147,7 @@ function YardDetails() {
             />
           </div>
           <div className="row p-2 py-1">
-            <label for="yard-province" style={{ paddingLeft: 0 }}>
+            <label htmlFor="yard-province" style={{ paddingLeft: 0 }}>
               Province
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Province">
@@ -70,7 +161,7 @@ function YardDetails() {
             />
           </div>
           <div className="row p-2 py-1">
-            <label for="yard-district" style={{ paddingLeft: 0 }}>
+            <label htmlFor="yard-district" style={{ paddingLeft: 0 }}>
               District
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="District">
@@ -84,7 +175,7 @@ function YardDetails() {
             />
           </div>
           <div className="row p-2 py-1">
-            <label for="yard-address" style={{ paddingLeft: 0 }}>
+            <label htmlFor="yard-address" style={{ paddingLeft: 0 }}>
               Address Details
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Address">
@@ -98,7 +189,7 @@ function YardDetails() {
             />
           </div>
           <div className="row p-2 py-1">
-            <label for="yard-open-time" style={{ paddingLeft: 0 }}>
+            <label htmlFor="yard-open-time" style={{ paddingLeft: 0 }}>
               Open Time
             </label>
             <span
@@ -107,19 +198,20 @@ function YardDetails() {
             >
               <i className="fas fa-clock"></i>
             </span>
-            <input
+            <select
               id="yard-open-time"
-              type="time"
-              name="appt"
               className="col-11 outline-none p-2 signup__input-border"
-              min="09:00"
-              max="18:00"
-              required
-              placeholder="Open time"
-            />
+              style={{ backgroundColor: "white" }}
+            >
+              {TIMELINE.filter((value) => value.value < timeSlot.end).map(
+                (time) => (
+                  <option value={time.value}>{time.label}</option>
+                )
+              )}
+            </select>
           </div>
           <div className="row p-2 py-1">
-            <label for="yard-close-time" style={{ paddingLeft: 0 }}>
+            <label htmlFor="yard-close-time" style={{ paddingLeft: 0 }}>
               Close Time
             </label>
             <span
@@ -128,34 +220,36 @@ function YardDetails() {
             >
               <i className="fas fa-clock"></i>
             </span>
-            <input
+            <select
               id="yard-close-time"
-              type="time"
-              name="appt"
               className="col-11 outline-none p-2 signup__input-border"
-              min="09:00"
-              max="18:00"
-              required
-              placeholder="Close time"
-            />
+              style={{ backgroundColor: "white" }}
+            >
+              {TIMELINE.filter((value) => value.value > timeSlot.start).map(
+                (time) => (
+                  <option value={time.value}>{time.label}</option>
+                )
+              )}
+            </select>
           </div>
           <div className="row p-2 py-1">
-            <label for="yard-duration" style={{ paddingLeft: 0 }}>
+            <label htmlFor="yard-duration" style={{ paddingLeft: 0 }}>
               Duration
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Duration">
               <i className="fas fa-hourglass-half"></i>
             </span>
-            <input
+            <select
               id="yard-duration"
-              type="time"
-              name="appt"
               className="col-11 outline-none p-2 signup__input-border"
-              min="09:00"
-              max="18:00"
-              required
-              placeholder="Duration"
-            />
+              style={{ backgroundColor: "white" }}
+            >
+              {PERIODS.filter(
+                (value) => (timeSlot.end - timeSlot.start) % value.value === 0
+              ).map((time) => (
+                <option value={time.value}>{time.label}</option>
+              ))}
+            </select>
           </div>
         </form>
         <div className="flex-1 ps-3">
@@ -190,8 +284,14 @@ function YardDetails() {
           </div>
           <div className="p-3 overflow-y-auto h-300 pt-4">
             <h4 className="d-inline-block">Sub Yards</h4>
-            <button className="btn btn-primary px-4 ms-5" onClick={() => {}}>
-              <i class="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
+            <button
+              className="btn btn-primary px-4 ms-5"
+              onClick={() => onUpdateSubYard()}
+            >
+              <i
+                className="fas fa-plus me-2"
+                style={{ fontSize: "0.8rem" }}
+              ></i>
               <b>Add</b>
             </button>
             <table className="table table-striped mt-3">
@@ -243,7 +343,7 @@ function YardDetails() {
                     ></i>
                   </td>
                   <td>
-                    <b className="trash-icon" onClick={() => {}}>
+                    <b className="trash-icon" onClick={() => onUpdateSubYard()}>
                       1009
                     </b>
                   </td>
@@ -251,6 +351,27 @@ function YardDetails() {
                     Sân quận 9
                   </td>
                   <td>3 vs 3</td>
+                </tr>
+                <tr>
+                  <td>
+                    <i
+                      className="trash-icon fas fa-times col-4"
+                      title="Delete"
+                      onClick={() => {}}
+                    ></i>
+                    <i
+                      className="trash-icon fas fa-edit col-4"
+                      title="Edit"
+                      onClick={() => onUpdateSubYard()}
+                    ></i>
+                  </td>
+                  <td>
+                    <b className="fsi fwl">Draft</b>
+                  </td>
+                  <td className="text-truncate fsi fwl" title="Sân quận 9">
+                    Sân quận 9
+                  </td>
+                  <td className="fsi fwl">3 vs 3</td>
                 </tr>
               </tbody>
             </table>
