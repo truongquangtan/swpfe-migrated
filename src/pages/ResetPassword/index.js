@@ -12,7 +12,6 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_PASSWORD,
 } from "../../constants/default";
-//import { ResetPassword } from "../../services/auth.service";
 
 const validation = yup.object({
   re_password: yup
@@ -34,18 +33,18 @@ function ResetPassword() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      await ResetPassword(data).catch((error) => {
-        if (error.response.status === 400) {
-          toast.error(error.response.data, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "colored",
-          });
-        }
-      });
+      // await resetPassword(data).catch((error) => {
+      //   if (error.response.status === 400) {
+      //     toast.error(error.response.data, {
+      //       position: "bottom-right",
+      //       autoClose: 5000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       theme: "colored",
+      //     });
+      //   }
+      // });
     },
   });
 

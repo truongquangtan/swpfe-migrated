@@ -19,5 +19,5 @@ export const registerUser = async (values) => {
   return response?.data ? response?.data : null;
 };
 
-export const ForgotPassword = async (values) => {};
-export const ResetPassword = async (values) => {};
+export const forgotPassword = async (values) => {};
+export const resetPassword = async (values) => {};

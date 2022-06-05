@@ -14,7 +14,6 @@ import {
   REQUIRED_PASSWORD,
   REQUIRED_CODE,
 } from "../../constants/default";
-//import { ForgotPassword } from "../../services/auth.service";
 
 const validation = yup.object({
   re_email: yup
@@ -23,8 +22,7 @@ const validation = yup.object({
     .required(REQUIRED_EMAIL),
   code: yup
     .string(REQUEST_PASSWORD)
-    .min(6, "Password should be 8 characters length")
-    .max(6, "Password should be 8 characters length")
+    .length(6, "Code should be 6 characters length")
     .required(REQUIRED_CODE),
 });
 
@@ -37,18 +35,18 @@ function ForgotPassword() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      await ForgotPassword(data).catch((error) => {
-        if (error.response.status === 400) {
-          toast.error(error.response.data, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "colored",
-          });
-        }
-      });
+      // await forgotPassword(data).catch((error) => {
+      //   if (error.response.status === 400) {
+      //     toast.error(error.response.data, {
+      //       position: "bottom-right",
+      //       autoClose: 5000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       theme: "colored",
+      //     });
+      //   }
+      // });
     },
   });
 
