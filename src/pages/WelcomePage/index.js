@@ -6,31 +6,31 @@ import "./style.scss";
 import yard1 from "../../assets/images/yard-1.jpg";
 import yard2 from "../../assets/images/yard-2.jpg";
 import yard3 from "../../assets/images/yard-3.jpg";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import BookingWidget from "../../components/BookingWidget";
 
-const slideImages = [yard1, yard2, yard3];
+const slideImages = [
+  { url: yard1, caption: "“One man can be a crucial ingredient on a team, but one man cannot make a team”" },
+  { url: yard2, caption: "“Eat, sleep and live basketball…”" },
+  { url: yard3, caption: "“Booking faster, more convenience”" },
+];
 
 function WelcomePage() {
   return (
-    <div className="row welcome__page-container">
-      <div className="col-4 d-flex align-items-center flex-column justify-content-center">
-        <h1 className="size-5 text-center font-weight-bold bold lp-3">
-          Basketball Playground
-        </h1>
-        <Link to="/login">
-          <button className="btn btn-primary mt-5 plr-2 booking-btn">
-            Get Started
-          </button>
-        </Link>
-      </div>
-      <div className="col-8">
-        <Slide>
-          {slideImages.map((slideImage, index) => (
-            <div className="slide-container" key={index}>
-              <div style={{ backgroundImage: `url(${slideImage})` }}></div>
+    <div className="welcome__page-container">
+      <Header />
+      <Slide>
+        {slideImages.map((slideImage, index) => (
+          <div className="slide-container" key={index}>
+            <div style={{ backgroundImage: `url(${slideImage.url})` }}>
+              <span>{slideImage.caption}</span>
             </div>
-          ))}
-        </Slide>
-      </div>
+          </div>
+        ))}
+      </Slide>
+      <BookingWidget />
+      <Footer/>
     </div>
   );
 }

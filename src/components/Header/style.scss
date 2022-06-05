@@ -29,6 +29,7 @@
     border-radius: 5px;
     top: 3rem;
     background-color: white;
+    z-index: 10;
 }
 
 .profile__popup-feature {
@@ -56,4 +57,12 @@
         background: black;
         color: white;
     }
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    width: 100vw;
 }

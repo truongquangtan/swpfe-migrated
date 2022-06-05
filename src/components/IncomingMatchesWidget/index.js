@@ -66,7 +66,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -94,7 +94,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -122,7 +122,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -150,7 +150,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -178,7 +178,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>

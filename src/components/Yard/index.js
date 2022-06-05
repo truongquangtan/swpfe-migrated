@@ -19,7 +19,7 @@ function Yard() {
   ]);
 
   return (
-    <div className="w-100 yard-container mt-4">
+    <div className="w-100 yard-container mt-5">
       <div className="row flex-row">
         <div className="col-8">
           <Slide>
@@ -34,10 +34,6 @@ function Yard() {
         </div>
         <div className="col-4 ps-4 pe-4 pt-5 flex-column">
           <b className="size-2 mb-3 d-block text-center">Sân quận 9</b>
-          <div className="row mb-1 yard__details-field">
-            <span className="col-3 fw-bolder">Size:</span>
-            <span className="col-9">3 vs 3</span>
-          </div>
           <div className="row mb-1 yard__details-field">
             <span className="col-3 fw-bolder">Address:</span>
             <span className="col-9">
@@ -54,332 +50,41 @@ function Yard() {
       <div className="row justify-content-center mt-5">
         <div className="col-7 pt-4">
           <div className="text-center mb-4 row">
-            <div className="col-7 d-flex align-items-center justify-content-center size-2">
-              Slots
-            </div>
-            <div className="row p-2 col-5 justify-content-end size-1">
+            <div className="row p-2 col-6 justify-content-end size-1 ps-3">
+              <label htmlFor="play-date" className="text-start">
+                Play Date
+              </label>
               <span className="col-1 lh-44 signup__icon-wrapper booking__icon-wrapper">
                 <i className="far fa-clock"></i>
               </span>
               <input
-                className="col-9 outline-none p-2 signup__input-border"
+                id="play-date"
+                className="col-10 outline-none p-2 signup__input-border"
                 type="date"
                 placeholder="Date"
                 required
               />
             </div>
-          </div>
-          <div className="row">
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
+            <div className="row p-2 col-6 justify-content-end size-1 ps-3">
+              <label htmlFor="play-date" className="text-start">
+                Pick Yard
+              </label>
+              <span className="col-1 lh-44 signup__icon-wrapper booking__icon-wrapper">
+                <i className="fas fa-columns"></i>
+              </span>
+              <input
+                id="play-date"
+                className="col-10 outline-none p-2 signup__input-border"
+                type="date"
+                placeholder="Date"
+                required
+              />
             </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
+            <div className="col-12 d-flex align-items-center justify-content-center size-2">
+              Slots
             </div>
           </div>
-          <div className="row">
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-            <div className="col-2 slot-details-container">
-              <div className="slot-details flex-column">
-                <p>
-                  <b>4:00 - 4:30</b>
-                </p>
-                <p>
-                  <i>60.000 VND</i>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
+          <div className="row ps-2">
             <div className="col-2 slot-details-container">
               <div className="slot-details flex-column">
                 <p>
@@ -453,82 +158,9 @@ function Yard() {
                   <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
                 </p>
               </div>
-              <div className="p-3 ps-0 pe-1 col-6">
+              <div className="p-3 ps-0 pe-1 col-6 d-flex justify-content-center align-items-center">
                 <p>
-                  <b>Sân quận 9</b> - (3 vs 3)
-                </p>
-                <p className="color-blur">
-                  Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức,
-                  Thành phố Hồ Chí Minh 700000
-                </p>
-              </div>
-              <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p>
-                  <b>100.000 VND</b>
-                </p>
-              </div>
-            </div>
-            <div className="match-container row mb-2">
-              <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p className="text-center">
-                  <b>4:00 - 5:00</b>
-                  <br />
-                  <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
-                </p>
-              </div>
-              <div className="p-3 ps-0 pe-1 col-6">
-                <p>
-                  <b>Sân quận 9</b> - (3 vs 3)
-                </p>
-                <p className="color-blur">
-                  Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức,
-                  Thành phố Hồ Chí Minh 700000
-                </p>
-              </div>
-              <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p>
-                  <b>100.000 VND</b>
-                </p>
-              </div>
-            </div>
-            <div className="match-container row mb-2">
-              <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p className="text-center">
-                  <b>4:00 - 5:00</b>
-                  <br />
-                  <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
-                </p>
-              </div>
-              <div className="p-3 ps-0 pe-1 col-6">
-                <p>
-                  <b>Sân quận 9</b> - (3 vs 3)
-                </p>
-                <p className="color-blur">
-                  Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức,
-                  Thành phố Hồ Chí Minh 700000
-                </p>
-              </div>
-              <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p>
-                  <b>100.000 VND</b>
-                </p>
-              </div>
-            </div>
-            <div className="match-container row mb-2">
-              <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
-                <p className="text-center">
-                  <b>4:00 - 5:00</b>
-                  <br />
-                  <span style={{ fontSize: "0.9rem" }}>26/05/2022</span>
-                </p>
-              </div>
-              <div className="p-3 ps-0 pe-1 col-6">
-                <p>
-                  <b>Sân quận 9</b> - (3 vs 3)
-                </p>
-                <p className="color-blur">
-                  Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức,
-                  Thành phố Hồ Chí Minh 700000
+                  <b>Sân A</b> - (3 vs 3)
                 </p>
               </div>
               <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
@@ -544,11 +176,8 @@ function Yard() {
               <b>1.000.000 VND</b>
             </div>
           </div>
-          <div className="pt-3 pb-3 row justify-content-around">
-            <button className="btn btn-primary col-5 p-2">Checkout</button>
-            <Link className="col-5" to="/home/booking">
-              <button className="btn btn-primary p-2 w-100">Continue Booking</button>
-            </Link>
+          <div className="pt-3 pb-3 justify-content-around">
+            <button className="btn btn-primary p-2 w-100">Checkout</button>
           </div>
         </div>
       </div>

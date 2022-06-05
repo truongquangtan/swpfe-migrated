@@ -20,12 +20,6 @@ const features = [
     path: "incoming-matches",
   },
   {
-    title: "Pending Payments",
-    icon: "fas fa-file-invoice-dollar",
-    allowedRoles: [USER],
-    path: "pending-payments",
-  },
-  {
     title: "Transaction History",
     icon: "fas fa-history",
     allowedRoles: [USER, ADMIN, OWNER],
@@ -44,12 +38,6 @@ const features = [
     path: "yards",
   },
   {
-    title: "Statistic",
-    icon: "fas fa-chart-line",
-    allowedRoles: [OWNER],
-    path: "statistic",
-  },
-  {
     title: "Vouchers",
     icon: "fas fa-money-bill",
     allowedRoles: [USER, ADMIN, OWNER],
@@ -66,12 +54,6 @@ const features = [
     icon: "fas fa-basketball-ball",
     allowedRoles: [ADMIN, OWNER],
     path: "match-management",
-  },
-  {
-    title: "Return Payments",
-    icon: "fas fa-cash-register",
-    allowedRoles: [ADMIN, OWNER],
-    path: "return-payments",
   },
   {
     title: "Rating",

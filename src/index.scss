@@ -7,7 +7,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 code {
@@ -150,4 +150,20 @@ p {
 
 .yellow {
   color: rgb(192, 192, 0);
+}
+
+.size-15 {
+  font-size: 1.5rem;
+}
+
+.mh-550 {
+  max-height: 550px;
+}
+
+.fsi {
+  font-style: italic;
+}
+
+.fwl {
+  font-weight: lighter;
 }

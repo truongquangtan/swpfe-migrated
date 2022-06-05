@@ -27,13 +27,13 @@ function VouchersWidget() {
                 title="Effective date"
                 style={{ fontSize: "0.9rem" }}
               >
-                <i class="fas fa-clock col-1 pt-1"></i>
+                <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">
                   27/05/2022 - 01/06/2022
                 </span>
               </p>
               <p className="row mb-1">
-                <i class="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
+                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
                 <span className="ps-2 bold col-10 voucher-code">
                   qR8KU5x1qFKtqxS
                 </span>
@@ -61,13 +61,13 @@ function VouchersWidget() {
                 title="Effective date"
                 style={{ fontSize: "0.9rem" }}
               >
-                <i class="fas fa-clock col-1 pt-1"></i>
+                <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">
                   27/05/2022 - 01/06/2022
                 </span>
               </p>
               <p className="row mb-1">
-                <i class="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
+                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
                 <span className="ps-2 bold col-10 voucher-code">
                   qR8KU5x1qFKtqxS
                 </span>
@@ -95,13 +95,13 @@ function VouchersWidget() {
                 title="Effective date"
                 style={{ fontSize: "0.9rem" }}
               >
-                <i class="fas fa-clock col-1 pt-1"></i>
+                <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">
                   27/05/2022 - 01/06/2022
                 </span>
               </p>
               <p className="row mb-1">
-                <i class="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
+                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
                 <span className="ps-2 bold col-10 voucher-code">
                   qR8KU5x1qFKtqxS
                 </span>
@@ -129,13 +129,13 @@ function VouchersWidget() {
                 title="Effective date"
                 style={{ fontSize: "0.9rem" }}
               >
-                <i class="fas fa-clock col-1 pt-1"></i>
+                <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">
                   27/05/2022 - 01/06/2022
                 </span>
               </p>
               <p className="row mb-1">
-                <i class="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
+                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
                 <span className="ps-2 bold col-10 voucher-code">
                   qR8KU5x1qFKtqxS
                 </span>
@@ -163,13 +163,13 @@ function VouchersWidget() {
                 title="Effective date"
                 style={{ fontSize: "0.9rem" }}
               >
-                <i class="fas fa-clock col-1 pt-1"></i>
+                <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">
                   27/05/2022 - 01/06/2022
                 </span>
               </p>
               <p className="row mb-1">
-                <i class="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
+                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
                 <span className="ps-2 bold col-10 voucher-code">
                   qR8KU5x1qFKtqxS
                 </span>
@@ -197,13 +197,13 @@ function VouchersWidget() {
                 title="Effective date"
                 style={{ fontSize: "0.9rem" }}
               >
-                <i class="fas fa-clock col-1 pt-1"></i>
+                <i className="fas fa-clock col-1 pt-1"></i>
                 <span className="ps-2 color-blur col-10">
                   27/05/2022 - 01/06/2022
                 </span>
               </p>
               <p className="row mb-1">
-                <i class="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
+                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
                 <span className="ps-2 bold col-10 voucher-code">
                   qR8KU5x1qFKtqxS
                 </span>

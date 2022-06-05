@@ -61,7 +61,7 @@ function YardRatingWidget() {
             className="col-2 basket__img-container d-flex justify-content-center align-items-center"
             style={{ fontSize: "1.5rem" }}
           >
-            <i class="fas fa-user-edit trash-icon" title="Rating" onClick={onClick}></i>
+            <i className="fas fa-user-edit trash-icon" title="Rating" onClick={onClick}></i>
           </div>
         </div>
         <div className="match-container row mb-2 col-5">
@@ -85,7 +85,7 @@ function YardRatingWidget() {
             className="col-2 basket__img-container d-flex justify-content-center align-items-center"
             style={{ fontSize: "1.5rem" }}
           >
-            <i class="fas fa-user-edit"></i>
+            <i className="fas fa-user-edit"></i>
           </div>
         </div>
         <div className="match-container row mb-2 col-5">
@@ -109,7 +109,7 @@ function YardRatingWidget() {
             className="col-2 basket__img-container d-flex justify-content-center align-items-center"
             style={{ fontSize: "1.5rem" }}
           >
-            <i class="fas fa-user-edit"></i>
+            <i className="fas fa-user-edit"></i>
           </div>
         </div>
         <div className="match-container row mb-2 col-5">
@@ -133,7 +133,7 @@ function YardRatingWidget() {
             className="col-2 basket__img-container d-flex justify-content-center align-items-center"
             style={{ fontSize: "1.5rem" }}
           >
-            <i class="fas fa-user-edit"></i>
+            <i className="fas fa-user-edit"></i>
           </div>
         </div>
         <div className="match-container row mb-2 col-5">
@@ -157,7 +157,7 @@ function YardRatingWidget() {
             className="col-2 basket__img-container d-flex justify-content-center align-items-center"
             style={{ fontSize: "1.5rem" }}
           >
-            <i class="fas fa-user-edit"></i>
+            <i className="fas fa-user-edit"></i>
           </div>
         </div>
       </div>
