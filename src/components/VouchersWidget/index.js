@@ -7,7 +7,7 @@ import voucher1 from "../../assets/images/voucher-1.png";
 
 function VouchersWidget() {
   return (
-    <div className="w-100 pt-5">
+    <div className="w-100 pt-5 mt-5 px-5">
       <h4 className="text-center mb-4 size-2">
         <img src={voucher1} alt="Transaction" className="width-60 pe-3" />
         Vouchers

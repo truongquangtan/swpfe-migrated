@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Slide } from "react-slideshow-image";
 
 import yard from "../../assets/images/basketball-court-1.jpeg";
@@ -17,9 +17,15 @@ function Yard() {
       url: yard,
     },
   ]);
+  const navigate = useNavigate();
+
+  const onBooking = () => {
+    if (!localStorage.getItem('token')) {
+    }
+  }
 
   return (
-    <div className="w-100 yard-container mt-5">
+    <div className="w-100 yard-container mt-5 container">
       <div className="row flex-row">
         <div className="col-8">
           <Slide>
@@ -177,7 +183,7 @@ function Yard() {
             </div>
           </div>
           <div className="pt-3 pb-3 justify-content-around">
-            <button className="btn btn-primary p-2 w-100">Checkout</button>
+            <button className="btn btn-primary p-2 w-100" onClick={onBooking}>Booking</button>
           </div>
         </div>
       </div>

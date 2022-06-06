@@ -29,12 +29,9 @@ const validation = yup.object({
     .string("Enter your confirm password")
     .required("Confirm password is required")
     .oneOf([yup.ref("password"), null], "Confirm password not matches"),
-  fullName: yup
-    .string("Enter your full name")
-    .required("full name is required"),
+  fullName: yup.string("Enter your fullname").required("Fullname is required"),
   phone: yup
-    .string("Enter your email")
-    .required("full name is required")
+    .string("Enter your phone")
     .matches(PHONE_PATTERN, "Phone number is not valid"),
 });
 
@@ -50,18 +47,34 @@ function SignUpPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      await registerUser(data).catch((error) => {
-        if (error.response.status === 400) {
-          toast.error(error.response.data, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "colored",
-          });
-        }
-      });
+      await registerUser(data)
+        .then((res) => {
+          if (res) {
+            toast.success("Register account successfully.", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "colored",
+            });
+          }
+        })
+        .catch((error) => {
+          toast.error(
+            error.response.status >= 500
+              ? "Internal Server Error"
+              : error.response.data,
+            {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "colored",
+            }
+          );
+        });
     },
   });
 
@@ -76,7 +89,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Email
+              Email*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-envelope"></i>
@@ -104,7 +117,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Password
+              Password*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
@@ -132,7 +145,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Confirm Password
+              Confirm Password*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
@@ -160,7 +173,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Fullname
+              Fullname*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-address-card"></i>
@@ -173,7 +186,7 @@ function SignUpPage() {
               onChange={formik.handleChange}
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
-              placeholder="Full name"
+              placeholder="Fullname"
             />
             <span className="signup__filed--error">
               {formik.touched.fullName && formik.errors.fullName
@@ -223,7 +236,11 @@ function SignUpPage() {
             </p>
           </div>
           <div className="pt-3 pb-3">
-            <button type="submit" className="btn btn-primary w-100 p-2">
+            <button
+              type="submit"
+              className="btn btn-primary w-100 p-2"
+              disabled={formik.isSubmitting || !formik.isValid}
+            >
               {!formik.isSubmitting ? (
                 "Sign Up"
               ) : (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -15,6 +15,7 @@ import {
   REQUIRED_PASSWORD,
 } from "../../constants/default";
 import { loginRequest } from "../../services/auth.service";
+import { ADMIN, USER } from "../../constants/roles";
 
 const validation = yup.object({
   username: yup
@@ -36,20 +37,49 @@ function LoginPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      await loginRequest(data).catch((error) => {
-        if (error.response.status === 400) {
-          toast.error(error.response.data, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "colored",
-          });
-        }
-      });
+      await loginRequest(data)
+        .then((res) => {
+          if (res) {
+            // let navigateUrl;
+            // localStorage.setItem(encryptKey("credential", encrypt(res)));
+
+            // if (res.role === USER) {
+            //   const returnUrl = localStorage.getItem(encryptKey("returnUrl"));
+            //   navigateUrl = returnUrl || "/";
+            // } else {
+            //   navigateUrl = res.role === ADMIN ? "/admin" : "/owner";
+            // }
+            // navigate(navigateUrl);
+          
+            toast.success("Login successfully.", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "colored",
+            });
+          }
+        })
+        .catch((error) => {
+          toast.error(
+            error.response.status >= 500
+              ? "Internal Server Error"
+              : error.response.data,
+            {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              theme: "colored",
+            }
+          );
+        });
     },
   });
+
+  const navigate = useNavigate();
 
   return (
     <div className="row align-items-center justify-content-center text-center">

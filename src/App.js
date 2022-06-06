@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.scss";
-import TransactionHistoryWidget from "./components/TransactionHistoryWidget";
+import HistoryWidget from "./components/HistoryWidget";
 import BookingWidget from "./components/BookingWidget";
 import DashboardFeatures from "./components/DashboardFeatures";
 import IncomingMatchesWidget from "./components/IncomingMatchesWidget";
@@ -20,41 +20,32 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MatchManagementWidget from "./components/MatchManagementWidget";
 import YardDetails from "./components/YardDetails";
+import WelcomeWidget from "./components/WelcomeWidget";
 
 function App() {
   return (
     <Router>
       <div className="app-container">
         <Routes>
-          <Route exact path="/" element={<WelcomePage />}></Route>
-          <Route exact path="/admin" element={<HomePage />}>
+          <Route exact path="/" element={<WelcomePage />}>
+            <Route exact path="/" element={<WelcomeWidget />}></Route>
+            <Route path="/yard/:id" element={<Yard />}></Route>
+            <Route exact path="/admin" element={<HomePage />}></Route>
+            <Route path="/vouchers" element={<VouchersWidget />}></Route>
             <Route exact path="/admin" element={<DashboardFeatures />}></Route>
             <Route path="/admin/booking" element={<BookingWidget />}></Route>
-            <Route path="/admin/yard/:id" element={<Yard />}></Route>
             <Route
               path="/admin/incoming-matches"
               element={<IncomingMatchesWidget />}
             ></Route>
             <Route
               path="/admin/transaction-history"
-              element={<TransactionHistoryWidget />}
+              element={<HistoryWidget />}
             ></Route>
-            <Route
-              path="/admin/users"
-              element={<ManageUsersWidget />}
-            ></Route>
-            <Route
-              path="/admin/yards"
-              element={<ManageYardsWidget />}
-            ></Route>
-            <Route
-              path="/admin/rating"
-              element={<YardRatingWidget />}
-            ></Route>
-            <Route
-              path="/admin/vouchers"
-              element={<VouchersWidget />}
-            ></Route>
+            <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
+            <Route path="/admin/yards" element={<ManageYardsWidget />}></Route>
+            <Route path="/admin/rating" element={<YardRatingWidget />}></Route>
+            <Route path="/admin/vouchers" element={<VouchersWidget />}></Route>
             <Route
               path="/admin/voucher-management"
               element={<VoucherManagementWidget />}
@@ -63,15 +54,20 @@ function App() {
               path="/admin/match-management"
               element={<MatchManagementWidget />}
             ></Route>
-            <Route
-              path="/admin/yards/:id"
-              element={< YardDetails/>}
-            ></Route>
+            <Route path="/admin/yards/:id" element={<YardDetails />}></Route>
           </Route>
           <Route exact path="/login" element={<LoginPage />}></Route>
           <Route exact path="/signup" element={<SignUpPage />}></Route>
-          <Route exact path="/forgot-password" element={<ForgotPassword />}></Route>
-          <Route exact path="/reset-password" element={<ResetPassword />}></Route>
+          <Route
+            exact
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          ></Route>
+          <Route
+            exact
+            path="/reset-password"
+            element={<ResetPassword />}
+          ></Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
       </div>
