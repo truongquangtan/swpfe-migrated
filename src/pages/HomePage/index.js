@@ -7,7 +7,7 @@ import Header from "../../components/Header";
 function HomePage() {
   return (
     <div>
-      <Header />
+      <Header auth={true} />
       <div className="container d-flex justify-content-center features mt-5">
         <Outlet />
       </div>

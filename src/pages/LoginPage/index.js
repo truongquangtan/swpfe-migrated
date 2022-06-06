@@ -16,6 +16,7 @@ import {
 } from "../../constants/default";
 import { loginRequest } from "../../services/auth.service";
 import { ADMIN, USER } from "../../constants/roles";
+import { encrypt, encryptKey } from "../../helpers/crypto.helper";
 
 const validation = yup.object({
   username: yup
@@ -40,17 +41,17 @@ function LoginPage() {
       await loginRequest(data)
         .then((res) => {
           if (res) {
-            // let navigateUrl;
-            // localStorage.setItem(encryptKey("credential", encrypt(res)));
+            let navigateUrl;
+            localStorage.setItem(encryptKey("credential"), encrypt(res));
 
-            // if (res.role === USER) {
-            //   const returnUrl = localStorage.getItem(encryptKey("returnUrl"));
-            //   navigateUrl = returnUrl || "/";
-            // } else {
-            //   navigateUrl = res.role === ADMIN ? "/admin" : "/owner";
-            // }
-            // navigate(navigateUrl);
-          
+            if (res.role === USER) {
+              const returnUrl = localStorage.getItem(encryptKey("returnUrl"));
+              navigateUrl = returnUrl || "/";
+            } else {
+              navigateUrl = res.role === ADMIN ? "/admin" : "/owner";
+            }
+            navigate(navigateUrl);
+
             toast.success("Login successfully.", {
               position: "bottom-right",
               autoClose: 5000,
@@ -65,7 +66,7 @@ function LoginPage() {
           toast.error(
             error.response.status >= 500
               ? "Internal Server Error"
-              : error.response.data,
+              : error.response.data.message,
             {
               position: "bottom-right",
               autoClose: 5000,
