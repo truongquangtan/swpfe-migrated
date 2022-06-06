@@ -7,28 +7,22 @@ import congratulation from "../../assets/images/fire-cracker.png";
 
 const features = [
   {
-    title: "Booking",
-    icon: "far fa-calendar-alt",
-    allowedRoles: [USER, ADMIN, OWNER],
-    path: "/booking",
-  },
-  {
     title: "Incoming Matches",
     icon: "far fa-calendar-check",
     allowedRoles: [USER, ADMIN, OWNER],
     path: "/incoming-matches",
   },
   {
-    title: "Transaction History",
+    title: "History",
     icon: "fas fa-history",
     allowedRoles: [USER, ADMIN, OWNER],
-    path: "/transaction-history",
+    path: "/history",
   },
   {
     title: "Users",
     icon: "far fa-user",
-    allowedRoles: [OWNER],
-    path: "/users",
+    allowedRoles: [ADMIN],
+    path: "/admin/users",
   },
   {
     title: "Manage Yards",
@@ -71,7 +65,7 @@ function DashboardFeatures({ role }) {
       </h2>
       <div className="row justify-content-around">
         {features
-          .filter((feature) => feature.allowedRoles.includes(role))
+          // .filter((feature) => feature.allowedRoles.includes(role))
           .map((feature) => {
             return (
               <div className="col-2 mb-5">

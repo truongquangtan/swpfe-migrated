@@ -14,6 +14,7 @@ import {
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
 } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { loginRequest } from "../../services/auth.service";
 import { ADMIN, USER } from "../../constants/roles";
 import { encrypt, encryptKey } from "../../helpers/crypto.helper";
@@ -65,7 +66,7 @@ function LoginPage() {
         .catch((error) => {
           toast.error(
             error.response.status >= 500
-              ? "Internal Server Error"
+              ? INTERNAL_SERVER_ERROR
               : error.response.data.message,
             {
               position: "bottom-right",

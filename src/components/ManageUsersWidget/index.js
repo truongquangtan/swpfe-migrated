@@ -41,7 +41,7 @@ function ManageUsersWidget() {
             customUI: ({ onClose }) => {
                 return (
                     <div className="custom-confirm" style={{ width: 600 }}>
-                        <h4>Invite User</h4>
+                        <h4>Add Owner</h4>
                         <form className="my-3">
                             <div className="row p-2">
                                 <span className="col-1 lh-44 signup__icon-wrapper">
@@ -73,16 +73,6 @@ function ManageUsersWidget() {
                                     type="text"
                                     placeholder="Phone number"
                                 />
-                            </div>
-                            <div className="row p-2">
-                                <span className="col-1 lh-44 signup__icon-wrapper">
-                                    <i className="fas fa-user-tag"></i>
-                                </span>
-                                <select className="col-11 outline-none p-2 signup__input-border" style={{backgroundColor: "white"}}>
-                                    <option value="volvo">Customer</option>
-                                    <option value="saab">Admin</option>
-                                    <option value="opel">Owner</option>
-                                </select>
                             </div>
                         </form>
                         <button
@@ -143,16 +133,6 @@ function ManageUsersWidget() {
                                     placeholder="Phone number"
                                 />
                             </div>
-                            <div className="row p-2">
-                                <span className="col-1 lh-44 signup__icon-wrapper">
-                                    <i className="fas fa-user-tag"></i>
-                                </span>
-                                <select className="col-11 outline-none p-2 signup__input-border" style={{backgroundColor: "white"}}>
-                                    <option value="volvo">Customer</option>
-                                    <option value="saab">Admin</option>
-                                    <option value="opel">Owner</option>
-                                </select>
-                            </div>
                         </form>
                         <button
                             className="btn btn-primary me-3 px-4"
@@ -182,7 +162,7 @@ function ManageUsersWidget() {
             </h4>
             <button className="btn btn-primary px-4 ms-5" onClick={onInviteClick}>
                 <i className="fas fa-user-plus me-2" style={{ fontSize: "0.8rem" }}></i>
-                <b>Invite</b>
+                <b>Add Owner</b>
             </button>
         </div>
         <table className="table table-striped">
@@ -193,8 +173,8 @@ function ManageUsersWidget() {
                     <th scope="col" style={{ width: "20%" }}>Email</th>
                     <th scope="col">Phone</th>
                     <th scope="col">Role</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Created At</th>
-                    <th scope="col">Updated At</th>
                 </tr>
             </thead>
             <tbody>
@@ -208,7 +188,20 @@ function ManageUsersWidget() {
                     <td className="text-truncate" title="gianggiangph@gmail.com">gianggiangph@gmail.com</td>
                     <td>012346789</td>
                     <td>Admin</td>
+                    <td className="green bold">ACTIVE</td>
                     <td>29/05/2022 11:26</td>
+                </tr>
+                <tr>
+                    <td>
+                        <i className="trash-icon fas fa-edit col-4" title="Edit" onClick={onEditClick}></i>
+                        <i className="trash-icon fas fa-ban col-4" title="Deactive" onClick={() => onSimpleClick("Disable", "Are you sure to disable this user?", handleDisableUser)}></i>
+                        <i className="trash-icon fas fa-check-circle col-4" title="Active" onClick={() => onSimpleClick("Enable", "Are you sure to activate this user?", handleEnableUser)}></i>
+                    </td>
+                    <td>Pham Ha Giang</td>
+                    <td className="text-truncate" title="gianggiangph@gmail.com">gianggiangph@gmail.com</td>
+                    <td>012346789</td>
+                    <td>Admin</td>
+                    <td className="red bold">UNACTIVE</td>
                     <td>29/05/2022 11:26</td>
                 </tr>
             </tbody>

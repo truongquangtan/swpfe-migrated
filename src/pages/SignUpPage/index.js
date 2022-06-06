@@ -14,6 +14,7 @@ import {
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
 } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { registerUser } from "../../services/auth.service";
 
 const validation = yup.object({
@@ -63,7 +64,7 @@ function SignUpPage() {
         .catch((error) => {
           toast.error(
             error.response.status >= 500
-              ? "Internal Server Error"
+              ? INTERNAL_SERVER_ERROR
               : error.response.data,
             {
               position: "bottom-right",

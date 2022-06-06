@@ -36,7 +36,7 @@ function IncomingMatchesWidget() {
   };
 
   return (
-    <div className="col-6 ps-4 pe-4 flex-column pt-4">
+    <div className="col-6 ps-4 pe-4 flex-column pt-4 m-auto mt-5">
       <img src={player1} alt="Player" className="incoming-player-1" />
       <img src={player2} alt="Player" className="incoming-player-2" />
       <h4 className="text-center mb-4">

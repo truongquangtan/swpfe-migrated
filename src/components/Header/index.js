@@ -15,7 +15,7 @@ const popupFeatures = [
   },
 ];
 
-function Header() {
+function Header({ auth }) {
   const [showPopup, setShowPopup] = useState(false);
   return (
     <div className="header">
@@ -25,12 +25,19 @@ function Header() {
         </span>
         <b className="home-title">Basketball Playground</b>
       </Link>
-      <div
-        className="size-2 position-fixed top-1 right-1 profile-icon"
-        onClick={() => setShowPopup(() => !showPopup)}
-      >
-        <i className="far fa-user-circle"></i>
-      </div>
+      {auth ? (
+        <div
+          className="size-2 position-fixed top-1 right-1 profile-icon"
+          onClick={() => setShowPopup(() => !showPopup)}
+        >
+          <i className="far fa-user-circle"></i>
+        </div>
+      ) : (
+        <div className="size-2 position-fixed top-1 right-1 unauth-group">
+          <Link to="/login">Login</Link>
+          <Link to="/signup" style={{marginLeft: "1.5rem"}}>Sign Up</Link>
+        </div>
+      )}
       {showPopup && (
         <div className="profile-popup">
           {popupFeatures.map((feature) => {

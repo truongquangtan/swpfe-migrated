@@ -30,18 +30,20 @@ function App() {
           <Route exact path="/" element={<WelcomePage />}>
             <Route exact path="/" element={<WelcomeWidget />}></Route>
             <Route path="/yard/:id" element={<Yard />}></Route>
-            <Route exact path="/admin" element={<HomePage />}></Route>
+            <Route
+              path="/incoming-matches"
+              element={<IncomingMatchesWidget />}
+            ></Route>
             <Route path="/vouchers" element={<VouchersWidget />}></Route>
+          </Route>
+          <Route exact path="/admin" element={<HomePage />}>
             <Route exact path="/admin" element={<DashboardFeatures />}></Route>
             <Route path="/admin/booking" element={<BookingWidget />}></Route>
             <Route
               path="/admin/incoming-matches"
               element={<IncomingMatchesWidget />}
             ></Route>
-            <Route
-              path="/admin/transaction-history"
-              element={<HistoryWidget />}
-            ></Route>
+            <Route path="/admin/history" element={<HistoryWidget />}></Route>
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
             <Route path="/admin/yards" element={<ManageYardsWidget />}></Route>
             <Route path="/admin/rating" element={<YardRatingWidget />}></Route>
