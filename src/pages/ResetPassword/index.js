@@ -12,6 +12,7 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_PASSWORD,
 } from "../../constants/default";
+import { updatePassword } from "../../services/auth.service";
 
 const validation = yup.object({
   re_password: yup
@@ -21,6 +22,7 @@ const validation = yup.object({
   confirm_re_password: yup
     .string(REQUEST_PASSWORD)
     .min(8, "Confirm Re-Password should be of minimum 8 characters length")
+    .oneOf([yup.ref("re_password"), null], "Confirm password not matches")
     .required(REQUIRED_PASSWORD),
 });
 
@@ -32,19 +34,27 @@ function ResetPassword() {
     },
     validationSchema: validation,
     onSubmit: async (values) => {
-      const data = JSON.stringify(values);
-      // await resetPassword(data).catch((error) => {
-      //   if (error.response.status === 400) {
-      //     toast.error(error.response.data, {
-      //       position: "bottom-right",
-      //       autoClose: 5000,
-      //       hideProgressBar: true,
-      //       closeOnClick: true,
-      //       pauseOnHover: true,
-      //       theme: "colored",
-      //     });
-      //   }
-      // });
+      const data = JSON.stringify({
+        password: values.confirm_re_password,
+      });
+      let restPaswwordAccount = localStorage.getItem("restPaswwordAccount");
+      if (restPaswwordAccount) {
+        restPaswwordAccount = JSON.parse(restPaswwordAccount);
+        const response = await updatePassword(
+          JSON.stringify({ password: values.confirm_re_password }),
+          restPaswwordAccount.token
+        );
+        console.log(response);
+
+        try {
+          const setjson = JSON.stringify();
+          localStorage.setItem("key", setjson);
+
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     },
   });
 
@@ -53,7 +63,7 @@ function ResetPassword() {
       <div className="col-4 pt-5">
         <h3 className=" bold size-4 pt-5">Reset Password</h3>
         <i className="fas fa-lock size-5 mt-4"></i>
-        <form className="mt-5">
+        <form className="mt-5" onSubmit={formik.handleSubmit}>
           <div className="row p-2">
             <label
               htmlFor="rePassword"

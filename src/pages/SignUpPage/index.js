@@ -50,6 +50,7 @@ function SignUpPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
+      console.log(data);
       await registerUser(data).catch((error) => {
         if (error.response.status === 400) {
           toast.error(error.response.data, {

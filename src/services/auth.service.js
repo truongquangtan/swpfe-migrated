@@ -19,5 +19,46 @@ export const registerUser = async (values) => {
   return response?.data ? response?.data : null;
 };
 
-export const forgotPassword = async (values) => {};
-export const resetPassword = async (values) => {};
+export const sendForgotPassword = async (values) => {
+  console.log(values);
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/forgot/send-mail`,
+    values,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response?.data ? response?.data : null;
+};
+
+export const verifyForgotPassword = async (values) => {
+  console.log(values);
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/forgot/confirm-otp`,
+    values,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response?.data ? response?.data : null;
+};
+
+export const updatePassword = async (data, token) => {
+  console.log(data);
+
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/forgot/new-password`,
+    data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response?.data ? response?.data : null;
+};

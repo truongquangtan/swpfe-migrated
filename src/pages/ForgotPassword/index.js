@@ -11,9 +11,10 @@ import {
   REQUEST_EMAIL,
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
-  REQUIRED_PASSWORD,
   REQUIRED_CODE,
 } from "../../constants/default";
+import { sendForgotPassword } from "../../services/auth.service";
+import { verifyForgotPassword } from "../../services/auth.service";
 
 const validation = yup.object({
   re_email: yup
@@ -34,19 +35,31 @@ function ForgotPassword() {
     },
     validationSchema: validation,
     onSubmit: async (values) => {
-      const data = JSON.stringify(values);
-      // await forgotPassword(data).catch((error) => {
-      //   if (error.response.status === 400) {
-      //     toast.error(error.response.data, {
-      //       position: "bottom-right",
-      //       autoClose: 5000,
-      //       hideProgressBar: true,
-      //       closeOnClick: true,
-      //       pauseOnHover: true,
-      //       theme: "colored",
-      //     });
-      //   }
-      // });
+      const data = JSON.stringify({
+        email: values.re_email,
+        otpCode: values.code,
+      });
+      await verifyForgotPassword(data)
+        .then((res) => {
+          const forgotPassword = {
+            email: values.re_email,
+            token: res.token,
+          };
+          localStorage.setItem(
+            "restPaswwordAccount",
+            JSON.stringify(forgotPassword)
+          );
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            theme: "colored",
+          });
+        });
     },
   });
 
@@ -55,7 +68,7 @@ function ForgotPassword() {
       <div className="col-4 pt-5">
         <h3 className=" bold size-4 pt-5">Forgot Password</h3>
         <i className="fas fa-lock size-5 mt-4"></i>
-        <form className="mt-5">
+        <form className="mt-5" onSubmit={formik.handleSubmit}>
           <div className="row p-2">
             <label
               htmlFor="email"
@@ -78,7 +91,28 @@ function ForgotPassword() {
               placeholder="Enter your registered mail to receive code"
               required
             />
-            <span className="col-1 lh-44 fg-pw__icon-wrapper">
+            <span
+              onClick={async () => {
+                const data = JSON.stringify({
+                  email: formik.values.re_email,
+                });
+                await sendForgotPassword(data)
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((error) => {
+                    toast.error(error.response.data.message, {
+                      position: "bottom-right",
+                      autoClose: 5000,
+                      hideProgressBar: true,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      theme: "colored",
+                    });
+                  });
+              }}
+              className="col-1 lh-44 fg-pw__icon-wrapper"
+            >
               <i className="fas fa-redo"></i>
             </span>
             <span className="signup__filed--error">
@@ -123,25 +157,24 @@ function ForgotPassword() {
             </p>
           </div>
           <div className="pt-3 pb-3">
-            <Link to="/reset-password">
-              <button
-                disabled={formik.isSubmitting || !formik.isValid}
-                type="submit"
-                className="btn btn-primary w-100 p-2"
-              >
-                {!formik.isSubmitting ? (
-                  "Confirm"
-                ) : (
-                  <div className="dots-loading">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                )}
-              </button>
-              <ToastContainer />
-            </Link>
+            {/* <Link
+              disabled={formik.isSubmitting || !formik.isValid}
+              to="/reset-password"
+            > */}
+            <button type="submit" className="btn btn-primary w-100 p-2">
+              {!formik.isSubmitting ? (
+                "Confirm"
+              ) : (
+                <div className="dots-loading">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              )}
+            </button>
+            <ToastContainer />
+            {/* </Link> */}
           </div>
         </form>
       </div>
