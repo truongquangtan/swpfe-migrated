@@ -2,10 +2,13 @@ import { Slide } from "react-slideshow-image";
 
 import Footer from "../../components/Footer";
 import BookingWidget from "../../components/BookingWidget";
-import yard1 from "../../assets/images/yard-1.jpg";
-import yard2 from "../../assets/images/yard-2.jpg";
-import yard3 from "../../assets/images/yard-3.jpg";
+import yard1 from "../../assets/images/6.jpg";
+import yard2 from "../../assets/images/3.jpg";
+import yard3 from "../../assets/images/9.jpg";
 import DashboardFeatures from "../DashboardFeatures";
+import { useState } from "react";
+import { encryptKey } from "../../helpers/crypto.helper";
+import OutstandingYard from "../OutstandingYard";
 
 const slideImages = [
   {
@@ -18,6 +21,13 @@ const slideImages = [
 ];
 
 function WelcomeWidget() {
+  const [auth, setAuth] = useState(false);
+
+  useState(() => {
+    const credential = localStorage.getItem(encryptKey("credential"));
+    setAuth(() => (credential ? true : false));
+  }, []);
+
   return (
     <>
       <Slide>
@@ -29,7 +39,8 @@ function WelcomeWidget() {
           </div>
         ))}
       </Slide>
-      <DashboardFeatures role="user"/>
+      {auth && <DashboardFeatures role="user" />}
+      <OutstandingYard />
       <BookingWidget />
       <Footer />
     </>

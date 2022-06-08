@@ -1,22 +1,41 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./style.scss";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
-const popupFeatures = [
-  {
-    title: "Profile",
-    icon: "fas fa-info-circle",
-    click: () => {},
-  },
-  {
-    title: "Log Out",
-    icon: "fas fa-sign-out-alt",
-    click: () => {},
-  },
-];
+import "./style.scss";
+import { logout } from "../../services/auth.service";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import { TOAST_CONFIG } from "../../constants/default";
+import { encryptKey } from "../../helpers/crypto.helper";
 
 function Header({ auth }) {
+  const popupFeatures = [
+    {
+      title: "Profile",
+      icon: "fas fa-info-circle",
+      click: () => {},
+    },
+    {
+      title: "Log Out",
+      icon: "fas fa-sign-out-alt",
+      click: async () => {
+        await logout()
+          .then((res) => {
+            if (res) {
+              toast.success("Logout successfully.", TOAST_CONFIG);
+              localStorage.removeItem(encryptKey("credential"));
+              navigate("/auth/login");
+            }
+          })
+          .catch((error) => {
+            toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
+          });
+      },
+    },
+  ];
   const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <div className="header">
       <Link to="/" className="d-flex align-content-center nav-brand">
@@ -34,8 +53,10 @@ function Header({ auth }) {
         </div>
       ) : (
         <div className="size-2 position-fixed top-1 right-1 unauth-group">
-          <Link to="/login">Login</Link>
-          <Link to="/signup" style={{marginLeft: "1.5rem"}}>Sign Up</Link>
+          <Link to="/auth/login">Login</Link>
+          <Link to="/auth/signup" style={{ marginLeft: "1.5rem" }}>
+            Sign Up
+          </Link>
         </div>
       )}
       {showPopup && (
@@ -50,6 +71,7 @@ function Header({ auth }) {
           })}
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 }

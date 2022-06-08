@@ -34,7 +34,7 @@ function ResetPassword() {
           </div>
           <div className="pl-3 pr-3 mt-3">
             <p className="link">
-              <Link to="/login">
+              <Link to="/auth/login">
                 <i className="fas fa-long-arrow-alt-left"></i> Back to login
               </Link>
             </p>

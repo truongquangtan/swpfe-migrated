@@ -21,6 +21,8 @@ import ResetPassword from "./pages/ResetPassword";
 import MatchManagementWidget from "./components/MatchManagementWidget";
 import YardDetails from "./components/YardDetails";
 import WelcomeWidget from "./components/WelcomeWidget";
+import OwnerPage from "./pages/OwnerPage";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
@@ -35,9 +37,38 @@ function App() {
               element={<IncomingMatchesWidget />}
             ></Route>
             <Route path="/vouchers" element={<VouchersWidget />}></Route>
+            <Route path="/rating" element={<YardRatingWidget />}></Route>
           </Route>
+
+          <Route exact path="/auth" element={<AuthPage />}>
+            <Route exact path="/auth/login" element={<LoginPage />}></Route>
+            <Route exact path="/auth/signup" element={<SignUpPage />}></Route>
+          </Route>
+
+          <Route exact path="/owner" element={<OwnerPage />}>
+            <Route
+              exact
+              path="/owner"
+              element={<DashboardFeatures role="owner" />}
+            ></Route>
+            <Route path="/owner/yards" element={<ManageYardsWidget />}></Route>
+            <Route path="/owner/yards/:id" element={<YardDetails />}></Route>
+            <Route
+              path="/owner/voucher-management"
+              element={<VoucherManagementWidget />}
+            ></Route>
+            <Route
+              path="/owner/match-management"
+              element={<MatchManagementWidget />}
+            ></Route>
+          </Route>
+
           <Route exact path="/admin" element={<HomePage />}>
-            <Route exact path="/admin" element={<DashboardFeatures />}></Route>
+            <Route
+              exact
+              path="/admin"
+              element={<DashboardFeatures role="admin" />}
+            ></Route>
             <Route path="/admin/booking" element={<BookingWidget />}></Route>
             <Route
               path="/admin/incoming-matches"
@@ -45,21 +76,8 @@ function App() {
             ></Route>
             <Route path="/admin/history" element={<HistoryWidget />}></Route>
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
-            <Route path="/admin/yards" element={<ManageYardsWidget />}></Route>
-            <Route path="/admin/rating" element={<YardRatingWidget />}></Route>
-            <Route path="/admin/vouchers" element={<VouchersWidget />}></Route>
-            <Route
-              path="/admin/voucher-management"
-              element={<VoucherManagementWidget />}
-            ></Route>
-            <Route
-              path="/admin/match-management"
-              element={<MatchManagementWidget />}
-            ></Route>
-            <Route path="/admin/yards/:id" element={<YardDetails />}></Route>
           </Route>
-          <Route exact path="/login" element={<LoginPage />}></Route>
-          <Route exact path="/signup" element={<SignUpPage />}></Route>
+
           <Route
             exact
             path="/forgot-password"

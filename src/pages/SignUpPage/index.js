@@ -13,6 +13,7 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
+  TOAST_CONFIG,
 } from "../../constants/default";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { registerUser } from "../../services/auth.service";
@@ -51,14 +52,7 @@ function SignUpPage() {
       await registerUser(data)
         .then((res) => {
           if (res) {
-            toast.success("Register account successfully.", {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              theme: "colored",
-            });
+            toast.success("Register account successfully.", TOAST_CONFIG);
           }
         })
         .catch((error) => {
@@ -66,14 +60,7 @@ function SignUpPage() {
             error.response.status >= 500
               ? INTERNAL_SERVER_ERROR
               : error.response.data,
-            {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              theme: "colored",
-            }
+            TOAST_CONFIG
           );
         });
     },
@@ -233,7 +220,7 @@ function SignUpPage() {
           </div> */}
           <div className="pl-3 pr-3 mt-3">
             <p className="link">
-              Already have an account? <Link to="/login">Login</Link>
+              Already have an account? <Link to="/auth/login">Login</Link>
             </p>
           </div>
           <div className="pt-3 pb-3">

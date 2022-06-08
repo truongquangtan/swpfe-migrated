@@ -1,10 +1,23 @@
-import { useState } from "react";
-import { confirmAlert } from "react-confirm-alert";
 import { Link } from "react-router-dom";
-import { END, PERIODS, START, TIMELINE } from "../../constants/time";
+import { useEffect, useState } from "react";
+import { confirmAlert } from "react-confirm-alert";
+import { ToastContainer, toast } from "react-toastify";
+
 import "./style.scss";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
+import {
+  getAllProvinces,
+  getDistrictsByProvinceId,
+} from "../../services/location.service";
+import { END, PERIODS, START, TIMELINE } from "../../constants/time";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
 
 function YardDetails({ yard }) {
+  const [provinces, setProvinces] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState(EMPTY);
+  const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
   const [timeSlot, setTimeSlot] = useState({
     start: START,
     end: END,
@@ -94,6 +107,70 @@ function YardDetails({ yard }) {
     });
   };
 
+  useEffect(() => {
+    const storedProvinces = localStorage.getItem(encryptKey("provinces"));
+    if (!storedProvinces) {
+      return async () => {
+        await getAllProvinces()
+          .then((res) => {
+            if (res) {
+              localStorage.setItem(encryptKey("provinces"), encrypt(res));
+              setProvinces(res);
+            }
+          })
+          .catch((error) => {
+            toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
+          });
+      };
+    } else {
+      setProvinces(decrypt(storedProvinces));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedProvince) {
+      const storedDistricts = localStorage.getItem(encryptKey("districts"));
+      if (storedDistricts) {
+        const districtsSet = decrypt(storedDistricts);
+        if (districtsSet.hasOwnProperty(selectedProvince)) {
+          return setDistricts(districtsSet[selectedProvince]);
+        }
+      }
+      fetchDistricts();
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedProvince]);
+
+  const fetchDistricts = async () => {
+    const storedDistricts = localStorage.getItem(encryptKey("districts"));
+    await getDistrictsByProvinceId(selectedProvince)
+      .then((res) => {
+        if (res) {
+          if (storedDistricts) {
+            localStorage.setItem(
+              encryptKey("districts"),
+              encrypt({
+                ...decrypt(storedDistricts),
+                [selectedProvince]: res,
+              })
+            );
+          } else {
+            localStorage.setItem(
+              encryptKey("districts"),
+              encrypt({
+                [selectedProvince]: res,
+              })
+            );
+          }
+          setDistricts(res);
+        }
+      })
+      .catch((error) => {
+        toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
+      });
+  };
+
   const handleDisableYard = () => {};
 
   const handleEnableYard = () => {};
@@ -153,12 +230,17 @@ function YardDetails({ yard }) {
             <span className="col-1 lh-44 signup__icon-wrapper" title="Province">
               <i className="far fa-map"></i>
             </span>
-            <input
+            <select
               id="yard-province"
               className="col-11 outline-none p-2 signup__input-border"
-              type="text"
-              placeholder="Province"
-            />
+              style={{ backgroundColor: "white" }}
+              onChange={(e) => setSelectedProvince(() => e.target.value)}
+            >
+              <option value="">Select province</option>
+              {provinces.map((province) => (
+                <option value={province.id}>{province.provinceName}</option>
+              ))}
+            </select>
           </div>
           <div className="row p-2 py-1">
             <label htmlFor="yard-district" style={{ paddingLeft: 0 }}>
@@ -167,12 +249,19 @@ function YardDetails({ yard }) {
             <span className="col-1 lh-44 signup__icon-wrapper" title="District">
               <i className="fas fa-map-marker-alt"></i>
             </span>
-            <input
+            <select
               id="yard-district"
               className="col-11 outline-none p-2 signup__input-border"
-              type="text"
-              placeholder="District"
-            />
+              style={{ backgroundColor: "white" }}
+              onChange={(e) => {
+                setSelectedDistrict(e.target.value);
+              }}
+            >
+              <option value="">Select district</option>
+              {districts.map((district) => (
+                <option value={district.id}>{district.districtName}</option>
+              ))}
+            </select>
           </div>
           <div className="row p-2 py-1">
             <label htmlFor="yard-address" style={{ paddingLeft: 0 }}>
@@ -303,6 +392,7 @@ function YardDetails({ yard }) {
                   <th scope="col">Reference</th>
                   <th scope="col">Name</th>
                   <th scope="col">Type</th>
+                  <th scope="col">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -351,6 +441,7 @@ function YardDetails({ yard }) {
                     Sân quận 9
                   </td>
                   <td>3 vs 3</td>
+                  <td className="green bold">ACTIVE</td>
                 </tr>
                 <tr>
                   <td>
@@ -372,6 +463,7 @@ function YardDetails({ yard }) {
                     Sân quận 9
                   </td>
                   <td className="fsi fwl">3 vs 3</td>
+                  <td className="fsi fwl">N/A</td>
                 </tr>
               </tbody>
             </table>
@@ -384,6 +476,7 @@ function YardDetails({ yard }) {
       <Link to="/admin/yards">
         <button className="btn btn-light">Back</button>
       </Link>
+      <ToastContainer />
     </div>
   );
 }

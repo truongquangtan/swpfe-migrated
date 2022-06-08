@@ -6,25 +6,27 @@ import Header from "../../components/Header";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import { ADMIN, OWNER } from "../../constants/roles";
 
-function HomePage() {
+function AuthPage() {
   const credential = localStorage.getItem(encryptKey("credential"));
-  if (!credential) {
-    return <Navigate to="/auth/login" />;
-  }
-
-  const role = decrypt(credential)?.role;
-  if (role !== ADMIN) {
-    return role === OWNER ? <Navigate to="/owner" /> : <Navigate to="/" />;
+  if (credential) {
+    const role = decrypt(credential).role;
+    return role === ADMIN ? (
+      <Navigate to="/admin" />
+    ) : role === OWNER ? (
+      <Navigate to="/owner" />
+    ) : (
+      <Navigate to="/" />
+    );
   }
 
   return (
     <div className="home">
-      <Header auth={true} />
-      <div className="container d-flex justify-content-center features mt-5">
+      <Header auth={false} />
+      <div className="features mt-5">
         <Outlet />
       </div>
     </div>
   );
 }
 
-export default HomePage;
+export default AuthPage;

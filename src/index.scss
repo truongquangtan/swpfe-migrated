@@ -121,6 +121,10 @@ p {
   overflow-x: auto;
 }
 
+.overflow-x-hidden {
+  overflow-x: hidden !important;
+}
+
 .overflow-y-auto {
   overflow-x: auto;
 }
@@ -167,4 +171,8 @@ p {
 
 .fwl {
   font-weight: lighter;
+}
+
+.w-min-content {
+  width: min-content;
 }

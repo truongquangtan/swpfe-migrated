@@ -13,6 +13,7 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
+  TOAST_CONFIG,
 } from "../../constants/default";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { loginRequest } from "../../services/auth.service";
@@ -48,19 +49,15 @@ function LoginPage() {
             if (res.role === USER) {
               const returnUrl = localStorage.getItem(encryptKey("returnUrl"));
               navigateUrl = returnUrl || "/";
+              if (returnUrl) {
+                localStorage.removeItem(encryptKey("returnUrl"));
+              }
             } else {
               navigateUrl = res.role === ADMIN ? "/admin" : "/owner";
             }
             navigate(navigateUrl);
 
-            toast.success("Login successfully.", {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              theme: "colored",
-            });
+            toast.success("Login successfully.", TOAST_CONFIG);
           }
         })
         .catch((error) => {
@@ -68,14 +65,7 @@ function LoginPage() {
             error.response.status >= 500
               ? INTERNAL_SERVER_ERROR
               : error.response.data.message,
-            {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              theme: "colored",
-            }
+            TOAST_CONFIG
           );
         });
     },
@@ -149,7 +139,7 @@ function LoginPage() {
           </div>
           <div className="pl-3 pr-3 mt-3 row">
             <p className="link text-start col-6">
-              Create new account? <Link to="/signup">Sign up</Link>
+              Create new account? <Link to="/auth/signup">Sign up</Link>
             </p>
             <p className="link text-end col-6">
               <Link to="/forgot-password">Forgot password?</Link>

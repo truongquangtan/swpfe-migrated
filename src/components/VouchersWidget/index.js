@@ -4,8 +4,15 @@ import "./style.scss";
 import noData from "../../assets/images/no-data.jpg";
 import voucher from "../../assets/images/voucher.png";
 import voucher1 from "../../assets/images/voucher-1.png";
+import { ToastContainer, toast } from "react-toastify";
+import { TOAST_CONFIG } from "../../constants/default";
 
 function VouchersWidget() {
+  const copyToClipBoard = (value) => {
+    navigator.clipboard.writeText(value);
+    toast.info("Copy to clipboard", TOAST_CONFIG);
+  };
+
   return (
     <div className="w-100 pt-5 mt-5 px-5">
       <h4 className="text-center mb-4 size-2">
@@ -33,8 +40,15 @@ function VouchersWidget() {
                 </span>
               </p>
               <p className="row mb-1">
-                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
-                <span className="ps-2 bold col-10 voucher-code">
+                <i
+                  className="trash-icon fas fa-copy col-1 pt-1"
+                  title="Copy"
+                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
+                ></i>
+                <span
+                  className="ps-2 bold col-10 voucher-code"
+                  value="qR8KU5x1qFKtqxS"
+                >
                   qR8KU5x1qFKtqxS
                 </span>
               </p>
@@ -54,7 +68,9 @@ function VouchersWidget() {
               <b className="d-block mb-2">Discount 10.000 VND</b>
               <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
                 <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Bill at least 100.000 VND</span>
+                <span className="ps-2 color-blur col-10">
+                  Bill at least 100.000 VND
+                </span>
               </p>
               <p
                 className="row mb-1"
@@ -67,8 +83,15 @@ function VouchersWidget() {
                 </span>
               </p>
               <p className="row mb-1">
-                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
-                <span className="ps-2 bold col-10 voucher-code">
+                <i
+                  className="trash-icon fas fa-copy col-1 pt-1"
+                  title="Copy"
+                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
+                ></i>
+                <span
+                  className="ps-2 bold col-10 voucher-code"
+                  value="qR8KU5x1qFKtqxS"
+                >
                   qR8KU5x1qFKtqxS
                 </span>
               </p>
@@ -88,7 +111,9 @@ function VouchersWidget() {
               <b className="d-block mb-2">Discount 10.000 VND</b>
               <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
                 <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Bill at least 100.000 VND</span>
+                <span className="ps-2 color-blur col-10">
+                  Bill at least 100.000 VND
+                </span>
               </p>
               <p
                 className="row mb-1"
@@ -101,8 +126,15 @@ function VouchersWidget() {
                 </span>
               </p>
               <p className="row mb-1">
-                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
-                <span className="ps-2 bold col-10 voucher-code">
+                <i
+                  className="trash-icon fas fa-copy col-1 pt-1"
+                  title="Copy"
+                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
+                ></i>
+                <span
+                  className="ps-2 bold col-10 voucher-code"
+                  value="qR8KU5x1qFKtqxS"
+                >
                   qR8KU5x1qFKtqxS
                 </span>
               </p>
@@ -135,8 +167,15 @@ function VouchersWidget() {
                 </span>
               </p>
               <p className="row mb-1">
-                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
-                <span className="ps-2 bold col-10 voucher-code">
+                <i
+                  className="trash-icon fas fa-copy col-1 pt-1"
+                  title="Copy"
+                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
+                ></i>
+                <span
+                  className="ps-2 bold col-10 voucher-code"
+                  value="qR8KU5x1qFKtqxS"
+                >
                   qR8KU5x1qFKtqxS
                 </span>
               </p>
@@ -169,8 +208,15 @@ function VouchersWidget() {
                 </span>
               </p>
               <p className="row mb-1">
-                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
-                <span className="ps-2 bold col-10 voucher-code">
+                <i
+                  className="trash-icon fas fa-copy col-1 pt-1"
+                  title="Copy"
+                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
+                ></i>
+                <span
+                  className="ps-2 bold col-10 voucher-code"
+                  value="qR8KU5x1qFKtqxS"
+                >
                   qR8KU5x1qFKtqxS
                 </span>
               </p>
@@ -190,7 +236,9 @@ function VouchersWidget() {
               <b className="d-block mb-2">Discount 10.000 VND</b>
               <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
                 <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Bill at least 100.000 VND</span>
+                <span className="ps-2 color-blur col-10">
+                  Bill at least 100.000 VND
+                </span>
               </p>
               <p
                 className="row mb-1"
@@ -203,8 +251,15 @@ function VouchersWidget() {
                 </span>
               </p>
               <p className="row mb-1">
-                <i className="trash-icon fas fa-copy col-1 pt-1" title="Copy"></i>
-                <span className="ps-2 bold col-10 voucher-code">
+                <i
+                  className="trash-icon fas fa-copy col-1 pt-1"
+                  title="Copy"
+                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
+                ></i>
+                <span
+                  className="ps-2 bold col-10 voucher-code"
+                  value="qR8KU5x1qFKtqxS"
+                >
                   qR8KU5x1qFKtqxS
                 </span>
               </p>
@@ -235,6 +290,7 @@ function VouchersWidget() {
           </span>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

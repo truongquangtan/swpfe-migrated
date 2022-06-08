@@ -7,15 +7,21 @@ import congratulation from "../../assets/images/fire-cracker.png";
 
 const features = [
   {
+    title: "Manage Yards",
+    icon: "fas fa-columns",
+    allowedRoles: [OWNER],
+    path: "/owner/yards",
+  },
+  {
     title: "Incoming Matches",
     icon: "far fa-calendar-check",
-    allowedRoles: [USER, ADMIN, OWNER],
+    allowedRoles: [USER],
     path: "/incoming-matches",
   },
   {
     title: "History",
     icon: "fas fa-history",
-    allowedRoles: [USER, ADMIN, OWNER],
+    allowedRoles: [USER, OWNER],
     path: "/history",
   },
   {
@@ -25,28 +31,22 @@ const features = [
     path: "/admin/users",
   },
   {
-    title: "Manage Yards",
-    icon: "fas fa-columns",
-    allowedRoles: [ADMIN, OWNER],
-    path: "/yards",
+    title: "Booking Management",
+    icon: "fas fa-basketball-ball",
+    allowedRoles: [OWNER],
+    path: "/owner/match-management",
   },
   {
     title: "Vouchers",
     icon: "fas fa-money-bill",
-    allowedRoles: [USER, ADMIN, OWNER],
+    allowedRoles: [USER],
     path: "/vouchers",
   },
   {
     title: "Voucher Management",
     icon: "fas fa-wallet",
     allowedRoles: [OWNER],
-    path: "/voucher-management",
-  },
-  {
-    title: "Match Management",
-    icon: "fas fa-basketball-ball",
-    allowedRoles: [ADMIN, OWNER],
-    path: "/match-management",
+    path: "/owner/voucher-management",
   },
   {
     title: "Rating",
@@ -65,7 +65,7 @@ function DashboardFeatures({ role }) {
       </h2>
       <div className="row justify-content-around">
         {features
-          // .filter((feature) => feature.allowedRoles.includes(role))
+          .filter((feature) => feature.allowedRoles.includes(role))
           .map((feature) => {
             return (
               <div className="col-2 mb-5">

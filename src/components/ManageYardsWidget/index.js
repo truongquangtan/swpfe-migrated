@@ -773,7 +773,7 @@ function ManageYardsWidget() {
         <img src={playground} alt="Yard" className="width-60 pe-3" />
         Yard Management
       </h4>
-      <Link to="/admin/yards/draft">
+      <Link to="/owner/yards/draft">
         <button className="btn btn-primary px-4 ms-5">
           <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
           <b>Add</b>
@@ -833,7 +833,7 @@ function ManageYardsWidget() {
               ></i>
             </td>
             <td>
-              <Link to="/admin/yards/1">
+              <Link to="/owner/yards/1">
                 <b className="trash-icon">
                   1009
                 </b>
