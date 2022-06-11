@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import { useFormik } from "formik";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import "./style.scss";
 import userGroup from "../../assets/images/user-group.png";
@@ -11,50 +10,33 @@ import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { registerOwner } from "../../services/auth.service";
 import {
   EMPTY,
+  PHONE_PATTERN,
   REQUEST_EMAIL,
   REQUIRED_EMAIL,
-  PHONE_PATTERN,
-  TOAST_CONFIG,
 } from "../../constants/default";
 
-const validation = yup.object({
+const validation = yup.object().shape({
   email: yup
     .string(REQUEST_EMAIL)
-    .email("Enter a valid email")
-    .required(REQUIRED_EMAIL),
+    .required(REQUIRED_EMAIL)
+    .email("Enter a valid email"),
   fullName: yup.string("Enter your fullname").required("Fullname is required"),
   phone: yup
     .string("Enter your phone")
     .matches(PHONE_PATTERN, "Phone number is not valid"),
 });
-
 function ManageUsersWidget() {
-  const Formik = useFormik({
-    initialValues: {
-      email: EMPTY,
-      fullName: EMPTY,
-      phone: EMPTY,
-    },
-    validationSchema: validation,
-    onSubmit: async (values) => {
-      const data = JSON.stringify(values);
-      console.log(data);
-      await registerOwner(data)
-        .then((res) => {
-          if (res) {
-            toast.success("Add owner successfully.", TOAST_CONFIG);
-          }
-        })
-        .catch((error) => {
-          toast.error(
-            error.response.status >= 500
-              ? INTERNAL_SERVER_ERROR
-              : error.response.data,
-            TOAST_CONFIG
-          );
-        });
-    },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validation),
   });
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
+    // cho nay ___ de goi API
+  };
 
   const onSimpleClick = async (title, question, callback) => {
     confirmAlert({
@@ -90,102 +72,67 @@ function ManageUsersWidget() {
   const onInviteClick = async () => {
     confirmAlert({
       customUI: ({ onClose }) => {
-        // const Formik = useFormik({
-        //   initialValues: {
-        //     email: EMPTY,
-        //     fullName: EMPTY,
-        //     phone: EMPTY,
-        //   },
-        //   validationSchema: validation,
-        //   onSubmit: async (values) => {
-        //     const data = JSON.stringify(values);
-        //     console.log(data);
-        //     await registerOwner(data)
-        //       .then((res) => {
-        //         if (res) {
-        //           toast.success("Add owner successfully.", TOAST_CONFIG);
-        //         }
-        //       })
-        //       .catch((error) => {
-        //         toast.error(
-        //           error.response.status >= 500
-        //             ? INTERNAL_SERVER_ERROR
-        //             : error.response.data,
-        //           TOAST_CONFIG
-        //         );
-        //       });
-        //   },
-        // });
-
         return (
           <div className="custom-confirm" style={{ width: 600 }}>
             <h4>Add Owner</h4>
-            <form className="my-3" onSubmit={Formik.handleSubmit}>
+            <form className="my-3" onSubmit={handleSubmit(onSubmit)}>
               <div className="row p-2">
+                <label
+                  htmlFor="add-owner-email"
+                  className="text-start"
+                  style={{ paddingLeft: 0 }}
+                >
+                  Email*
+                </label>
                 <span className="col-1 lh-44 signup__icon-wrapper">
                   <i className="fas fa-envelope"></i>
                 </span>
                 <input
-                  id="addOwner-email"
-                  onBlur={Formik.handleBlur}
-                  onChange={Formik.handleChange}
-                  value={Formik.values.email}
-                  name="email"
+                  {...register("email")}
                   className="col-11 outline-none p-2 signup__input-border"
                   type="text"
                   placeholder="Email"
                   required
                 />
-                <span className="signup__filed--error">
-                  {Formik.touched.email && Formik.errors.email
-                    ? Formik.errors.email
-                    : ""}{" "}
-                </span>
               </div>
               <div className="row p-2">
+                <label
+                  htmlFor="add-owner-fullname"
+                  className="text-start"
+                  style={{ paddingLeft: 0 }}
+                >
+                  Fullname*
+                </label>
                 <span className="col-1 lh-44 signup__icon-wrapper">
                   <i className="fas fa-address-card"></i>
                 </span>
                 <input
-                  id="addOwner-fullName"
-                  onBlur={Formik.handleBlur}
-                  onChange={Formik.handleChange}
-                  value={Formik.values.fullName}
-                  name="fullName"
+                  {...register("fullName")}
                   className="col-11 outline-none p-2 signup__input-border"
                   type="text"
                   placeholder="Full name"
                 />
-                <span className="signup__filed--error">
-                  {Formik.touched.fullName && Formik.errors.fullName
-                    ? Formik.errors.fullName
-                    : ""}{" "}
-                </span>
               </div>
               <div className="row p-2">
+                <label
+                  htmlFor="add-owner-phone"
+                  className="text-start"
+                  style={{ paddingLeft: 0 }}
+                >
+                  Phone
+                </label>
                 <span className="col-1 lh-44 signup__icon-wrapper">
                   <i className="fas fa-phone-alt"></i>
                 </span>
                 <input
-                  id="addOwner-phone"
-                  onBlur={Formik.handleBlur}
-                  onChange={Formik.handleChange}
-                  value={Formik.values.phone}
-                  name="phone"
+                  {...register("phone")}
                   className="col-11 outline-none p-2 signup__input-border"
                   type="text"
                   placeholder="Phone number"
                 />
-                <span className="signup__filed--error">
-                  {Formik.touched.phone && Formik.errors.phone
-                    ? Formik.errors.phone
-                    : ""}{" "}
-                </span>
               </div>
             </form>
             <button
-              //   type="submit"
-              //   disabled={formik.isSubmitting || !formik.isValid}
               className="btn btn-primary me-3 px-4"
               onClick={() => {
                 this.handleClickDelete();
@@ -197,7 +144,6 @@ function ManageUsersWidget() {
             <button onClick={onClose} className="btn btn-light">
               Cancel
             </button>
-            {/* <ToastContainer /> */}
           </div>
         );
       },
