@@ -14,7 +14,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { encryptKey } from "../../helpers/crypto.helper";
 import { TOAST_CONFIG } from "../../constants/default";
 import Reviews from "../Reviews";
-import { getYardById } from "../../services/yard.service";
+import { getSlots, getYardById } from "../../services/yard.service";
 import empty from "../../assets/images/empty.png";
 
 function Yard() {
@@ -27,18 +27,35 @@ function Yard() {
   const [slideImages, setSlideImages] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSubYard, setSelectedSubYard] = useState(null);
+  const [isLoadingSlots, setIsLoadingSlots] = useState(false);
+  const [slots, setSlots] = useState([]);
 
   useEffect(() => {
     getYardById(id).then((res) => {
       setYard(res.data);
-      setSlideImages(res.data.images.length ? res.data.images : [yard1]);
-      console.log(res.data);
+      setSlideImages(
+        res.data.images.length ? res.data.images : [yard1, yard2, yard3]
+      );
     });
   }, []);
 
   useEffect(() => {
     if (selectedDate && selectedSubYard) {
-      console.log(selectedDate, selectedSubYard);
+      setIsLoadingSlots(true);
+      getSlots(selectedSubYard, selectedDate)
+        .then((res) => {
+          console.log(res);
+          if (res) {
+            setSlots(res.data);
+          }
+        })
+        .finally(() => {
+          setIsLoadingSlots(false);
+        });
+    } else {
+      if (isLoadingSlots) {
+        setIsLoadingSlots(false);
+      }
     }
   }, [selectedDate, selectedSubYard]);
 
@@ -105,7 +122,7 @@ function Yard() {
               </div>
             </div>
           </div>
-          <div className="row justify-content-center mt-5">
+          <div className="row justify-content-center my-5">
             <div className="col-7 pt-4">
               <div className="text-center mb-4 row">
                 <div className="row p-2 col-6 justify-content-end size-1 ps-3">
@@ -156,30 +173,40 @@ function Yard() {
                 </div>
               </div>
               <div className="row ps-2">
-                {/* {yard.subYards[0].slots.map((slot) => (
-                  <div className="col-3 slot-details-container">
-                    <div
-                      className={
-                        slot.isSelected
-                          ? "slot-details-clicked flex-column"
-                          : "slot-details flex-column"
-                      }
-                      onClick={() => onSelectSlot(slot)}
-                    >
-                      <p>
-                        <b>
-                          {slot.startTime} - {slot.endTime}
-                        </b>
-                      </p>
-                      <p>
-                        <i>{slot.price} VND</i>
-                      </p>
+                {slots &&
+                  slots.map((slot) => (
+                    <div className="col-3 slot-details-container">
+                      <div
+                        className={
+                          slot.isBooked
+                            ? "slot-details flex-column bg-red"
+                            : slot.isSelected
+                            ? "slot-details-clicked flex-column"
+                            : "slot-details flex-column"
+                        }
+                        onClick={() => onSelectSlot(slot)}
+                      >
+                        <p>
+                          <b>
+                            {slot.startTime} - {slot.endTime}
+                          </b>
+                        </p>
+                        <p>
+                          <i>{slot.price} VND</i>
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                {isLoadingSlots && (
+                  <div className="w-100 d-flex justify-content-center pt-5">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
                     </div>
                   </div>
-                ))} */}
+                )}
                 {(!selectedDate || !selectedSubYard) && (
                   <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
-                    <img src={empty} style={{ width: 100 }} />
+                    <i className="fas fa-hand-pointer size-3"></i>
                     <p className="text-center nodata-text">
                       Please select date and sub yard
                     </p>

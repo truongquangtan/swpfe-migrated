@@ -25,6 +25,7 @@ function BookingWidget() {
   const [selectedProvince, setSelectedProvince] = useState(EMPTY);
   const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
   const [yards, setYards] = useState([]);
+  const [slots, setSlots] = useState([]);
 
   const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
@@ -158,7 +159,7 @@ function BookingWidget() {
               disabled={isLoadingProvinces}
             >
               <option value="">
-                {isLoadingDistricts ? "Loading..." : "Select province"}
+                {isLoadingProvinces ? "Loading..." : "Select province"}
               </option>
               {provinces.map((province) => (
                 <option value={province.id}>{province.provinceName}</option>

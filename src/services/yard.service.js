@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SERVICE_URL } from "../constants/default";
+import * as moment from "moment";
 
 export const searchYard = async (body) => {
   const response = await axios.post(`${SERVICE_URL}/v1/yards/search`, body, {
@@ -18,7 +19,7 @@ export const getYardById = async (id) => {
 export const getSlots = async (subYardId, date) => {
   const response = await axios.post(
     `${SERVICE_URL}/v1/sub-yards/${subYardId}/slots`,
-    { date },
+    { date: moment(date).format("DD/mm/yyyy") },
     {
       headers: {
         "Content-Type": "application/json",

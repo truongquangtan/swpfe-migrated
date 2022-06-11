@@ -7,8 +7,10 @@ import { logout } from "../../services/auth.service";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { TOAST_CONFIG } from "../../constants/default";
 import { encryptKey } from "../../helpers/crypto.helper";
+import DisableScreen from "../DisableScreen";
 
 function Header({ auth }) {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const popupFeatures = [
     {
       title: "Profile",
@@ -18,8 +20,9 @@ function Header({ auth }) {
     {
       title: "Log Out",
       icon: "fas fa-sign-out-alt",
-      click: async () => {
-        await logout()
+      click: () => {
+        setIsLoggingOut(true);
+        logout()
           .then((res) => {
             if (res) {
               toast.success("Logout successfully.", TOAST_CONFIG);
@@ -29,6 +32,9 @@ function Header({ auth }) {
           })
           .catch((error) => {
             toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
+          })
+          .finally(() => {
+            setIsLoggingOut(false);
           });
       },
     },
@@ -38,6 +44,7 @@ function Header({ auth }) {
 
   return (
     <div className="header">
+      {isLoggingOut && <DisableScreen />}
       <Link to="/" className="d-flex align-content-center nav-brand">
         <span className="p-2 size-2 ps-4 pe-3">
           <i className="fas fa-basketball-ball"></i>
