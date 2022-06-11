@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,9 +12,11 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
   REQUIRED_CODE,
+  TOAST_CONFIG,
 } from "../../constants/default";
 import { sendForgotPassword } from "../../services/auth.service";
 import { verifyForgotPassword } from "../../services/auth.service";
+import { encryptKey } from "../../helpers/crypto.helper";
 
 const validation = yup.object({
   re_email: yup
@@ -28,6 +30,8 @@ const validation = yup.object({
 });
 
 function ForgotPassword() {
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       re_email: EMPTY,
@@ -41,27 +45,30 @@ function ForgotPassword() {
       });
       await verifyForgotPassword(data)
         .then((res) => {
-          const forgotPassword = {
-            email: values.re_email,
-            token: res.token,
-          };
-          localStorage.setItem(
-            "restPaswwordAccount",
-            JSON.stringify(forgotPassword)
-          );
+          localStorage.setItem(encryptKey("temporaryToken"), res.token);
+          navigate("/auth/reset-password");
         })
         .catch((error) => {
-          toast.error(error.response.data.message, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "colored",
-          });
+          toast.error(error.response.data.message, TOAST_CONFIG);
         });
     },
   });
+
+  const requestCode = async () => {
+    const data = JSON.stringify({
+      email: formik.values.re_email,
+    });
+
+    toast.info("Code will be sent soon.", TOAST_CONFIG);
+
+    await sendForgotPassword(data)
+      .then((res) => {
+        toast.success("Code has been sent.", TOAST_CONFIG);
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message, TOAST_CONFIG);
+      });
+  };
 
   return (
     <div className="row align-items-center justify-content-center text-center">
@@ -92,25 +99,7 @@ function ForgotPassword() {
               required
             />
             <span
-              onClick={async () => {
-                const data = JSON.stringify({
-                  email: formik.values.re_email,
-                });
-                await sendForgotPassword(data)
-                  .then((res) => {
-                    console.log(res);
-                  })
-                  .catch((error) => {
-                    toast.error(error.response.data.message, {
-                      position: "bottom-right",
-                      autoClose: 5000,
-                      hideProgressBar: true,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      theme: "colored",
-                    });
-                  });
-              }}
+              onClick={requestCode}
               className="col-1 lh-44 fg-pw__icon-wrapper"
             >
               <i className="fas fa-redo"></i>
@@ -157,10 +146,6 @@ function ForgotPassword() {
             </p>
           </div>
           <div className="pt-3 pb-3">
-            {/* <Link
-              disabled={formik.isSubmitting || !formik.isValid}
-              to="/reset-password"
-            > */}
             <button type="submit" className="btn btn-primary w-100 p-2">
               {!formik.isSubmitting ? (
                 "Confirm"
@@ -174,7 +159,6 @@ function ForgotPassword() {
               )}
             </button>
             <ToastContainer />
-            {/* </Link> */}
           </div>
         </form>
       </div>

@@ -43,6 +43,16 @@ function App() {
           <Route exact path="/auth" element={<AuthPage />}>
             <Route exact path="/auth/login" element={<LoginPage />}></Route>
             <Route exact path="/auth/signup" element={<SignUpPage />}></Route>
+            <Route
+              exact
+              path="/auth/forgot-password"
+              element={<ForgotPassword />}
+            ></Route>
+            <Route
+              exact
+              path="/auth/reset-password"
+              element={<ResetPassword />}
+            ></Route>
           </Route>
 
           <Route exact path="/owner" element={<OwnerPage />}>
@@ -77,17 +87,6 @@ function App() {
             <Route path="/admin/history" element={<HistoryWidget />}></Route>
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
           </Route>
-
-          <Route
-            exact
-            path="/forgot-password"
-            element={<ForgotPassword />}
-          ></Route>
-          <Route
-            exact
-            path="/reset-password"
-            element={<ResetPassword />}
-          ></Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
       </div>

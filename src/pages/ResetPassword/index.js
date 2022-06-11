@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,8 +11,10 @@ import {
   EMPTY,
   REQUEST_PASSWORD,
   REQUIRED_PASSWORD,
+  TOAST_CONFIG,
 } from "../../constants/default";
 import { updatePassword } from "../../services/auth.service";
+import { encryptKey } from "../../helpers/crypto.helper";
 
 const validation = yup.object({
   re_password: yup
@@ -21,12 +23,14 @@ const validation = yup.object({
     .required(REQUIRED_PASSWORD),
   confirm_re_password: yup
     .string(REQUEST_PASSWORD)
-    .min(8, "Confirm Re-Password should be of minimum 8 characters length")
     .oneOf([yup.ref("re_password"), null], "Confirm password not matches")
     .required(REQUIRED_PASSWORD),
 });
 
 function ResetPassword() {
+  const temporaryToken = localStorage.getItem(encryptKey("temporaryToken"));
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       re_password: EMPTY,
@@ -37,26 +41,29 @@ function ResetPassword() {
       const data = JSON.stringify({
         password: values.confirm_re_password,
       });
-      let restPaswwordAccount = localStorage.getItem("restPaswwordAccount");
-      if (restPaswwordAccount) {
-        restPaswwordAccount = JSON.parse(restPaswwordAccount);
-        const response = await updatePassword(
+
+      if (temporaryToken) {
+        updatePassword(
           JSON.stringify({ password: values.confirm_re_password }),
-          restPaswwordAccount.token
-        );
-        console.log(response);
-
-        try {
-          const setjson = JSON.stringify();
-          localStorage.setItem("key", setjson);
-
-          console.log(data);
-        } catch (error) {
-          console.log(error);
-        }
+          temporaryToken
+        )
+          .then((res) => {
+            toast.success("Reset password successfully.", TOAST_CONFIG);
+            navigate("/auth/login");
+            localStorage.removeItem(encryptKey("temporaryToken"));
+          })
+          .catch((error) => {
+            toast.error(error.response.data.message, TOAST_CONFIG);
+          });
+      } else {
+        toast.error("Missing token!", TOAST_CONFIG);
       }
     },
   });
+
+  if (!temporaryToken) {
+    return <Navigate to="/not-found" />;
+  }
 
   return (
     <div className="row align-items-center justify-content-center text-center">

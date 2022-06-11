@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -38,6 +38,7 @@ const validation = yup.object({
 });
 
 function SignUpPage() {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: EMPTY,
@@ -53,6 +54,7 @@ function SignUpPage() {
         .then((res) => {
           if (res) {
             toast.success("Register account successfully.", TOAST_CONFIG);
+            navigate("/auth/login");
           }
         })
         .catch((error) => {

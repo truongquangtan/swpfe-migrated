@@ -142,7 +142,7 @@ function LoginPage() {
               Create new account? <Link to="/auth/signup">Sign up</Link>
             </p>
             <p className="link text-end col-6">
-              <Link to="/forgot-password">Forgot password?</Link>
+              <Link to="/auth/forgot-password">Forgot password?</Link>
             </p>
           </div>
           <div className="pt-3 pb-3">

@@ -57,8 +57,6 @@ export const logout = async () => {
 };
 
 export const updatePassword = async (data, token) => {
-  console.log(data);
-
   const response = await axios.post(
     `${SERVICE_URL}/v1/forgot/new-password`,
     data,
