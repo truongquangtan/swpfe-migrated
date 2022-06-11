@@ -67,18 +67,16 @@ function BookingWidget() {
           return setDistricts(districtsSet[selectedProvince]);
         }
       }
-      fetchDistricts().finally(() => {
-        setIsLoadingDistricts(false);
-      });
+      fetchDistricts();
     } else {
       setDistricts([]);
       setIsLoadingDistricts(false);
     }
   }, [selectedProvince]);
 
-  const fetchDistricts = async () => {
+  const fetchDistricts = () => {
     const storedDistricts = localStorage.getItem(encryptKey("districts"));
-    await getDistrictsByProvinceId(selectedProvince)
+    getDistrictsByProvinceId(selectedProvince)
       .then((res) => {
         if (res) {
           if (storedDistricts) {
@@ -102,10 +100,13 @@ function BookingWidget() {
       })
       .catch((error) => {
         toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
+      })
+      .finally(() => {
+        setIsLoadingDistricts(false);
       });
   };
 
-  const filterYard = async (
+  const filterYard = (
     provinceId = "",
     districtId = "",
     page = 1,
@@ -115,7 +116,7 @@ function BookingWidget() {
       setIsLoadingYard(true);
     }
 
-    await searchYard({ provinceId, districtId, page, itemsPerPage })
+    searchYard({ provinceId, districtId, page, itemsPerPage })
       .then((res) => {
         if (res) {
           console.log(res);
@@ -134,6 +135,8 @@ function BookingWidget() {
         setIsLoadingYard(false);
       });
   };
+
+  const filterYardOnPageChange = () => {};
 
   return (
     <div>
@@ -232,11 +235,11 @@ function BookingWidget() {
           {!yards?.length && !isLoadingYard && (
             <div className=" row justify-content-center align-items-center">
               <img className="nodata-img" src={noData} alt="No data availble" />
-              <p className="text-center nodata-text">No booking available</p>
+              <p className="text-center nodata-text">No result available</p>
             </div>
           )}
         </div>
-        <Pagination />
+        <Pagination itemsPerPage={8} filterYard={filterYard} />
       </div>
       <ToastContainer />
     </div>

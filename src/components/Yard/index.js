@@ -14,495 +14,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { encryptKey } from "../../helpers/crypto.helper";
 import { TOAST_CONFIG } from "../../constants/default";
 import Reviews from "../Reviews";
-
-const yards = [
-  {
-    id: "c62f6d14-3114-435a-8c9a-c1c767eed9ca",
-    name: "Sân Thủ Đức",
-    address: "503 Lê Văn Việt, Thành phố Thủ Đức, Thành phố Hồ Chí Minh",
-    openAt: 360,
-    closeAt: 600,
-    slotDuration: 60,
-    images: [yard1, yard2, yard3],
-    subYards: [
-      {
-        name: "Sân 1",
-        type: "3 vs 3",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 50000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 2",
-        type: "5 vs 5",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 70000,
-            isSelected: false,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "09effa30-d3d9-4d62-bb21-a795d0deba03",
-    name: "Sân Quận 1",
-    address: "2 Đinh Tiên Hoàng, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
-    openAt: 360,
-    closeAt: 600,
-    slotDuration: 60,
-    images: [yard2, yard1, yard3],
-    subYards: [
-      {
-        name: "Sân 1",
-        type: "3 vs 3",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 50000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 2",
-        type: "5 vs 5",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 70000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 3",
-        type: 2,
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "970824f1-69b1-478e-9445-b3f8ca9a320c",
-    name: "Sân Điện Biên Phủ",
-    address: "186 Điện Biên Phủ, Quận 3, Thành phố Hồ Chí Minh",
-    openAt: 360,
-    closeAt: 600,
-    slotDuration: 60,
-    images: [yard3, yard1, yard2],
-    subYards: [
-      {
-        name: "Sân 1",
-        type: "3 vs 3",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 50000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 2",
-        type: "5 vs 5",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 70000,
-            isSelected: false,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "b01b78ac-add8-4fbf-85a5-89666de6f3f6",
-    name: "Sân Thủ Đức",
-    address: "503 Lê Văn Việt, Thành phố Thủ Đức, Thành phố Hồ Chí Minh",
-    openAt: 360,
-    closeAt: 600,
-    slotDuration: 60,
-    images: [yard1, yard2, yard3],
-    subYards: [
-      {
-        name: "Sân 1",
-        type: "3 vs 3",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 50000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 2",
-        type: "5 vs 5",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 70000,
-            isSelected: false,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "ffbf6d0d-fb81-48f1-bcd7-145aa9d262f7",
-    name: "Sân Quận 1",
-    address: "2 Đinh Tiên Hoàng, Đa Kao, Quận 1, Thành phố Hồ Chí Minh",
-    openAt: 360,
-    closeAt: 600,
-    slotDuration: 60,
-    images: [yard2, yard1, yard3],
-    subYards: [
-      {
-        name: "Sân 1",
-        type: "3 vs 3",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 50000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 2",
-        type: "5 vs 5",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 70000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 3",
-        type: 2,
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "0e050a63-32d2-4298-a391-5ba2b378a43d",
-    name: "Sân Điện Biên Phủ",
-    address: "186 Điện Biên Phủ, Quận 3, Thành phố Hồ Chí Minh",
-    openAt: 360,
-    closeAt: 600,
-    slotDuration: 60,
-    images: [yard3, yard1, yard2],
-    subYards: [
-      {
-        name: "Sân 1",
-        type: "3 vs 3",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 50000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 50000,
-            isSelected: false,
-          },
-        ],
-      },
-      {
-        name: "Sân 2",
-        type: "5 vs 5",
-        slots: [
-          {
-            startTime: "06:00",
-            endTime: "07:00",
-            price: 70000,
-            isSelected: false,
-          },
-          {
-            startTime: "07:00",
-            endTime: "08:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "08:00",
-            endTime: "09:00",
-            price: 60000,
-            isSelected: false,
-          },
-          {
-            startTime: "09:00",
-            endTime: "10:00",
-            price: 70000,
-            isSelected: false,
-          },
-        ],
-      },
-    ],
-  },
-];
+import { getYardById } from "../../services/yard.service";
+import empty from "../../assets/images/empty.png";
 
 function Yard() {
   const { id } = useParams();
@@ -512,8 +25,22 @@ function Yard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [slideImages, setSlideImages] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedSubYard, setSelectedSubYard] = useState(null);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getYardById(id).then((res) => {
+      setYard(res.data);
+      setSlideImages(res.data.images.length ? res.data.images : [yard1]);
+      console.log(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (selectedDate && selectedSubYard) {
+      console.log(selectedDate, selectedSubYard);
+    }
+  }, [selectedDate, selectedSubYard]);
 
   const onBooking = () => {
     if (!localStorage.getItem(encryptKey("credential"))) {
@@ -573,8 +100,7 @@ function Yard() {
               <div className="row mb-1 yard__details-field">
                 <span className="col-3 fw-bolder">Open:</span>
                 <span className="col-9">
-                  {TIMELINE.find((time) => time.value === yard.openAt).label} -{" "}
-                  {TIMELINE.find((time) => time.value === yard.closeAt).label}
+                  {yard.openAt} - {yard.closeAt}
                 </span>
               </div>
             </div>
@@ -594,6 +120,10 @@ function Yard() {
                     className="col-10 outline-none p-2 signup__input-border"
                     type="date"
                     placeholder="Date"
+                    value={selectedDate}
+                    onChange={(e) => {
+                      setSelectedDate(e.target.value);
+                    }}
                     min={moment(new Date()).format("yyyy-mm-DD")}
                     required
                   />
@@ -609,12 +139,15 @@ function Yard() {
                     id="sub-yard"
                     className="col-10 outline-none p-2 signup__input-border"
                     style={{ backgroundColor: "white" }}
+                    onChange={(e) => {
+                      setSelectedSubYard(e.target.value);
+                    }}
                   >
                     <option value="">Select yard</option>
                     {yard.subYards.map((sub) => (
                       <option
                         value={sub.id}
-                      >{`${sub.name} - (${sub.type})`}</option>
+                      >{`${sub.name} - (${sub.typeYard})`}</option>
                     ))}
                   </select>
                 </div>
@@ -623,7 +156,7 @@ function Yard() {
                 </div>
               </div>
               <div className="row ps-2">
-                {yard.subYards[0].slots.map((slot) => (
+                {/* {yard.subYards[0].slots.map((slot) => (
                   <div className="col-3 slot-details-container">
                     <div
                       className={
@@ -643,7 +176,15 @@ function Yard() {
                       </p>
                     </div>
                   </div>
-                ))}
+                ))} */}
+                {(!selectedDate || !selectedSubYard) && (
+                  <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
+                    <img src={empty} style={{ width: 100 }} />
+                    <p className="text-center nodata-text">
+                      Please select date and sub yard
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="col-5 ps-4 pe-4 flex-column pt-4">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Pagination() {
+function Pagination({ onChange }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
 
