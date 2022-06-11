@@ -1,36 +1,32 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Slide } from "react-slideshow-image";
+import React, { useState, useEffect } from "react";
+import { Link, Outlet, Navigate } from "react-router-dom";
 
 import "./style.scss";
-import yard1 from "../../assets/images/yard-1.jpg";
-import yard2 from "../../assets/images/yard-2.jpg";
-import yard3 from "../../assets/images/yard-3.jpg";
-
-const slideImages = [yard1, yard2, yard3];
+import Header from "../../components/Header";
+import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import { OWNER, ADMIN } from "../../constants/roles";
 
 function WelcomePage() {
+  const [auth, setAuth] = useState(false);
+  const credential = localStorage.getItem(encryptKey("credential"));
+
+  useEffect(() => {
+    setAuth(() => (credential ? true : false));
+  }, []);
+
+  if (credential) {
+    const role = decrypt(credential).role;
+    if (role === ADMIN) {
+      return <Navigate to="/admin" />;
+    } else if (role === OWNER) {
+      return <Navigate to="/owner" />;
+    }
+  }
+
   return (
-    <div className="row welcome__page-container">
-      <div className="col-4 d-flex align-items-center flex-column justify-content-center">
-        <h1 className="size-5 text-center font-weight-bold bold lp-3">
-          Basketball Playground
-        </h1>
-        <Link to="/login">
-          <button className="btn btn-primary mt-5 plr-2 booking-btn">
-            Get Started
-          </button>
-        </Link>
-      </div>
-      <div className="col-8">
-        <Slide>
-          {slideImages.map((slideImage, index) => (
-            <div className="slide-container" key={index}>
-              <div style={{ backgroundImage: `url(${slideImage})` }}></div>
-            </div>
-          ))}
-        </Slide>
-      </div>
+    <div className="welcome__page-container overflow-x-hidden">
+      <Header auth={auth} />
+      <Outlet />
     </div>
   );
 }

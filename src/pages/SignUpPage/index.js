@@ -13,7 +13,9 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
+  TOAST_CONFIG,
 } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { registerUser } from "../../services/auth.service";
 
 const validation = yup.object({
@@ -29,12 +31,9 @@ const validation = yup.object({
     .string("Enter your confirm password")
     .required("Confirm password is required")
     .oneOf([yup.ref("password"), null], "Confirm password not matches"),
-  fullName: yup
-    .string("Enter your full name")
-    .required("Full name is required"),
+  fullName: yup.string("Enter your fullname").required("Fullname is required"),
   phone: yup
     .string("Enter your phone")
-    .required("Phone number is required")
     .matches(PHONE_PATTERN, "Phone number is not valid"),
 });
 
@@ -50,19 +49,20 @@ function SignUpPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      console.log(data);
-      await registerUser(data).catch((error) => {
-        if (error.response.status === 400) {
-          toast.error(error.response.data, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "colored",
-          });
-        }
-      });
+      await registerUser(data)
+        .then((res) => {
+          if (res) {
+            toast.success("Register account successfully.", TOAST_CONFIG);
+          }
+        })
+        .catch((error) => {
+          toast.error(
+            error.response.status >= 500
+              ? INTERNAL_SERVER_ERROR
+              : error.response.data,
+            TOAST_CONFIG
+          );
+        });
     },
   });
 
@@ -77,7 +77,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Email
+              Email*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-envelope"></i>
@@ -105,7 +105,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Password
+              Password*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
@@ -133,7 +133,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Confirm Password
+              Confirm Password*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
@@ -161,7 +161,7 @@ function SignUpPage() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Fullname
+              Fullname*
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-address-card"></i>
@@ -174,7 +174,7 @@ function SignUpPage() {
               onChange={formik.handleChange}
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
-              placeholder="Full name"
+              placeholder="Fullname"
             />
             <span className="signup__filed--error">
               {formik.touched.fullName && formik.errors.fullName
@@ -220,11 +220,15 @@ function SignUpPage() {
           </div> */}
           <div className="pl-3 pr-3 mt-3">
             <p className="link">
-              Already have an account? <Link to="/login">Login</Link>
+              Already have an account? <Link to="/auth/login">Login</Link>
             </p>
           </div>
           <div className="pt-3 pb-3">
-            <button type="submit" className="btn btn-primary w-100 p-2">
+            <button
+              type="submit"
+              className="btn btn-primary w-100 p-2"
+              disabled={formik.isSubmitting || !formik.isValid}
+            >
               {!formik.isSubmitting ? (
                 "Sign Up"
               ) : (

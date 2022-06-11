@@ -4,7 +4,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "./style.scss";
 import transaction from "../../assets/images/transaction.png";
 
-function TransactionHistoryWidget() {
+function HistoryWidget() {
   const onRefClick = async () => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -55,7 +55,7 @@ function TransactionHistoryWidget() {
     <div className="pt-4 w-100">
       <h4 className="text-center mb-4">
         <img src={transaction} alt="Transaction" className="width-60 pe-3" />
-        Transaction History
+        History
       </h4>
       <table className="table table-striped">
         <thead>
@@ -105,4 +105,4 @@ function TransactionHistoryWidget() {
   );
 }
 
-export default TransactionHistoryWidget;
+export default HistoryWidget;

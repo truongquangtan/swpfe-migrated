@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,8 +13,12 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
+  TOAST_CONFIG,
 } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { loginRequest } from "../../services/auth.service";
+import { ADMIN, USER } from "../../constants/roles";
+import { encrypt, encryptKey } from "../../helpers/crypto.helper";
 
 const validation = yup.object({
   username: yup
@@ -36,20 +40,38 @@ function LoginPage() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const data = JSON.stringify(values);
-      await loginRequest(data).catch((error) => {
-        if (error.response.status === 400) {
-          toast.error(error.response.data, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            theme: "colored",
-          });
-        }
-      });
+      await loginRequest(data)
+        .then((res) => {
+          if (res) {
+            let navigateUrl;
+            localStorage.setItem(encryptKey("credential"), encrypt(res));
+
+            if (res.role === USER) {
+              const returnUrl = localStorage.getItem(encryptKey("returnUrl"));
+              navigateUrl = returnUrl || "/";
+              if (returnUrl) {
+                localStorage.removeItem(encryptKey("returnUrl"));
+              }
+            } else {
+              navigateUrl = res.role === ADMIN ? "/admin" : "/owner";
+            }
+            navigate(navigateUrl);
+
+            toast.success("Login successfully.", TOAST_CONFIG);
+          }
+        })
+        .catch((error) => {
+          toast.error(
+            error.response.status >= 500
+              ? INTERNAL_SERVER_ERROR
+              : error.response.data.message,
+            TOAST_CONFIG
+          );
+        });
     },
   });
+
+  const navigate = useNavigate();
 
   return (
     <div className="row align-items-center justify-content-center text-center">
@@ -117,7 +139,7 @@ function LoginPage() {
           </div>
           <div className="pl-3 pr-3 mt-3 row">
             <p className="link text-start col-6">
-              Create new account? <Link to="/signup">Sign up</Link>
+              Create new account? <Link to="/auth/signup">Sign up</Link>
             </p>
             <p className="link text-end col-6">
               <Link to="/forgot-password">Forgot password?</Link>

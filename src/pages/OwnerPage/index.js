@@ -6,15 +6,15 @@ import Header from "../../components/Header";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import { ADMIN, OWNER } from "../../constants/roles";
 
-function HomePage() {
+function OwnerPage() {
   const credential = localStorage.getItem(encryptKey("credential"));
   if (!credential) {
     return <Navigate to="/auth/login" />;
   }
 
   const role = decrypt(credential)?.role;
-  if (role !== ADMIN) {
-    return role === OWNER ? <Navigate to="/owner" /> : <Navigate to="/" />;
+  if (role !== OWNER) {
+    return role === ADMIN ? <Navigate to="/admin" /> : <Navigate to="/" />
   }
 
   return (
@@ -27,4 +27,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default OwnerPage;

@@ -1,11 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.scss";
-import TransactionHistoryWidget from "./components/TransactionHistoryWidget";
+import HistoryWidget from "./components/HistoryWidget";
 import BookingWidget from "./components/BookingWidget";
 import DashboardFeatures from "./components/DashboardFeatures";
 import IncomingMatchesWidget from "./components/IncomingMatchesWidget";
-import PendingPaymentsWidget from "./components/PendingPaymentsWidget";
 import Yard from "./components/Yard";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -14,74 +13,81 @@ import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
 import ManageUsersWidget from "./components/ManageUsersWidget";
 import ManageYardsWidget from "./components/ManageYardsWidget";
-import StatisticWidget from "./components/StatisticWidget";
 import YardRatingWidget from "./components/YardRatingWidget";
 import VouchersWidget from "./components/VouchersWidget";
 import VoucherManagementWidget from "./components/VoucherManagementWidget";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MatchManagementWidget from "./components/MatchManagementWidget";
-import ReturnPaymentsWidget from "./components/ReturnPaymentsWidget";
+import YardDetails from "./components/YardDetails";
+import WelcomeWidget from "./components/WelcomeWidget";
+import OwnerPage from "./pages/OwnerPage";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
     <Router>
       <div className="app-container">
         <Routes>
-          <Route exact path="/" element={<WelcomePage />}></Route>
-          <Route exact path="/home" element={<HomePage />}>
-            <Route exact path="/home" element={<DashboardFeatures />}></Route>
-            <Route path="/home/booking" element={<BookingWidget />}></Route>
-            <Route path="/home/yard/:id" element={<Yard />}></Route>
+          <Route exact path="/" element={<WelcomePage />}>
+            <Route exact path="/" element={<WelcomeWidget />}></Route>
+            <Route path="/yard/:id" element={<Yard />}></Route>
             <Route
-              path="/home/incoming-matches"
+              path="/incoming-matches"
               element={<IncomingMatchesWidget />}
             ></Route>
+            <Route path="/vouchers" element={<VouchersWidget />}></Route>
+            <Route path="/rating" element={<YardRatingWidget />}></Route>
+          </Route>
+
+          <Route exact path="/auth" element={<AuthPage />}>
+            <Route exact path="/auth/login" element={<LoginPage />}></Route>
+            <Route exact path="/auth/signup" element={<SignUpPage />}></Route>
+          </Route>
+
+          <Route exact path="/owner" element={<OwnerPage />}>
             <Route
-              path="/home/pending-payments"
-              element={<PendingPaymentsWidget />}
+              exact
+              path="/owner"
+              element={<DashboardFeatures role="owner" />}
             ></Route>
+            <Route path="/owner/yards" element={<ManageYardsWidget />}></Route>
+            <Route path="/owner/yards/:id" element={<YardDetails />}></Route>
             <Route
-              path="/home/transaction-history"
-              element={<TransactionHistoryWidget />}
-            ></Route>
-            <Route
-              path="/home/users"
-              element={<ManageUsersWidget />}
-            ></Route>
-            <Route
-              path="/home/yards"
-              element={<ManageYardsWidget />}
-            ></Route>
-            <Route
-              path="/home/statistic"
-              element={<StatisticWidget />}
-            ></Route>
-            <Route
-              path="/home/rating"
-              element={<YardRatingWidget />}
-            ></Route>
-            <Route
-              path="/home/vouchers"
-              element={<VouchersWidget />}
-            ></Route>
-            <Route
-              path="/home/voucher-management"
+              path="/owner/voucher-management"
               element={<VoucherManagementWidget />}
             ></Route>
             <Route
-              path="/home/match-management"
+              path="/owner/match-management"
               element={<MatchManagementWidget />}
             ></Route>
-            <Route
-              path="/home/return-payments"
-              element={<ReturnPaymentsWidget />}
-            ></Route>
           </Route>
-          <Route exact path="/login" element={<LoginPage />}></Route>
-          <Route exact path="/signup" element={<SignUpPage />}></Route>
-          <Route exact path="/forgot-password" element={<ForgotPassword />}></Route>
-          <Route exact path="/reset-password" element={<ResetPassword />}></Route>
+
+          <Route exact path="/admin" element={<HomePage />}>
+            <Route
+              exact
+              path="/admin"
+              element={<DashboardFeatures role="admin" />}
+            ></Route>
+            <Route path="/admin/booking" element={<BookingWidget />}></Route>
+            <Route
+              path="/admin/incoming-matches"
+              element={<IncomingMatchesWidget />}
+            ></Route>
+            <Route path="/admin/history" element={<HistoryWidget />}></Route>
+            <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
+          </Route>
+
+          <Route
+            exact
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          ></Route>
+          <Route
+            exact
+            path="/reset-password"
+            element={<ResetPassword />}
+          ></Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
       </div>

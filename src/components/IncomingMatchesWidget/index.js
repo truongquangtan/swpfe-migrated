@@ -14,7 +14,8 @@ function IncomingMatchesWidget() {
         return (
           <div className="custom-confirm">
             <h4>Cancel Booking</h4>
-            <p className="mb-3">Are you sure to cancel booking this match?</p>
+            <p className="mb-3">Give us your reason why you cancel this booking</p>
+            <textarea className="w-100 mb-3" style={{ height: "100px", borderRadius: "5px", resize: "none" }} />
             <button
               className="btn btn-primary me-3"
               onClick={() => {
@@ -36,7 +37,7 @@ function IncomingMatchesWidget() {
   };
 
   return (
-    <div className="col-6 ps-4 pe-4 flex-column pt-4">
+    <div className="col-6 ps-4 pe-4 flex-column pt-4 m-auto mt-5">
       <img src={player1} alt="Player" className="incoming-player-1" />
       <img src={player2} alt="Player" className="incoming-player-2" />
       <h4 className="text-center mb-4">
@@ -54,7 +55,8 @@ function IncomingMatchesWidget() {
           </div>
           <div className="p-3 ps-0 pe-1 col-7 d-flex align-items-center flex-column">
             <p className="text-center">
-              <b>Sân quận 9</b> - (3 vs 3)
+              <b>Sân quận 9</b>
+              <p>Sân A - (3 vs 3)</p>
             </p>
             <p className="color-blur">
               Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành
@@ -66,7 +68,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -82,7 +84,8 @@ function IncomingMatchesWidget() {
           </div>
           <div className="p-3 ps-0 pe-1 col-7 d-flex align-items-center flex-column">
             <p className="text-center">
-              <b>Sân quận 9</b> - (3 vs 3)
+              <b>Sân quận 9</b>
+              <p>Sân A - (3 vs 3)</p>
             </p>
             <p className="color-blur">
               Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành
@@ -94,7 +97,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -110,7 +113,8 @@ function IncomingMatchesWidget() {
           </div>
           <div className="p-3 ps-0 pe-1 col-7 d-flex align-items-center flex-column">
             <p className="text-center">
-              <b>Sân quận 9</b> - (3 vs 3)
+              <b>Sân quận 9</b>
+              <p>Sân A - (3 vs 3)</p>
             </p>
             <p className="color-blur">
               Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành
@@ -122,7 +126,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -138,7 +142,8 @@ function IncomingMatchesWidget() {
           </div>
           <div className="p-3 ps-0 pe-1 col-7 d-flex align-items-center flex-column">
             <p className="text-center">
-              <b>Sân quận 9</b> - (3 vs 3)
+              <b>Sân quận 9</b>
+              <p>Sân A - (3 vs 3)</p>
             </p>
             <p className="color-blur">
               Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành
@@ -150,7 +155,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>
@@ -166,7 +171,8 @@ function IncomingMatchesWidget() {
           </div>
           <div className="p-3 ps-0 pe-1 col-7 d-flex align-items-center flex-column">
             <p className="text-center">
-              <b>Sân quận 9</b> - (3 vs 3)
+              <b>Sân quận 9</b>
+              <p>Sân A - (3 vs 3)</p>
             </p>
             <p className="color-blur">
               Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành
@@ -178,7 +184,7 @@ function IncomingMatchesWidget() {
             style={{ fontSize: "1.5rem" }}
           >
             <i
-              class="far fa-trash-alt trash-icon"
+              className="far fa-trash-alt trash-icon"
               title="Cancel booking"
               onClick={onClick}
             ></i>

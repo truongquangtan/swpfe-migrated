@@ -7,7 +7,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 code {
@@ -120,6 +121,10 @@ p {
   overflow-x: auto;
 }
 
+.overflow-x-hidden {
+  overflow-x: hidden !important;
+}
+
 .overflow-y-auto {
   overflow-x: auto;
 }
@@ -150,4 +155,24 @@ p {
 
 .yellow {
   color: rgb(192, 192, 0);
+}
+
+.size-15 {
+  font-size: 1.5rem;
+}
+
+.mh-550 {
+  max-height: 550px;
+}
+
+.fsi {
+  font-style: italic;
+}
+
+.fwl {
+  font-weight: lighter;
+}
+
+.w-min-content {
+  width: min-content;
 }
