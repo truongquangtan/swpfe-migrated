@@ -29,3 +29,16 @@ export const logout = async () => {
   });
   return response ? response.data : null;
 };
+
+export const registerOwner = async (values) => {
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/admin/owner-register`,
+    values,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response ? response?.data : null;
+};
