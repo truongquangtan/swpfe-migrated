@@ -174,7 +174,7 @@ function BookingWidget() {
               onChange={(e) => {
                 setSelectedDistrict(e.target.value);
               }}
-              disabled={isLoadingDistricts}
+              disabled={isLoadingDistricts || !selectedProvince}
             >
               <option value="">
                 {isLoadingDistricts ? "Loading..." : "Select district"}
