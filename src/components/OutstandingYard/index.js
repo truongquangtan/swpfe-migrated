@@ -17,6 +17,7 @@ import yard1 from "../../assets/images/yard-1.jpg";
 import yard2 from "../../assets/images/yard-2.jpg";
 import yard3 from "../../assets/images/yard-3.jpg";
 import { TIMELINE } from "../../constants/time";
+import Pagination from "../Pagination";
 
 function OutstandingYard() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -362,32 +363,7 @@ function OutstandingYard() {
             </div>
           ))}
         </div>
-        <div className="yard-pagination mt-4">
-          <div>
-            <span
-              className="pagination-arrow"
-              onClick={() => onChangePage(false)}
-            >
-              <i className="fas fa-arrow-left"></i>
-            </span>
-            <span className="pagination-statistic">
-              <input
-                type="text"
-                value={currentPage}
-                onChange={(e) => setCurrentPage(e.target.value)}
-                onBlur={(e) => onBlurPage(e)}
-                onKeyUp={(e) => onInputPage(e)}
-              />
-              / {maxPage}
-            </span>
-            <span
-              className="pagination-arrow"
-              onClick={() => onChangePage(true)}
-            >
-              <i className="fas fa-arrow-right"></i>
-            </span>
-          </div>
-        </div>
+        <Pagination />
       </div>
       <ToastContainer />
     </div>

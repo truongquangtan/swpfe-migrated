@@ -88,3 +88,7 @@
     overflow-x: hidden;
     border-bottom: 2px solid black;
 }
+
+.loading-height {
+    height: calc(100vh - 64px);
+}
