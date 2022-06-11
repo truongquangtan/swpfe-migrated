@@ -17,10 +17,7 @@ import { updatePassword } from "../../services/auth.service";
 import { encryptKey } from "../../helpers/crypto.helper";
 
 const validation = yup.object({
-  re_password: yup
-    .string(REQUEST_PASSWORD)
-    .min(8, "Re-Password should be of minimum 8 characters length")
-    .required(REQUIRED_PASSWORD),
+  re_password: yup.string(REQUEST_PASSWORD).required(REQUIRED_PASSWORD),
   confirm_re_password: yup
     .string(REQUEST_PASSWORD)
     .oneOf([yup.ref("re_password"), null], "Confirm password not matches")
@@ -137,7 +134,12 @@ function ResetPassword() {
           </div>
           <div className="pt-3 pb-3">
             <button
-              disabled={formik.isSubmitting || !formik.isValid}
+              disabled={
+                formik.isSubmitting ||
+                !formik.isValid ||
+                formik.values.re_password == EMPTY ||
+                formik.values.confirm_re_password == EMPTY
+              }
               type="submit"
               className="btn btn-primary w-100 p-2"
             >

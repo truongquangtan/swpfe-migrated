@@ -146,7 +146,16 @@ function ForgotPassword() {
             </p>
           </div>
           <div className="pt-3 pb-3">
-            <button type="submit" className="btn btn-primary w-100 p-2">
+            <button
+              type="submit"
+              className="btn btn-primary w-100 p-2"
+              disabled={
+                formik.isSubmitting ||
+                !formik.isValid ||
+                formik.values.re_email == EMPTY ||
+                formik.values.code == EMPTY
+              }
+            >
               {!formik.isSubmitting ? (
                 "Confirm"
               ) : (
