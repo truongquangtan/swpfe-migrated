@@ -2,8 +2,8 @@ import axios from "axios";
 import { SERVICE_URL } from "../constants/default";
 import * as moment from "moment";
 
-export const searchYard = async (body) => {
-  const response = await axios.post(`${SERVICE_URL}/v1/yards/search`, body, {
+export const searchYard = async (params) => {
+  const response = await axios.post(`${SERVICE_URL}/v1/yards/search`, params, {
     headers: {
       "Content-Type": "application/json",
     },

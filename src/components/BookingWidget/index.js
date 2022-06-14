@@ -20,13 +20,15 @@ import { TIMELINE } from "../../constants/time";
 import Pagination from "../Pagination";
 
 function BookingWidget() {
+  const ITEMS_PER_PAGE = 8;
+
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(EMPTY);
   const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
   const [yards, setYards] = useState([]);
   const [slots, setSlots] = useState([]);
-
+  const [maxPage, setMaxPage] = useState(0);
   const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
   const [isLoadingYard, setIsLoadingYard] = useState(true);
@@ -111,7 +113,7 @@ function BookingWidget() {
     provinceId = "",
     districtId = "",
     page = 1,
-    itemsPerPage = 8
+    itemsPerPage = ITEMS_PER_PAGE
   ) => {
     if (!isLoadingYard) {
       setIsLoadingYard(true);
@@ -120,8 +122,8 @@ function BookingWidget() {
     searchYard({ provinceId, districtId, page, itemsPerPage })
       .then((res) => {
         if (res) {
-          console.log(res);
           setYards(res.yards);
+          setMaxPage(Math.floor(res.maxResult / ITEMS_PER_PAGE) + 1);
         }
       })
       .catch((error) => {
@@ -137,7 +139,9 @@ function BookingWidget() {
       });
   };
 
-  const filterYardOnPageChange = () => {};
+  const onChangePage = (page) => {
+    filterYard(selectedProvince, selectedDistrict, page);
+  };
 
   return (
     <div>
@@ -158,11 +162,13 @@ function BookingWidget() {
               }}
               disabled={isLoadingProvinces}
             >
-              <option value="">
+              <option value="" key="NO_PROVINCE">
                 {isLoadingProvinces ? "Loading..." : "Select province"}
               </option>
               {provinces.map((province) => (
-                <option value={province.id}>{province.provinceName}</option>
+                <option value={province.id} key={province.id}>
+                  {province.provinceName}
+                </option>
               ))}
             </select>
           </div>
@@ -180,11 +186,13 @@ function BookingWidget() {
               }}
               disabled={isLoadingDistricts || !selectedProvince}
             >
-              <option value="">
+              <option value="" key="NO_DISTRICT">
                 {isLoadingDistricts ? "Loading..." : "Select district"}
               </option>
               {districts.map((district) => (
-                <option value={district.id}>{district.districtName}</option>
+                <option value={district.id} key={district.id}>
+                  {district.districtName}
+                </option>
               ))}
             </select>
           </div>
@@ -212,7 +220,10 @@ function BookingWidget() {
           )}
           {!isLoadingYard &&
             yards?.map((yard) => (
-              <div className="yard__result-wrapper col-3 p-3 pe-2">
+              <div
+                className="yard__result-wrapper col-3 p-3 pe-2"
+                key={yard.id}
+              >
                 <Link className="yard-result" to={`/yard/${yard.id}`}>
                   <img src={yard.images[0] || yard1} alt="basketball yard" />
                   <div className="yard-details p-3">
@@ -240,7 +251,7 @@ function BookingWidget() {
             </div>
           )}
         </div>
-        <Pagination itemsPerPage={8} filterYard={filterYard} />
+        <Pagination maxPage={maxPage} onChangePage={onChangePage} />
       </div>
       <ToastContainer />
     </div>

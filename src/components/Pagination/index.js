@@ -1,14 +1,19 @@
 import { useState } from "react";
 
-function Pagination({ onChange }) {
+function Pagination({ maxPage, onChangePage }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(1);
 
-  const onChangePage = (isPlus) => {
+  const acceptableChange = () => {
+    onChangePage(currentPage);
+  };
+
+  const onChangeCurrentPage = (isPlus) => {
     if (isPlus && currentPage < maxPage) {
       setCurrentPage(() => currentPage + 1);
+      acceptableChange();
     } else if (!isPlus && currentPage > 1) {
       setCurrentPage(() => currentPage - 1);
+      acceptableChange();
     }
   };
 
@@ -23,15 +28,20 @@ function Pagination({ onChange }) {
     const value = e.target.value;
     if (value <= 0) {
       setCurrentPage(1);
+      acceptableChange();
     } else if (value > maxPage) {
       setCurrentPage(maxPage);
+      acceptableChange();
     }
   };
 
   return (
     <div className="yard-pagination mt-4">
       <div>
-        <span className="pagination-arrow" onClick={() => onChangePage(false)}>
+        <span
+          className="pagination-arrow"
+          onClick={() => onChangeCurrentPage(false)}
+        >
           <i className="fas fa-arrow-left"></i>
         </span>
         <span className="pagination-statistic">
@@ -44,7 +54,10 @@ function Pagination({ onChange }) {
           />
           / {maxPage}
         </span>
-        <span className="pagination-arrow" onClick={() => onChangePage(true)}>
+        <span
+          className="pagination-arrow"
+          onClick={() => onChangeCurrentPage(true)}
+        >
           <i className="fas fa-arrow-right"></i>
         </span>
       </div>

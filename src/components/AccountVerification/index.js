@@ -43,6 +43,7 @@ function AccountVerification() {
   };
 
   const handleRequestCode = () => {
+    setCode("");
     toast.info("Code will be sent soon.", TOAST_CONFIG);
 
     receiveVerifyCode(decrypt(credential).token)

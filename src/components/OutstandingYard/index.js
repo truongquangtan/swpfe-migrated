@@ -333,7 +333,7 @@ function OutstandingYard() {
       <div className="w-100 p-5">
         <div className="row mt-5 yard__result-container">
           {yards.map((yard) => (
-            <div className="yard__result-wrapper col-3 p-3 pe-2">
+            <div className="yard__result-wrapper col-3 p-3 pe-2" key={yard.id}>
               <Link className="yard-result" to={`/yard/${yard.id}`}>
                 <img src={yard.images[0]} alt="basketball yard" />
                 <div className="yard-details p-3">
@@ -363,7 +363,7 @@ function OutstandingYard() {
             </div>
           ))}
         </div>
-        <Pagination />
+        {/* <Pagination /> */}
       </div>
       <ToastContainer />
     </div>

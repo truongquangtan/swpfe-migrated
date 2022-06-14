@@ -68,7 +68,7 @@ function DashboardFeatures({ role }) {
           .filter((feature) => feature.allowedRoles.includes(role))
           .map((feature) => {
             return (
-              <div className="col-2 mb-5">
+              <div className="col-2 mb-5" key={feature.path}>
                 <NavLink
                   key={feature.title}
                   to={feature.path}

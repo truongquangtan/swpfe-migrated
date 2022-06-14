@@ -37,6 +37,7 @@ function Yard() {
   const [isAppliedVoucher, setIsAppliedVoucher] = useState(false);
   const [isLoadingVoucher, setIsLoadingVoucher] = useState(false);
   const [voucherCode, setVoucherCode] = useState("");
+  const [isBooking, setIsBooking] = useState(false);
 
   useEffect(() => {
     getYardById(id).then((res) => {
@@ -76,6 +77,7 @@ function Yard() {
       localStorage.setItem(encryptKey("returnUrl"), location.pathname);
       navigate("/auth/login");
     } else {
+      setIsBooking(true);
       bookingYard(
         yard.id,
         {
@@ -83,28 +85,35 @@ function Yard() {
           bookingList: booking,
         },
         decrypt(credential).token
-      ).then((res) => {
-        if (res) {
-          setIsLoadingSlots(true);
-          getSlots(selectedSubYard, selectedDate)
-            .then((res) => {
-              if (res) {
-                setSlots(res.data);
-              }
-            })
-            .finally(() => {
-              setIsLoadingSlots(false);
-            });
-          setBooking([]);
-          setTotal(0);
-          toast.success("Booking successfully.", TOAST_CONFIG);
-        }
-      });
+      )
+        .then((res) => {
+          if (res) {
+            setIsLoadingSlots(true);
+            getSlots(selectedSubYard, selectedDate)
+              .then((res) => {
+                if (res) {
+                  setSlots(res.data);
+                }
+              })
+              .finally(() => {
+                setIsLoadingSlots(false);
+              });
+            setBooking([]);
+            setTotal(0);
+            toast.success("Booking successfully.", TOAST_CONFIG);
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, TOAST_CONFIG);
+        })
+        .finally(() => {
+          setIsBooking(false);
+        });
     }
   };
 
   const onSelectSlot = (slot) => {
-    if (!isAppliedVoucher) {
+    if (!isAppliedVoucher && !slot.isBooked) {
       slot.isSelected = !slot.isSelected;
       if (slot.isSelected) {
         const subYard = _.find(yard.subYards, { id: slot.refSubYard });
@@ -118,7 +127,10 @@ function Yard() {
         setBooking([newBooking, ...booking]);
         setTotal(total + slot.price);
       } else {
-        setBooking(booking.filter((item) => item.id !== slot.id));
+        const newBookingList = booking.filter(
+          (item) => item.slotId !== slot.id
+        );
+        setBooking(newBookingList);
         setTotal(total - slot.price);
       }
     }
@@ -369,9 +381,18 @@ function Yard() {
                 <button
                   className="btn btn-primary p-2 w-100"
                   onClick={onBooking}
-                  disabled={!booking.length || isLoadingVoucher}
+                  disabled={!booking.length || isLoadingVoucher || isBooking}
                 >
-                  Booking
+                  {isBooking ? (
+                    <div className="dots-loading">
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                  ) : (
+                    "Booking"
+                  )}
                 </button>
               </div>
             </div>
