@@ -93,4 +93,5 @@ export const receiveVerifyCode = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response ? response.data : null;
 };

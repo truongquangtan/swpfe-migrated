@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 
 import "./style.scss";
 import Header from "../../components/Header";

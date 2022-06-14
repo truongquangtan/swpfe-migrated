@@ -3,16 +3,6 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import "./style.scss";
-import yardImg from "../../assets/images/bg-wall.jpg";
-import noData from "../../assets/images/no-data.jpg";
-import { EMPTY, TOAST_CONFIG } from "../../constants/default";
-import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
-import {
-  getAllProvinces,
-  getDistrictsByProvinceId,
-} from "../../services/location.service";
-import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
-import { searchYard } from "../../services/yard.service";
 import yard1 from "../../assets/images/yard-1.jpg";
 import yard2 from "../../assets/images/yard-2.jpg";
 import yard3 from "../../assets/images/yard-3.jpg";
@@ -302,30 +292,6 @@ function OutstandingYard() {
       ],
     },
   ]);
-
-  const onChangePage = (isPlus) => {
-    if (isPlus && currentPage < maxPage) {
-      setCurrentPage(() => currentPage + 1);
-    } else if (!isPlus && currentPage > 1) {
-      setCurrentPage(() => currentPage - 1);
-    }
-  };
-
-  const onInputPage = (e) => {
-    if (e.which === 13) {
-      onBlurPage(e);
-      e.target.blur();
-    }
-  };
-
-  const onBlurPage = (e) => {
-    const value = e.target.value;
-    if (value <= 0) {
-      setCurrentPage(1);
-    } else if (value > maxPage) {
-      setCurrentPage(maxPage);
-    }
-  };
 
   return (
     <div>

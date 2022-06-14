@@ -43,10 +43,7 @@ function ResetPassword() {
       });
 
       if (temporaryToken) {
-        updatePassword(
-          JSON.stringify({ password: values.confirm_re_password }),
-          temporaryToken
-        )
+        updatePassword(data, temporaryToken)
           .then((res) => {
             toast.success("Reset password successfully.", TOAST_CONFIG);
             navigate("/auth/login");

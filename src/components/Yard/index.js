@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Slide } from "react-slideshow-image";
 import * as moment from "moment";
 import { Rating } from "react-simple-star-rating";
@@ -9,7 +9,6 @@ import "./style.scss";
 import yard1 from "../../assets/images/yard-1.jpg";
 import yard2 from "../../assets/images/yard-2.jpg";
 import yard3 from "../../assets/images/yard-3.jpg";
-import { TIMELINE } from "../../constants/time";
 import noData from "../../assets/images/no-data.jpg";
 import { toast, ToastContainer } from "react-toastify";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";

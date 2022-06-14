@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import "./style.scss";
-import yardImg from "../../assets/images/bg-wall.jpg";
 import noData from "../../assets/images/no-data.jpg";
 import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
@@ -14,9 +13,6 @@ import {
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { searchYard } from "../../services/yard.service";
 import yard1 from "../../assets/images/yard-1.jpg";
-import yard2 from "../../assets/images/yard-2.jpg";
-import yard3 from "../../assets/images/yard-3.jpg";
-import { TIMELINE } from "../../constants/time";
 import Pagination from "../Pagination";
 
 function BookingWidget() {
@@ -27,7 +23,6 @@ function BookingWidget() {
   const [selectedProvince, setSelectedProvince] = useState(EMPTY);
   const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
   const [yards, setYards] = useState([]);
-  const [slots, setSlots] = useState([]);
   const [maxPage, setMaxPage] = useState(0);
   const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
