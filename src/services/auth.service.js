@@ -69,3 +69,28 @@ export const updatePassword = async (data, token) => {
   );
   return response ? response.data : null;
 };
+
+export const verifyAccount = async (token, code) => {
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/verify-account`,
+    {
+      otpCode: code,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response ? response.data : null;
+};
+
+export const receiveVerifyCode = async (token) => {
+  const response = await axios.get(`${SERVICE_URL}/v1/verify-account`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

@@ -82,7 +82,7 @@ function ForgotPassword() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Email receive code
+              Email
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-envelope"></i>
@@ -93,16 +93,16 @@ function ForgotPassword() {
               value={formik.values.re_email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className="col-10 outline-none p-2 fg-pw__input-border"
+              className="col-8 outline-none p-2 fg-pw__input-border"
               type="text"
               placeholder="Enter your registered mail to receive code"
               required
             />
             <span
               onClick={requestCode}
-              className="col-1 lh-44 fg-pw__icon-wrapper"
+              className="col-3 lh-44 fg-pw__icon-wrapper"
             >
-              <i className="fas fa-redo"></i>
+              Resend mail
             </span>
             <span className="signup__filed--error">
               {formik.touched.re_email && formik.errors.re_email
@@ -116,7 +116,7 @@ function ForgotPassword() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Resend Code
+              Code
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>

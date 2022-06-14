@@ -23,6 +23,7 @@ import YardDetails from "./components/YardDetails";
 import WelcomeWidget from "./components/WelcomeWidget";
 import OwnerPage from "./pages/OwnerPage";
 import AuthPage from "./pages/AuthPage";
+import AccountVerification from "./components/AccountVerification";
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
             ></Route>
             <Route path="/vouchers" element={<VouchersWidget />}></Route>
             <Route path="/rating" element={<YardRatingWidget />}></Route>
+            <Route
+              path="/verification"
+              element={<AccountVerification />}
+            ></Route>
           </Route>
 
           <Route exact path="/auth" element={<AuthPage />}>

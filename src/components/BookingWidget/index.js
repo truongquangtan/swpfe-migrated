@@ -205,8 +205,8 @@ function BookingWidget() {
         <div className="row mt-5 yard__result-container">
           {isLoadingYard && (
             <div className="w-100 d-flex justify-content-center">
-              <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+              <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
               </div>
             </div>
           )}

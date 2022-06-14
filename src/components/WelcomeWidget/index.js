@@ -7,8 +7,9 @@ import yard2 from "../../assets/images/3.jpg";
 import yard3 from "../../assets/images/9.jpg";
 import DashboardFeatures from "../DashboardFeatures";
 import { useState } from "react";
-import { encryptKey } from "../../helpers/crypto.helper";
+import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import OutstandingYard from "../OutstandingYard";
+import { Navigate } from "react-router-dom";
 
 const slideImages = [
   {
@@ -22,11 +23,15 @@ const slideImages = [
 
 function WelcomeWidget() {
   const [auth, setAuth] = useState(false);
+  const credential = localStorage.getItem(encryptKey("credential"));
 
   useState(() => {
-    const credential = localStorage.getItem(encryptKey("credential"));
     setAuth(() => (credential ? true : false));
   }, []);
+
+  if (credential && !decrypt(credential).isConfirm) {
+    return <Navigate to="/verification" />;
+  }
 
   return (
     <>

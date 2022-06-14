@@ -93,6 +93,21 @@
     height: calc(100vh - 64px);
 }
 
-.bg-red {
-    background-color: rgb(206, 0, 0);
+.booked-slot {
+    background-color: rgb(206, 0, 0) !important;
+    cursor: not-allowed !important;
+    color: white;
+}
+
+.div-disabled {
+    .flex-column {
+        cursor: not-allowed;
+    }
+}
+
+#voucher-btn {
+    &:disabled {
+        cursor: not-allowed;
+        background: none;
+    }
 }
