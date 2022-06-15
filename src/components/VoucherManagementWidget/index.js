@@ -5,7 +5,7 @@ import "./style.scss";
 import coupon from "../../assets/images/coupon.png";
 
 function VoucherManagementWidget() {
-  const onSimpleClick = async (title, question, callback) => {
+  const onSimpleClick = (title, question, callback) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -32,7 +32,7 @@ function VoucherManagementWidget() {
     });
   };
 
-  const onUpdatePercentClick = async (voucher) => {
+  const onUpdatePercentClick = (voucher) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -145,11 +145,11 @@ function VoucherManagementWidget() {
     });
   };
 
-  const onUpdateCashClick = async (voucher) => {
+  const onUpdateCashClick = (voucher) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-            <div className="custom-confirm" style={{ width: "600px" }}>
+          <div className="custom-confirm" style={{ width: "600px" }}>
             <h4>{voucher ? "Voucher Details" : "Create Voucher"}</h4>
             <div>
               <form className="my-3">

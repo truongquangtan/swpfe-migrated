@@ -23,7 +23,7 @@ function BookingWidget() {
   const [selectedProvince, setSelectedProvince] = useState(EMPTY);
   const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
   const [yards, setYards] = useState([]);
-  const [maxPage, setMaxPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(1);
   const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
   const [isLoadingYard, setIsLoadingYard] = useState(true);
@@ -118,7 +118,11 @@ function BookingWidget() {
       .then((res) => {
         if (res) {
           setYards(res.yards);
-          setMaxPage(Math.floor(res.maxResult / ITEMS_PER_PAGE) + 1);
+          setMaxPage(
+            res.maxResult % ITEMS_PER_PAGE === 0 && res.maxResult !== 0
+              ? res.maxResult / ITEMS_PER_PAGE
+              : Math.floor(res.maxResult / ITEMS_PER_PAGE) + 1
+          );
         }
       })
       .catch((error) => {

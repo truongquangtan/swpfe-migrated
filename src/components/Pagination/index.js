@@ -51,6 +51,7 @@ function Pagination({ maxPage, onChangePage }) {
             onChange={(e) => setCurrentPage(e.target.value)}
             onBlur={(e) => onBlurPage(e)}
             onKeyUp={(e) => onInputPage(e)}
+            className="p-0"
           />
           / {maxPage}
         </span>

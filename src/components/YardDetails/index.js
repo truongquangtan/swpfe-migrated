@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import { ToastContainer, toast } from "react-toastify";
+import * as _ from "lodash";
 
 import "./style.scss";
 import { EMPTY, TOAST_CONFIG } from "../../constants/default";
@@ -9,21 +10,33 @@ import {
   getAllProvinces,
   getDistrictsByProvinceId,
 } from "../../services/location.service";
-import { END, PERIODS, START, TIMELINE } from "../../constants/time";
+import {
+  END,
+  MIN_PERIOD,
+  PERIODS,
+  START,
+  TIMELINE,
+} from "../../constants/time";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
+
+const _URL = window.URL || window.webkitURL;
 
 function YardDetails({ yard }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(EMPTY);
   const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
+  const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
+  const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
   const [timeSlot, setTimeSlot] = useState({
     start: START,
     end: END,
-    period: 0,
+    period: MIN_PERIOD,
   });
-  const onUpdateSubYard = async (yard) => {
+  const [yardPictures, setYardPictures] = useState(["", "", ""]);
+
+  const onUpdateSubYard = (yard) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -108,6 +121,7 @@ function YardDetails({ yard }) {
   };
 
   useEffect(() => {
+    setIsLoadingProvinces(true);
     const storedProvinces = localStorage.getItem(encryptKey("provinces"));
     if (!storedProvinces) {
       return async () => {
@@ -120,31 +134,38 @@ function YardDetails({ yard }) {
           })
           .catch((error) => {
             toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
+          })
+          .finally(() => {
+            setIsLoadingProvinces(false);
           });
       };
     } else {
       setProvinces(decrypt(storedProvinces));
+      setIsLoadingProvinces(false);
     }
   }, []);
 
   useEffect(() => {
+    setIsLoadingDistricts(true);
     if (selectedProvince) {
       const storedDistricts = localStorage.getItem(encryptKey("districts"));
       if (storedDistricts) {
         const districtsSet = decrypt(storedDistricts);
         if (districtsSet.hasOwnProperty(selectedProvince)) {
+          setIsLoadingDistricts(false);
           return setDistricts(districtsSet[selectedProvince]);
         }
       }
       fetchDistricts();
     } else {
       setDistricts([]);
+      setIsLoadingDistricts(false);
     }
   }, [selectedProvince]);
 
-  const fetchDistricts = async () => {
+  const fetchDistricts = () => {
     const storedDistricts = localStorage.getItem(encryptKey("districts"));
-    await getDistrictsByProvinceId(selectedProvince)
+    getDistrictsByProvinceId(selectedProvince)
       .then((res) => {
         if (res) {
           if (storedDistricts) {
@@ -168,6 +189,9 @@ function YardDetails({ yard }) {
       })
       .catch((error) => {
         toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
+      })
+      .finally(() => {
+        setIsLoadingDistricts(false);
       });
   };
 
@@ -177,7 +201,7 @@ function YardDetails({ yard }) {
 
   const handleDeleteClick = () => {};
 
-  const onSimpleClick = async (title, question, callback) => {
+  const onSimpleClick = (title, question, callback) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -235,8 +259,11 @@ function YardDetails({ yard }) {
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
               onChange={(e) => setSelectedProvince(() => e.target.value)}
+              disabled={isLoadingProvinces}
             >
-              <option value="">Select province</option>
+              <option value="" key="NO_PROVINCE">
+                {isLoadingProvinces ? "Loading..." : "Select province"}
+              </option>
               {provinces.map((province) => (
                 <option value={province.id}>{province.provinceName}</option>
               ))}
@@ -256,8 +283,11 @@ function YardDetails({ yard }) {
               onChange={(e) => {
                 setSelectedDistrict(e.target.value);
               }}
+              disabled={isLoadingDistricts || !selectedProvince}
             >
-              <option value="">Select district</option>
+              <option value="" key="NO_DISTRICT">
+                {isLoadingDistricts ? "Loading..." : "Select district"}
+              </option>
               {districts.map((district) => (
                 <option value={district.id}>{district.districtName}</option>
               ))}
@@ -274,7 +304,7 @@ function YardDetails({ yard }) {
               id="yard-address"
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
-              placeholder="Address Details"
+              placeholder="Address details"
             />
           </div>
           <div className="row p-2 py-1">
@@ -291,6 +321,10 @@ function YardDetails({ yard }) {
               id="yard-open-time"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
+              onChange={(e) => {
+                setTimeSlot({ ...timeSlot, start: e.target.value });
+              }}
+              value={timeSlot.start}
             >
               {TIMELINE.filter((value) => value.value < timeSlot.end).map(
                 (time) => (
@@ -313,6 +347,10 @@ function YardDetails({ yard }) {
               id="yard-close-time"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
+              onChange={(e) => {
+                setTimeSlot({ ...timeSlot, end: e.target.value });
+              }}
+              value={timeSlot.end}
             >
               {TIMELINE.filter((value) => value.value > timeSlot.start).map(
                 (time) => (
@@ -332,6 +370,10 @@ function YardDetails({ yard }) {
               id="yard-duration"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
+              onChange={(e) => {
+                setTimeSlot({ ...timeSlot, period: e.target.value });
+              }}
+              value={timeSlot.period}
             >
               {PERIODS.filter(
                 (value) => (timeSlot.end - timeSlot.start) % value.value === 0
@@ -340,34 +382,84 @@ function YardDetails({ yard }) {
               ))}
             </select>
           </div>
+          <div className="row p-2 py-1">
+            <label htmlFor="yard-default-price" style={{ paddingLeft: 0 }}>
+              Default Price
+            </label>
+            <span className="col-1 lh-44 signup__icon-wrapper" title="Name">
+              <i className="fas fa-address-card"></i>
+            </span>
+            <input
+              id="yard-default-price"
+              className="col-11 outline-none p-2 signup__input-border"
+              type="text"
+              placeholder="Default price"
+            />
+          </div>
         </form>
-        <div className="flex-1 ps-3">
+        <div className="flex-1 ps-4">
           <div className="row h-50">
-            <div className="col-4 p-3">
-              <div className="upload__img-wrapper mb-2 color-blur">
-                Intro image
+            <div className="col-4 p-1">
+              <div
+                className="upload__img-wrapper mb-2 color-blur"
+                style={{
+                  backgroundImage: `url(${yardPictures[0]["src"]})`,
+                  backgroundSize: "cover",
+                }}
+              >
+                {!yardPictures[0] && "Intro image"}
               </div>
               <input
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
+                onChange={(e) => {
+                  const cloned = _.cloneDeep(yardPictures);
+                  const file = e.target.files[0];
+                  cloned[0] = { file, src: _URL.createObjectURL(file) };
+                  setYardPictures(cloned);
+                }}
               />
             </div>
-            <div className="col-4 p-3">
-              <div className="upload__img-wrapper mb-2 color-blur">
-                Intro image
+            <div className="col-4 p-1">
+              <div
+                className="upload__img-wrapper mb-2 color-blur"
+                style={{
+                  backgroundImage: `url(${yardPictures[1]["src"]})`,
+                  backgroundSize: "cover",
+                }}
+              >
+                {!yardPictures[1] && "Intro image"}
               </div>
               <input
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
+                onChange={(e) => {
+                  const cloned = _.cloneDeep(yardPictures);
+                  const file = e.target.files[0];
+                  cloned[1] = { file, src: _URL.createObjectURL(file) };
+                  setYardPictures(cloned);
+                }}
               />
             </div>
-            <div className="col-4 p-3">
-              <div className="upload__img-wrapper mb-2 color-blur">
-                Intro image
+            <div className="col-4 p-1">
+              <div
+                className="upload__img-wrapper mb-2 color-blur"
+                style={{
+                  backgroundImage: `url(${yardPictures[2]["src"]})`,
+                  backgroundSize: "cover",
+                }}
+              >
+                {!yardPictures[2] && "Intro image"}
               </div>
               <input
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
+                onChange={(e) => {
+                  const cloned = _.cloneDeep(yardPictures);
+                  const file = e.target.files[0];
+                  cloned[2] = { file, src: _URL.createObjectURL(file) };
+                  setYardPictures(cloned);
+                }}
               />
             </div>
           </div>
@@ -473,7 +565,7 @@ function YardDetails({ yard }) {
       <button className="btn btn-primary me-3 px-4" onClick={() => {}}>
         Save
       </button>
-      <Link to="/admin/yards">
+      <Link to="/owner/yards">
         <button className="btn btn-light">Back</button>
       </Link>
       <ToastContainer />

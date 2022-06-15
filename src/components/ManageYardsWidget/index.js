@@ -6,7 +6,7 @@ import playground from "../../assets/images/playground.png";
 import { Link } from "react-router-dom";
 
 function ManageYardsWidget() {
-  const onSimpleClick = async (title, question, callback) => {
+  const onSimpleClick = (title, question, callback) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -33,7 +33,7 @@ function ManageYardsWidget() {
     });
   };
 
-  // const onUpdateClick = async (yard) => {
+  // const onUpdateClick = (yard) => {
   //   confirmAlert({
   //     customUI: ({ onClose }) => {
   //       return (
@@ -834,9 +834,7 @@ function ManageYardsWidget() {
             </td>
             <td>
               <Link to="/owner/yards/1">
-                <b className="trash-icon">
-                  1009
-                </b>
+                <b className="trash-icon">1009</b>
               </Link>
             </td>
             <td className="text-truncate" title="Sân quận 9">

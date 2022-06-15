@@ -12,15 +12,22 @@ function YardRatingWidget() {
     setRating(rate);
   };
 
-  const onClick = async () => {
+  const onClick = () => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
           <div className="custom-confirm">
             <h4 className="w-min-content d-inline-block me-5">Rating</h4>
-            <Rating onClick={handleRating} ratingValue={rating} allowHalfIcon={true}/>
+            <Rating
+              onClick={handleRating}
+              ratingValue={rating}
+              allowHalfIcon={true}
+            />
             <p className="my-3">How do you feel about this yard?</p>
-            <textarea className="w-100 mb-3" style={{ height: "100px", borderRadius: "5px", resize: "none" }} />
+            <textarea
+              className="w-100 mb-3"
+              style={{ height: "100px", borderRadius: "5px", resize: "none" }}
+            />
             <button
               className="btn btn-primary me-3"
               onClick={() => {

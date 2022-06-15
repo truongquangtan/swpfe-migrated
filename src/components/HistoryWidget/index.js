@@ -5,11 +5,11 @@ import "./style.scss";
 import transaction from "../../assets/images/transaction.png";
 
 function HistoryWidget() {
-  const onRefClick = async () => {
+  const onRefClick = () => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <div className="custom-confirm" style={{width: 600}}>
+          <div className="custom-confirm" style={{ width: 600 }}>
             <h4>Match Details</h4>
             <div className="my-4">
               <div className="row mb-1 yard__details-field">
@@ -23,8 +23,8 @@ function HistoryWidget() {
               <div className="row mb-1 yard__details-field">
                 <span className="col-3 fw-bolder">Address:</span>
                 <span className="col-9">
-                  Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành
-                  phố Hồ Chí Minh 700000
+                  Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức,
+                  Thành phố Hồ Chí Minh 700000
                 </span>
               </div>
               <div className="row mb-1 yard__details-field">
@@ -70,7 +70,9 @@ function HistoryWidget() {
         <tbody>
           <tr>
             <td>
-              <b className="trash-icon" onClick={onRefClick}>1009</b>
+              <b className="trash-icon" onClick={onRefClick}>
+                1009
+              </b>
             </td>
             <td>150.000</td>
             <td>Momo</td>
@@ -79,7 +81,9 @@ function HistoryWidget() {
           </tr>
           <tr>
             <td>
-              <b className="trash-icon" onClick={onRefClick}>1009</b>
+              <b className="trash-icon" onClick={onRefClick}>
+                1009
+              </b>
             </td>
             <td>150.000</td>
             <td>Momo</td>

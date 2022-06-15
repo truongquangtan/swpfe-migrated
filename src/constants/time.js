@@ -189,7 +189,7 @@ const TIMELINE = [
   },
   {
     label: "23:30",
-    value: 1420,
+    value: 1410,
   },
 ];
 
@@ -380,15 +380,16 @@ const PERIODS = [
   },
   {
     label: "23:30",
-    value: 1420,
+    value: 1410,
   },
   {
     label: "24:00",
-    value: 1450,
+    value: 1440,
   },
 ];
 
 const START = 0;
-const END = 1420;
+const END = 1410;
+const MIN_PERIOD = 30;
 
-module.exports = { TIMELINE, PERIODS, START, END };
+module.exports = { TIMELINE, PERIODS, START, END, MIN_PERIOD };
