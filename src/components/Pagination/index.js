@@ -3,17 +3,17 @@ import { useState } from "react";
 function Pagination({ maxPage, onChangePage }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const acceptableChange = () => {
-    onChangePage(currentPage);
+  const acceptableChange = (page) => {
+    onChangePage(page);
   };
 
   const onChangeCurrentPage = (isPlus) => {
     if (isPlus && currentPage < maxPage) {
-      setCurrentPage(() => currentPage + 1);
-      acceptableChange();
+      setCurrentPage(currentPage + 1);
+      acceptableChange(currentPage + 1);
     } else if (!isPlus && currentPage > 1) {
-      setCurrentPage(() => currentPage - 1);
-      acceptableChange();
+      setCurrentPage(currentPage - 1);
+      acceptableChange(currentPage - 1);
     }
   };
 
@@ -28,10 +28,12 @@ function Pagination({ maxPage, onChangePage }) {
     const value = e.target.value;
     if (value <= 0) {
       setCurrentPage(1);
-      acceptableChange();
+      acceptableChange(1);
     } else if (value > maxPage) {
       setCurrentPage(maxPage);
-      acceptableChange();
+      acceptableChange(maxPage);
+    } else {
+      acceptableChange(value);
     }
   };
 
