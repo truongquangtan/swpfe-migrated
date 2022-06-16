@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Slide } from "react-slideshow-image";
 import * as moment from "moment";
@@ -23,6 +23,7 @@ import empty from "../../assets/images/empty.png";
 
 function Yard() {
   const { id } = useParams();
+  const container = useRef(null);
   const [yard, setYard] = useState(null);
   const [booking, setBooking] = useState([]);
   const [total, setTotal] = useState(0);
@@ -45,6 +46,7 @@ function Yard() {
         res.data.images.length ? res.data.images : [yard1, yard2, yard3]
       );
     });
+    container.current.scrollIntoView({ block: "start" });
   }, []);
 
   useEffect(() => {
@@ -144,6 +146,7 @@ function Yard() {
 
   return (
     <div className="w-100 yard-container mt-5 container pb-5">
+      <div ref={container}></div>
       {!yard && (
         <div className="w-100 d-flex justify-content-center align-items-center loading-height">
           <div className="spinner-border" role="status">
@@ -270,7 +273,7 @@ function Yard() {
                     </div>
                   </div>
                 )}
-                {(!selectedDate || !selectedSubYard) && (
+                {(!selectedDate || !selectedSubYard) && !slots.length && (
                   <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
                     <i className="fas fa-hand-pointer size-3"></i>
                     <p className="text-center nodata-text">

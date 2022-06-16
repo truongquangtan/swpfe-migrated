@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { Rating } from "react-simple-star-rating";
 
 import "./style.scss";
 import yard1 from "../../assets/images/yard-1.jpg";
@@ -303,7 +304,14 @@ function OutstandingYard() {
               <Link className="yard-result" to={`/yard/${yard.id}`}>
                 <img src={yard.images[0]} alt="basketball yard" />
                 <div className="yard-details p-3">
-                  <b className="d-block mb-2">{yard.name}</b>
+                  <b className="d-block">{yard.name}</b>
+                  <Rating
+                    ratingValue={80}
+                    allowHalfIcon={true}
+                    readonly={true}
+                    size={20}
+                    className="mb-2"
+                  />
                   <p className="row mb-1">
                     <i className="fas fa-clock col-1 pt-1"></i>
                     <span className="ps-2 color-blur col-10">
