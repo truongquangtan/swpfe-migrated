@@ -295,7 +295,7 @@ function OutstandingYard() {
 
   return (
     <div>
-      <h1 className="outstanding-title p-4 text-center">OUTSTANDING YARD</h1>
+      <h1 className="outstanding-title p-4 text-center">OUTSTANDING YARDS</h1>
       <div className="w-100 p-5">
         <div className="row mt-5 yard__result-container">
           {yards.map((yard) => (

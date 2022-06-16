@@ -43,6 +43,7 @@ function App() {
               path="/verification"
               element={<AccountVerification />}
             ></Route>
+            <Route path="/history" element={<HistoryWidget />}></Route>
           </Route>
 
           <Route exact path="/auth" element={<AuthPage />}>
@@ -89,7 +90,7 @@ function App() {
               path="/admin/incoming-matches"
               element={<IncomingMatchesWidget />}
             ></Route>
-            <Route path="/admin/history" element={<HistoryWidget />}></Route>
+
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
           </Route>
           <Route path="*" element={<NotFoundPage />}></Route>

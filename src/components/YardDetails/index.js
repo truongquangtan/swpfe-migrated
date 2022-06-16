@@ -34,9 +34,33 @@ function YardDetails({ yard }) {
     end: END,
     period: MIN_PERIOD,
   });
-  const [yardPictures, setYardPictures] = useState(["", "", ""]);
+  const [yardPictures, setYardPictures] = useState([EMPTY, EMPTY, EMPTY]);
+  const [basicData, setBasicData] = useState({});
+  const [subYards, setSubYards] = useState([]);
+  const [defaultPrice, setDefaultPrice] = useState(0);
+  const [defaultSlots, setDefaultSlots] = useState([]);
+  const [isAppliedDefaultPrice, setIsAppliedDefaultPrice] = useState(false);
+
+  useEffect(() => {
+    const slots = [];
+    let start = Number(timeSlot.start),
+      end = Number(timeSlot.end),
+      period = Number(timeSlot.period);
+
+    while (start < end) {
+      slots.push({
+        startTime: start,
+        endTime: start + period,
+        price: isAppliedDefaultPrice ? defaultPrice : 0,
+      });
+      start += period;
+    }
+
+    setDefaultSlots(slots);
+  }, [timeSlot]);
 
   const onUpdateSubYard = (yard) => {
+    const slots = yard ? yard.slots : _.cloneDeep(defaultSlots);
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -45,7 +69,7 @@ function YardDetails({ yard }) {
             <div className="d-flex">
               <form className="my-3 col-3 mw-410">
                 <div className="row p-2 py-1">
-                  <label htmlFor="yard-name" style={{ paddingLeft: 0 }}>
+                  <label htmlFor="name" style={{ paddingLeft: 0 }}>
                     Name
                   </label>
                   <span
@@ -55,14 +79,15 @@ function YardDetails({ yard }) {
                     <i className="fas fa-address-card"></i>
                   </span>
                   <input
-                    id="yard-name"
+                    id="name"
+                    name="name"
                     className="col-11 outline-none p-2 signup__input-border"
                     type="text"
                     placeholder="Name"
                   />
                 </div>
                 <div className="row p-2 py-1">
-                  <label htmlFor="yard-name" style={{ paddingLeft: 0 }}>
+                  <label htmlFor="type" style={{ paddingLeft: 0 }}>
                     Type
                   </label>
                   <span
@@ -74,6 +99,7 @@ function YardDetails({ yard }) {
                   <select
                     className="col-11 outline-none p-2 signup__input-border"
                     style={{ backgroundColor: "white" }}
+                    name="type"
                   >
                     <option value="3 vs 3">3 vs 3</option>
                     <option value="5 vs 5">5 vs 5</option>
@@ -82,21 +108,23 @@ function YardDetails({ yard }) {
               </form>
               <div className="flex-1 ps-3">
                 <div className="row p-3 overflow-y-auto pt-0 mh-550">
-                  <div className="col-2 slot-create-container">
-                    <div className="slot-details flex-column">
-                      <p>
-                        <b>4:00 - 4:30</b>
-                      </p>
-                      <p className="mt-2">
-                        <input
-                          className="w-75 text-center border-none price-input py-2"
-                          type="text"
-                          value="60.000"
-                        />{" "}
-                        VND
-                      </p>
-                    </div>
-                  </div>
+                  {slots.map((slot) => {
+                    <div className="col-2 slot-create-container">
+                      <div className="slot-details flex-column">
+                        <p>
+                          <b>4:00 - 4:30</b>
+                        </p>
+                        <p className="mt-2">
+                          <input
+                            className="w-75 text-center border-none price-input py-2"
+                            type="text"
+                            value={slot.price}
+                          />{" "}
+                          VND
+                        </p>
+                      </div>
+                    </div>;
+                  })}
                 </div>
               </div>
             </div>
@@ -234,32 +262,38 @@ function YardDetails({ yard }) {
       <div className="d-flex">
         <form className="my-3 col-3 mw-410">
           <div className="row p-2 py-1">
-            <label htmlFor="yard-name" style={{ paddingLeft: 0 }}>
+            <label htmlFor="name" style={{ paddingLeft: 0 }}>
               Name
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Name">
               <i className="fas fa-address-card"></i>
             </span>
             <input
-              id="yard-name"
+              id="name"
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
               placeholder="Name"
+              name="name"
+              value={basicData.name}
+              onChange={(e) =>
+                setBasicData({ ...basicData, [e.target.name]: e.target.value })
+              }
             />
           </div>
           <div className="row p-2 py-1">
-            <label htmlFor="yard-province" style={{ paddingLeft: 0 }}>
+            <label htmlFor="provinceId" style={{ paddingLeft: 0 }}>
               Province
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Province">
               <i className="far fa-map"></i>
             </span>
             <select
-              id="yard-province"
+              id="provinceId"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
               onChange={(e) => setSelectedProvince(() => e.target.value)}
               disabled={isLoadingProvinces}
+              name="provinceId"
             >
               <option value="" key="NO_PROVINCE">
                 {isLoadingProvinces ? "Loading..." : "Select province"}
@@ -270,20 +304,21 @@ function YardDetails({ yard }) {
             </select>
           </div>
           <div className="row p-2 py-1">
-            <label htmlFor="yard-district" style={{ paddingLeft: 0 }}>
+            <label htmlFor="districtId" style={{ paddingLeft: 0 }}>
               District
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="District">
               <i className="fas fa-map-marker-alt"></i>
             </span>
             <select
-              id="yard-district"
+              id="districtId"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
                 setSelectedDistrict(e.target.value);
               }}
               disabled={isLoadingDistricts || !selectedProvince}
+              name="districtId"
             >
               <option value="" key="NO_DISTRICT">
                 {isLoadingDistricts ? "Loading..." : "Select district"}
@@ -294,21 +329,25 @@ function YardDetails({ yard }) {
             </select>
           </div>
           <div className="row p-2 py-1">
-            <label htmlFor="yard-address" style={{ paddingLeft: 0 }}>
+            <label htmlFor="address" style={{ paddingLeft: 0 }}>
               Address Details
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Address">
               <i className="fas fa-map-pin"></i>
             </span>
             <input
-              id="yard-address"
+              id="address"
+              name="address"
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
               placeholder="Address details"
+              onChange={(e) =>
+                setBasicData({ ...basicData, [e.target.name]: e.target.value })
+              }
             />
           </div>
           <div className="row p-2 py-1">
-            <label htmlFor="yard-open-time" style={{ paddingLeft: 0 }}>
+            <label htmlFor="open" style={{ paddingLeft: 0 }}>
               Open Time
             </label>
             <span
@@ -318,7 +357,8 @@ function YardDetails({ yard }) {
               <i className="fas fa-clock"></i>
             </span>
             <select
-              id="yard-open-time"
+              id="open"
+              name="open"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
@@ -334,7 +374,7 @@ function YardDetails({ yard }) {
             </select>
           </div>
           <div className="row p-2 py-1">
-            <label htmlFor="yard-close-time" style={{ paddingLeft: 0 }}>
+            <label htmlFor="close" style={{ paddingLeft: 0 }}>
               Close Time
             </label>
             <span
@@ -344,7 +384,8 @@ function YardDetails({ yard }) {
               <i className="fas fa-clock"></i>
             </span>
             <select
-              id="yard-close-time"
+              id="close"
+              name="close"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
@@ -360,14 +401,15 @@ function YardDetails({ yard }) {
             </select>
           </div>
           <div className="row p-2 py-1">
-            <label htmlFor="yard-duration" style={{ paddingLeft: 0 }}>
+            <label htmlFor="duration" style={{ paddingLeft: 0 }}>
               Duration
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Duration">
               <i className="fas fa-hourglass-half"></i>
             </span>
             <select
-              id="yard-duration"
+              id="duration"
+              name="duration"
               className="col-11 outline-none p-2 signup__input-border"
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
@@ -383,18 +425,21 @@ function YardDetails({ yard }) {
             </select>
           </div>
           <div className="row p-2 py-1">
-            <label htmlFor="yard-default-price" style={{ paddingLeft: 0 }}>
+            <label htmlFor="defaultPrice" style={{ paddingLeft: 0 }}>
               Default Price
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper" title="Name">
-              <i className="fas fa-address-card"></i>
+              <i className="fas fa-dollar-sign"></i>
             </span>
             <input
-              id="yard-default-price"
-              className="col-11 outline-none p-2 signup__input-border"
-              type="text"
+              id="defaultPrice"
+              name="defaultPrice"
+              className="col-9 outline-none p-2 fg-pw__input-border"
+              type="number"
               placeholder="Default price"
+              min={0}
             />
+            <button className="col-2 fg-pw__icon-wrapper">Apply</button>
           </div>
         </form>
         <div className="flex-1 ps-4">
