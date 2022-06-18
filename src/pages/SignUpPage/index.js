@@ -13,7 +13,6 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
-  REQUIRED_PHONE,
   TOAST_CONFIG,
 } from "../../constants/default";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";

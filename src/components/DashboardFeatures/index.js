@@ -13,6 +13,12 @@ const features = [
     path: "/owner/yards",
   },
   {
+    title: "Statistics",
+    icon: "fas fa-chart-bar",
+    allowedRoles: [OWNER],
+    path: "/owner/statistics",
+  },
+  {
     title: "Incoming Matches",
     icon: "far fa-calendar-check",
     allowedRoles: [USER],
@@ -21,8 +27,14 @@ const features = [
   {
     title: "History",
     icon: "fas fa-history",
-    allowedRoles: [USER, OWNER],
+    allowedRoles: [USER],
     path: "/history",
+  },
+  {
+    title: "History",
+    icon: "fas fa-history",
+    allowedRoles: [OWNER],
+    path: "/owner/history",
   },
   {
     title: "Users",
@@ -60,15 +72,17 @@ function DashboardFeatures({ role }) {
   return (
     <div className="row py-5 w-100 height-mincontent">
       <h2 className="mb-5 text-center mt-5">
-        Welcome to Basketball Playground{" "}
-        <img src={congratulation} alt="congratulation" width="40" />
+        {role !== USER ? "Dashboard" : "Welcome to Basketball Playground"}
+        {role === USER && (
+          <img src={congratulation} alt="congratulation" width="40" />
+        )}
       </h2>
       <div className="row justify-content-around">
         {features
           .filter((feature) => feature.allowedRoles.includes(role))
           .map((feature) => {
             return (
-              <div className="col-2 mb-5" key={feature.path}>
+              <div className="col-3 mb-4" key={feature.path}>
                 <NavLink
                   key={feature.title}
                   to={feature.path}
