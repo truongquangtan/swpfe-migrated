@@ -16,8 +16,7 @@ const validation = yup.object({
     .required("Fullname owner is required"),
   phone: yup
     .string("Owner phone contact")
-    .matches(PHONE_PATTERN, "Phone is not vaild")
-    .required("Phone contact is required"),
+    .matches(PHONE_PATTERN, "Phone is not vaild"),
 });
 
 const AddOwnerModal = ({ toggleModal }) => {
