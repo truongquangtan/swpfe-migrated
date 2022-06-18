@@ -152,8 +152,8 @@ function ForgotPassword() {
               disabled={
                 formik.isSubmitting ||
                 !formik.isValid ||
-                formik.values.re_email == EMPTY ||
-                formik.values.code == EMPTY
+                formik.values.re_email === EMPTY ||
+                formik.values.code === EMPTY
               }
             >
               {!formik.isSubmitting ? (

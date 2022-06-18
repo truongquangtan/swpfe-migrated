@@ -150,8 +150,8 @@ function LoginPage() {
               disabled={
                 formik.isSubmitting ||
                 !formik.isValid ||
-                formik.values.username == EMPTY ||
-                formik.values.password == EMPTY
+                formik.values.username === EMPTY ||
+                formik.values.password === EMPTY
               }
               type="submit"
               className="btn btn-primary w-100 p-2"

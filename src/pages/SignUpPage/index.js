@@ -35,8 +35,7 @@ const validation = yup.object({
   fullName: yup.string("Enter your fullname").required("Fullname is required"),
   phone: yup
     .string("Enter your phone")
-    .matches(PHONE_PATTERN, "Phone number is not valid")
-    .required(REQUIRED_PHONE),
+    .matches(PHONE_PATTERN, "Phone number is not valid"),
 });
 
 function SignUpPage() {
@@ -234,11 +233,11 @@ function SignUpPage() {
               disabled={
                 formik.isSubmitting ||
                 !formik.isValid ||
-                formik.values.email == EMPTY ||
-                formik.values.password == EMPTY ||
-                formik.values.confirmPassword == EMPTY ||
-                formik.values.fullName == EMPTY ||
-                formik.values.phone == EMPTY
+                formik.values.email === EMPTY ||
+                formik.values.password === EMPTY ||
+                formik.values.confirmPassword === EMPTY ||
+                formik.values.fullName === EMPTY ||
+                formik.values.phone === EMPTY
               }
             >
               {!formik.isSubmitting ? (

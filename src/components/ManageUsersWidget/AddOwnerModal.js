@@ -8,22 +8,22 @@ import { addOwner } from "../../services/admin.service";
 const validation = yup.object({
   email: yup
     .string("Enter owner email")
-    .email("Enter owner email")
-    .required("Email owner is required"),
+    .email("Enter a valid email")
+    .required("Email is required"),
   fullName: yup
-    .string("Owner fullname")
+    .string("Enter owner fullname")
     .min(1, "Fullname must not missing.")
-    .required("Fullname owner is required"),
+    .required("Fullname is required"),
   phone: yup
-    .string("Owner phone contact")
-    .matches(PHONE_PATTERN, "Phone is not vaild"),
+    .string("Enter owner phone number")
+    .matches(PHONE_PATTERN, "Enter a valid phone number"),
 });
 
 const AddOwnerModal = ({ toggleModal }) => {
   const sendRequestAddOwner = async (values, resetForm) => {
     try {
       await addOwner(JSON.stringify(values));
-      toast.success("Add owner successfully.", TOAST_CONFIG);
+      toast.success("Add new owner successfully.", TOAST_CONFIG);
       toggleModal();
     } catch (error) {
       toast.error(error.response.data.message, TOAST_CONFIG);
@@ -45,7 +45,7 @@ const AddOwnerModal = ({ toggleModal }) => {
     <div className="custom-confirm" style={{ width: 600 }}>
       <h4>Add Owner</h4>
       <form className="my-3">
-        <div className="row p-2">
+        <div className="row p-1">
           <label
             htmlFor="signup-email"
             className="text-start"
@@ -71,7 +71,7 @@ const AddOwnerModal = ({ toggleModal }) => {
               : ""}{" "}
           </span>
         </div>
-        <div className="row p-2">
+        <div className="row p-1">
           <label
             htmlFor="signup-fullname"
             className="text-start"
@@ -97,7 +97,7 @@ const AddOwnerModal = ({ toggleModal }) => {
               : ""}{" "}
           </span>
         </div>
-        <div className="row p-2">
+        <div className="row p-1">
           <label
             htmlFor="signup-phone"
             className="text-start"

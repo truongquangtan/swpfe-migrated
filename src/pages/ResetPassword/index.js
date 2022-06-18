@@ -134,8 +134,8 @@ function ResetPassword() {
               disabled={
                 formik.isSubmitting ||
                 !formik.isValid ||
-                formik.values.re_password == EMPTY ||
-                formik.values.confirm_re_password == EMPTY
+                formik.values.re_password === EMPTY ||
+                formik.values.confirm_re_password === EMPTY
               }
               type="submit"
               className="btn btn-primary w-100 p-2"
