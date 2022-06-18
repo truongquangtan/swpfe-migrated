@@ -13,6 +13,7 @@ import {
   REQUEST_PASSWORD,
   REQUIRED_EMAIL,
   REQUIRED_PASSWORD,
+  REQUIRED_PHONE,
   TOAST_CONFIG,
 } from "../../constants/default";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
@@ -34,7 +35,8 @@ const validation = yup.object({
   fullName: yup.string("Enter your fullname").required("Fullname is required"),
   phone: yup
     .string("Enter your phone")
-    .matches(PHONE_PATTERN, "Phone number is not valid"),
+    .matches(PHONE_PATTERN, "Phone number is not valid")
+    .required(REQUIRED_PHONE),
 });
 
 function SignUpPage() {

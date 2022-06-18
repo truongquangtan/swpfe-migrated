@@ -5,6 +5,7 @@ const REQUEST_PASSWORD = "Enter your password";
 const REQUIRED_EMAIL = "Email is required";
 const REQUIRED_PASSWORD = "Password is required";
 const REQUIRED_CODE = "Code is required";
+const REQUIRED_PHONE = "Phone is required";
 
 const TOAST_CONFIG = {
   position: "bottom-right",
@@ -24,4 +25,5 @@ module.exports = {
   SERVICE_URL,
   REQUIRED_CODE,
   TOAST_CONFIG,
+  REQUIRED_PHONE,
 };
