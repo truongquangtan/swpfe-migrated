@@ -147,7 +147,12 @@ function LoginPage() {
           </div>
           <div className="pt-3 pb-3">
             <button
-              disabled={formik.isSubmitting || !formik.isValid}
+              disabled={
+                formik.isSubmitting ||
+                !formik.isValid ||
+                formik.values.username == EMPTY ||
+                formik.values.password == EMPTY
+              }
               type="submit"
               className="btn btn-primary w-100 p-2"
             >

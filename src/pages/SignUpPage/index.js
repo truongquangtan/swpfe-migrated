@@ -231,7 +231,15 @@ function SignUpPage() {
             <button
               type="submit"
               className="btn btn-primary w-100 p-2"
-              disabled={formik.isSubmitting || !formik.isValid}
+              disabled={
+                formik.isSubmitting ||
+                !formik.isValid ||
+                formik.values.email == EMPTY ||
+                formik.values.password == EMPTY ||
+                formik.values.confirmPassword == EMPTY ||
+                formik.values.fullName == EMPTY ||
+                formik.values.phone == EMPTY
+              }
             >
               {!formik.isSubmitting ? (
                 "Sign Up"
