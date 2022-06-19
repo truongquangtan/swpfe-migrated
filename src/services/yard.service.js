@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SERVICE_URL } from "../constants/default";
 import * as moment from "moment";
+import { decrypt, encryptKey } from "../helpers/crypto.helper";
 
 export const searchYard = async (params) => {
   const response = await axios.post(`${SERVICE_URL}/v1/yards/search`, params, {
@@ -41,6 +42,24 @@ export const bookingYard = async (yardId, payload, token) => {
       },
     }
   );
+
+  return response ? response.data : null;
+};
+
+export const addNewYard = async (payload) => {
+  const form = new FormData();
+  for (const image of payload.images) {
+    form.append("files", image);
+  }
+  form.append("data", payload.yard);
+
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/owners/me/yards`, form, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${decrypt(credential).token}`,
+    },
+  });
 
   return response ? response.data : null;
 };

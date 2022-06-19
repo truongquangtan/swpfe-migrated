@@ -73,7 +73,7 @@ function SignUpPage() {
       <div className="col-4 pt-5">
         <h3 className=" bold size-4 pt-3">Register</h3>
         <form className="mt-5" onSubmit={formik.handleSubmit}>
-          <div className="row p-2 position-relative">
+          <div className="row p-2">
             <label
               htmlFor="signup-email"
               className="text-start"
@@ -101,7 +101,7 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative pt-0">
+          <div className="row p-2 pt-0">
             <label
               htmlFor="signup-password"
               className="text-start"
@@ -129,7 +129,7 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative pt-0">
+          <div className="row p-2 pt-0">
             <label
               htmlFor="signup-password-confirm"
               className="text-start"
@@ -157,7 +157,7 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative pt-0">
+          <div className="row p-2 pt-0">
             <label
               htmlFor="signup-fullname"
               className="text-start"
@@ -184,7 +184,7 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          <div className="row p-2 position-relative pt-0">
+          <div className="row p-2 pt-0">
             <label
               htmlFor="signup-phone"
               className="text-start"
@@ -211,15 +211,6 @@ function SignUpPage() {
                 : ""}{" "}
             </span>
           </div>
-          {/* <div className="row p-2">
-            <span className="col-1 lh-42 signup__icon-wrapper">
-              <i className="fas fa-image"></i>
-            </span>
-            <input
-              className="col-11 outline-none custom-file-input p-0"
-              type="file"
-            />
-          </div> */}
           <div className="pl-3 pr-3 mt-3">
             <p className="link">
               Already have an account? <Link to="/auth/login">Login</Link>
@@ -228,7 +219,7 @@ function SignUpPage() {
           <div className="pt-3 pb-3">
             <button
               type="submit"
-              className="btn btn-primary w-100 p-2"
+              className="btn btn-primary w-100 p-2 row"
               disabled={
                 formik.isSubmitting ||
                 !formik.isValid ||

@@ -79,7 +79,7 @@ function LoginPage() {
         <h3 className=" bold size-4 pt-5">Welcome</h3>
         <img src={user} alt="user" className="width-120 mt-4" />
         <form className="mt-5" onSubmit={formik.handleSubmit}>
-          <div className="row p-2 position-relative">
+          <div className="row p-2">
             <label
               htmlFor="email"
               className="text-start"
@@ -109,7 +109,7 @@ function LoginPage() {
             </span>
           </div>
 
-          <div className="row p-2 position-relative pt-0">
+          <div className="row p-2 pt-0">
             <label
               htmlFor="password"
               className="text-start"
@@ -154,7 +154,7 @@ function LoginPage() {
                 formik.values.password === EMPTY
               }
               type="submit"
-              className="btn btn-primary w-100 p-2"
+              className="btn btn-primary w-100 p-2 row"
             >
               {!formik.isSubmitting ? (
                 "Login"

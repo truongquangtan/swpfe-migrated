@@ -1,12 +1,25 @@
 import { confirmAlert } from "react-confirm-alert";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
+import * as _ from "lodash";
+
 import userGroup from "../../assets/images/user-group.png";
+import AddOwnerModal from "../../modals/AddOwnerModal";
+import { searchAllUsers, updateUser } from "../../services/admin.service";
 import Modal, { useModal } from "../Modal";
-import AddOwnerModal from "./AddOwnerModal";
 import "./style.scss";
+import { TOAST_CONFIG } from "../../constants/default";
+import empty from "../../assets/images/empty.png";
+import Pagination from "../Pagination";
 
 function ManageUsersWidget() {
+  const ITEMS_PER_PAGE = 10;
   const [showAddOwnerModal, toggleShowAddOwnerModal] = useModal();
+  const [accounts, setAccounts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [maxPage, setMaxPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [account, setAccount] = useState(null);
 
   const onSimpleClick = (title, question, callback) => {
     confirmAlert({
@@ -35,85 +48,79 @@ function ManageUsersWidget() {
     });
   };
 
-  const handleDisableUser = () => {};
+  const handleDisableUser = (account) => {
+    updateUser(account.userId, { isActive: false }).then(() => {
+      toast.success(
+        `Deactivate account ${account.fullName} successfully.`,
+        TOAST_CONFIG
+      );
+      searchUsers(currentPage);
+    });
+  };
 
-  const handleEnableUser = () => {};
+  const handleEnableUser = (account) => {
+    updateUser(account.userId, { isActive: true }).then(() => {
+      toast.success(
+        `Activate account ${account.fullName} successfully.`,
+        TOAST_CONFIG
+      );
+      searchUsers(currentPage);
+    });
+  };
 
-  const onInviteClick = () => {
+  const onInviteClick = (account) => {
+    setAccount(account);
     toggleShowAddOwnerModal();
   };
 
-  const onEditClick = () => {
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className="custom-confirm" style={{ width: 600 }}>
-            <h4>User Details</h4>
-            <form className="my-3">
-              <div className="row p-2">
-                <span className="col-1 lh-44 signup__icon-wrapper">
-                  <i className="fas fa-envelope"></i>
-                </span>
-                <input
-                  className="col-11 outline-none p-2 signup__input-border"
-                  type="text"
-                  placeholder="Email"
-                  readOnly
-                />
-              </div>
-              <div className="row p-2">
-                <span className="col-1 lh-44 signup__icon-wrapper">
-                  <i className="fas fa-address-card"></i>
-                </span>
-                <input
-                  className="col-11 outline-none p-2 signup__input-border"
-                  type="text"
-                  placeholder="Full name"
-                />
-              </div>
-              <div className="row p-2">
-                <span className="col-1 lh-44 signup__icon-wrapper">
-                  <i className="fas fa-phone-alt"></i>
-                </span>
-                <input
-                  className="col-11 outline-none p-2 signup__input-border"
-                  type="text"
-                  placeholder="Phone number"
-                />
-              </div>
-            </form>
-            <button
-              className="btn btn-primary me-3 px-4"
-              onClick={() => {
-                this.handleClickDelete();
-                onClose();
-              }}
-            >
-              Save
-            </button>
-            <button onClick={onClose} className="btn btn-light">
-              Cancel
-            </button>
-          </div>
+  const searchUsers = (page, itemsPerPage = ITEMS_PER_PAGE) => {
+    setIsLoading(true);
+    searchAllUsers({ page, itemsPerPage })
+      .then((res) => {
+        setAccounts(res.accounts);
+        setMaxPage(
+          res.maxResult % ITEMS_PER_PAGE === 0 && res.maxResult !== 0
+            ? res.maxResult / ITEMS_PER_PAGE
+            : Math.floor(res.maxResult / ITEMS_PER_PAGE) + 1
         );
-      },
-      closeOnEscape: true,
-      closeOnClickOutside: true,
-    });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const onChangePage = (page) => {
+    setCurrentPage(page);
+    searchUsers(page);
+  };
+
+  useEffect(() => {
+    searchUsers(1, ITEMS_PER_PAGE);
+  }, []);
+
+  const onSave = () => {
+    searchUsers(currentPage);
   };
 
   return (
     <>
       <Modal isShowing={showAddOwnerModal} hide={toggleShowAddOwnerModal}>
-        <AddOwnerModal toggleModal={toggleShowAddOwnerModal} />
+        <AddOwnerModal
+          toggleModal={toggleShowAddOwnerModal}
+          account={account}
+          onSave={onSave}
+        />
       </Modal>
-      <div className="pt-4 w-100">
+      <div className="pt-5 w-100 mt-5">
         <div>
           <h4 className="mb-4 d-inline-block">
             <img src={userGroup} alt="User" className="width-60 pe-3" />
             Users
           </h4>
-          <button className="btn btn-primary px-4 ms-5" onClick={onInviteClick}>
+          <button
+            className="btn btn-primary px-4 ms-5"
+            onClick={() => onInviteClick(null)}
+          >
             <i
               className="fas fa-user-plus me-2"
               style={{ fontSize: "0.8rem" }}
@@ -121,116 +128,99 @@ function ManageUsersWidget() {
             <b>Add Owner</b>
           </button>
         </div>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col" style={{ width: "10%" }}>
-                Actions
-              </th>
-              <th scope="col">Display Name</th>
-              <th scope="col" style={{ width: "20%" }}>
-                Email
-              </th>
-              <th scope="col">Phone</th>
-              <th scope="col">Role</th>
-              <th scope="col">Status</th>
-              <th scope="col">Created At</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <i
-                  className="trash-icon fas fa-edit col-4"
-                  title="Edit"
-                  onClick={onEditClick}
-                ></i>
-                <i
-                  className="trash-icon fas fa-ban col-4"
-                  title="Deactive"
-                  onClick={() =>
-                    onSimpleClick(
-                      "Disable",
-                      "Are you sure to disable this user?",
-                      handleDisableUser
-                    )
-                  }
-                ></i>
-                <i
-                  className="trash-icon fas fa-check-circle col-4"
-                  title="Active"
-                  onClick={() =>
-                    onSimpleClick(
-                      "Enable",
-                      "Are you sure to activate this user?",
-                      handleEnableUser
-                    )
-                  }
-                ></i>
-              </td>
-              <td>Pham Ha Giang</td>
-              <td className="text-truncate" title="gianggiangph@gmail.com">
-                gianggiangph@gmail.com
-              </td>
-              <td>012346789</td>
-              <td>Admin</td>
-              <td className="green bold">ACTIVE</td>
-              <td>29/05/2022 11:26</td>
-            </tr>
-            <tr>
-              <td>
-                <i
-                  className="trash-icon fas fa-edit col-4"
-                  title="Edit"
-                  onClick={onEditClick}
-                ></i>
-                <i
-                  className="trash-icon fas fa-ban col-4"
-                  title="Deactive"
-                  onClick={() =>
-                    onSimpleClick(
-                      "Disable",
-                      "Are you sure to disable this user?",
-                      handleDisableUser
-                    )
-                  }
-                ></i>
-                <i
-                  className="trash-icon fas fa-check-circle col-4"
-                  title="Active"
-                  onClick={() =>
-                    onSimpleClick(
-                      "Enable",
-                      "Are you sure to activate this user?",
-                      handleEnableUser
-                    )
-                  }
-                ></i>
-              </td>
-              <td>Pham Ha Giang</td>
-              <td className="text-truncate" title="gianggiangph@gmail.com">
-                gianggiangph@gmail.com
-              </td>
-              <td>012346789</td>
-              <td>Admin</td>
-              <td className="red bold">UNACTIVE</td>
-              <td>29/05/2022 11:26</td>
-            </tr>
-          </tbody>
-        </table>
-        <div className="yard-pagination mt-4">
-          <div>
-            <span className="pagination-arrow">
-              <i className="fas fa-arrow-left"></i>
-            </span>
-            <span className="pagination-statistic">
-              <input type="text" value={1} />/ 10
-            </span>
-            <span className="pagination-arrow">
-              <i className="fas fa-arrow-right"></i>
-            </span>
+        {isLoading && (
+          <div className="w-100 d-flex justify-content-center pt-5">
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
           </div>
-        </div>
+        )}
+        {!accounts.length && !isLoading && (
+          <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column h-300">
+            <img src={empty} style={{ width: 80 }} />
+            <p
+              className="text-center nodata-text"
+              style={{ fontSize: "0.9rem" }}
+            >
+              No result available
+            </p>
+          </div>
+        )}
+        {!!accounts.length && !isLoading && (
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col" style={{ width: "10%" }}>
+                  Actions
+                </th>
+                <th scope="col">Display Name</th>
+                <th scope="col" style={{ width: "20%" }}>
+                  Email
+                </th>
+                <th scope="col">Phone</th>
+                <th scope="col">Role</th>
+                <th scope="col">Status</th>
+                <th scope="col">Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accounts.map((account) => {
+                return (
+                  <tr key={account.userId}>
+                    <td>
+                      <i
+                        className="trash-icon fas fa-edit col-4"
+                        title="Edit"
+                        onClick={() => onInviteClick(account)}
+                      ></i>
+                      {account.isActive ? (
+                        <i
+                          className="trash-icon fas fa-ban col-4"
+                          title="Deactive"
+                          onClick={() =>
+                            onSimpleClick(
+                              "Disable",
+                              `Are you sure to disable ${account.fullName}?`,
+                              () => handleDisableUser(account)
+                            )
+                          }
+                        ></i>
+                      ) : (
+                        <i
+                          className="trash-icon fas fa-check-circle col-4"
+                          title="Active"
+                          onClick={() =>
+                            onSimpleClick(
+                              "Enable",
+                              `Are you sure to activate ${account.fullName}?`,
+                              () => handleEnableUser(account)
+                            )
+                          }
+                        ></i>
+                      )}
+                    </td>
+                    <td>{account.fullName}</td>
+                    <td
+                      className="text-truncate"
+                      title="gianggiangph@gmail.com"
+                    >
+                      {account.email}
+                    </td>
+                    <td>{account.phone || "N/A"}</td>
+                    <td>{account.role}</td>
+                    <td
+                      className={account.isActive ? "green bold" : "red bold"}
+                    >
+                      {account.isActive ? "ACTIVE" : "INACTIVE"}
+                    </td>
+                    <td>{account.createAt}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+        <Pagination maxPage={maxPage} onChangePage={onChangePage} />
       </div>
       <ToastContainer />
     </>

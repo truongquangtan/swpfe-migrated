@@ -1,9 +1,9 @@
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import * as yup from "yup";
 import { TOAST_CONFIG } from "../../constants/default";
 import { PHONE_PATTERN } from "../../constants/regex";
-import { addOwner } from "../../services/admin.service";
+import { addOwner, updateUser } from "../../services/admin.service";
 
 const validation = yup.object({
   email: yup
@@ -19,21 +19,12 @@ const validation = yup.object({
     .matches(PHONE_PATTERN, "Enter a valid phone number"),
 });
 
-const AddOwnerModal = ({ toggleModal }) => {
-  const sendRequestAddOwner = async (values, resetForm) => {
-    try {
-      await addOwner(JSON.stringify(values));
-      toast.success("Add new owner successfully.", TOAST_CONFIG);
-      toggleModal();
-    } catch (error) {
-      toast.error(error.response.data.message, TOAST_CONFIG);
-    }
-  };
+const AddOwnerModal = ({ toggleModal, account, onSave }) => {
   const formik = useFormik({
     initialValues: {
-      email: "",
-      fullName: "",
-      phone: "",
+      email: account ? account.email : "",
+      fullName: account ? account.fullName : "",
+      phone: account ? account.phone : "",
     },
     validateOnMount: true,
     validationSchema: validation,
@@ -41,9 +32,28 @@ const AddOwnerModal = ({ toggleModal }) => {
       sendRequestAddOwner(values, resetForm),
   });
 
+  const sendRequestAddOwner = async (values, resetForm) => {
+    try {
+      if (!account) {
+        for (const key of Object.keys(values)) {
+          if (values[key].trim() === "") delete values[key];
+        }
+        await addOwner(JSON.stringify(values));
+        toast.success("Add new owner successfully.", TOAST_CONFIG);
+      } else {
+        await updateUser(account.userId, values);
+        toast.success("Update account successfully.", TOAST_CONFIG);
+      }
+      toggleModal();
+      onSave();
+    } catch (error) {
+      toast.error(error.response.data.message, TOAST_CONFIG);
+    }
+  };
+
   return (
     <div className="custom-confirm" style={{ width: 600 }}>
-      <h4>Add Owner</h4>
+      <h4>{account ? "Edit Account" : "Add Owner"}</h4>
       <form className="my-3">
         <div className="row p-1">
           <label
@@ -64,6 +74,7 @@ const AddOwnerModal = ({ toggleModal }) => {
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+            readOnly={account ? true : false}
           />
           <span className="signup__filed--error">
             {formik.touched.email && formik.errors.email
@@ -137,6 +148,7 @@ const AddOwnerModal = ({ toggleModal }) => {
           </div>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

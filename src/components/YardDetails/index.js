@@ -19,6 +19,11 @@ import {
 } from "../../constants/time";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
+import Modal, { useModal } from "../Modal";
+import UpdateSubYardModal from "../../modals/UpdateSubYardModal";
+import empty from "../../assets/images/empty.png";
+import { YARD_TYPES } from "../../constants/type";
+import { addNewYard } from "../../services/yard.service";
 
 const _URL = window.URL || window.webkitURL;
 
@@ -34,14 +39,25 @@ function YardDetails({ yard }) {
     end: END,
     period: MIN_PERIOD,
   });
-  const [yardPictures, setYardPictures] = useState([EMPTY, EMPTY, EMPTY]);
-  const [basicData, setBasicData] = useState({});
+  const [yardPictures, setYardPictures] = useState([
+    { file: null, src: EMPTY },
+    { file: null, src: EMPTY },
+    { file: null, src: EMPTY },
+  ]);
+  const [basicData, setBasicData] = useState({ name: EMPTY, address: EMPTY });
   const [subYards, setSubYards] = useState([]);
   const [defaultPrice, setDefaultPrice] = useState(0);
   const [defaultSlots, setDefaultSlots] = useState([]);
   const [isAppliedDefaultPrice, setIsAppliedDefaultPrice] = useState(false);
+  const [showUpdateSubYardModal, toggleShowUpdateSubYardModal] = useModal();
+  const [selectedSubYard, setSelectedSubYard] = useState(null);
+  const [isAddingYard, setIsAddingYard] = useState(false);
 
   useEffect(() => {
+    updateDefaulSlots();
+  }, [timeSlot]);
+
+  const updateDefaulSlots = () => {
     const slots = [];
     let start = Number(timeSlot.start),
       end = Number(timeSlot.end),
@@ -49,103 +65,35 @@ function YardDetails({ yard }) {
 
     while (start < end) {
       slots.push({
-        startTime: start,
-        endTime: start + period,
+        startTime: TIMELINE.find((t) => t.value === start).label,
+        endTime: TIMELINE.find((t) => t.value === start + period).label,
         price: isAppliedDefaultPrice ? defaultPrice : 0,
       });
       start += period;
     }
 
     setDefaultSlots(slots);
-  }, [timeSlot]);
+  };
 
   const onUpdateSubYard = (yard) => {
     const slots = yard ? yard.slots : _.cloneDeep(defaultSlots);
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className="custom-confirm" style={{ width: "90vw" }}>
-            <h4>{yard ? yard.name : "Create New Sub Yard"}</h4>
-            <div className="d-flex">
-              <form className="my-3 col-3 mw-410">
-                <div className="row p-2 py-1">
-                  <label htmlFor="name" style={{ paddingLeft: 0 }}>
-                    Name
-                  </label>
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Name"
-                  >
-                    <i className="fas fa-address-card"></i>
-                  </span>
-                  <input
-                    id="name"
-                    name="name"
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="text"
-                    placeholder="Name"
-                  />
-                </div>
-                <div className="row p-2 py-1">
-                  <label htmlFor="type" style={{ paddingLeft: 0 }}>
-                    Type
-                  </label>
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Size"
-                  >
-                    <i className="fas fa-expand-arrows-alt"></i>
-                  </span>
-                  <select
-                    className="col-11 outline-none p-2 signup__input-border"
-                    style={{ backgroundColor: "white" }}
-                    name="type"
-                  >
-                    <option value="3 vs 3">3 vs 3</option>
-                    <option value="5 vs 5">5 vs 5</option>
-                  </select>
-                </div>
-              </form>
-              <div className="flex-1 ps-3">
-                <div className="row p-3 overflow-y-auto pt-0 mh-550">
-                  {slots.map((slot) => {
-                    <div className="col-2 slot-create-container">
-                      <div className="slot-details flex-column">
-                        <p>
-                          <b>4:00 - 4:30</b>
-                        </p>
-                        <p className="mt-2">
-                          <input
-                            className="w-75 text-center border-none price-input py-2"
-                            type="text"
-                            value={slot.price}
-                          />{" "}
-                          VND
-                        </p>
-                      </div>
-                    </div>;
-                  })}
-                </div>
-              </div>
-            </div>
-            <button
-              className="btn btn-primary me-3 px-4"
-              onClick={() => {
-                this.handleClickDelete();
-                onClose();
-              }}
-            >
-              {yard ? "Save" : "Create"}
-            </button>
-            <button onClick={onClose} className="btn btn-light">
-              Cancel
-            </button>
-          </div>
-        );
-      },
-      closeOnEscape: true,
-      closeOnClickOutside: true,
-    });
+    setSelectedSubYard(yard ? yard : null);
+    toggleShowUpdateSubYardModal();
+  };
+
+  const onUpdateSubYardList = (yard) => {
+    if (!yard.id) {
+      if (yard.isUpdate) {
+        setSubYards([
+          yard,
+          ...subYards.filter((item) => item.ref !== yard.ref),
+        ]);
+      } else {
+        setSubYards([yard, ...subYards]);
+      }
+    } else {
+      setSubYards([yard, ...subYards.filter((item) => item.id !== yard.id)]);
+    }
   };
 
   useEffect(() => {
@@ -171,6 +119,7 @@ function YardDetails({ yard }) {
       setProvinces(decrypt(storedProvinces));
       setIsLoadingProvinces(false);
     }
+    setTimeSlot({ ...timeSlot, start: START });
   }, []);
 
   useEffect(() => {
@@ -190,6 +139,14 @@ function YardDetails({ yard }) {
       setIsLoadingDistricts(false);
     }
   }, [selectedProvince]);
+
+  useEffect(() => {
+    setDefaultSlots(
+      defaultSlots.map((slot) => {
+        return { ...slot, price: isAppliedDefaultPrice ? defaultPrice : 0 };
+      })
+    );
+  }, [isAppliedDefaultPrice]);
 
   const fetchDistricts = () => {
     const storedDistricts = localStorage.getItem(encryptKey("districts"));
@@ -227,7 +184,9 @@ function YardDetails({ yard }) {
 
   const handleEnableYard = () => {};
 
-  const handleDeleteClick = () => {};
+  const handleDeleteClick = (yard) => {
+    setSubYards(subYards.filter((item) => item !== yard));
+  };
 
   const onSimpleClick = (title, question, callback) => {
     confirmAlert({
@@ -254,6 +213,55 @@ function YardDetails({ yard }) {
       closeOnEscape: true,
       closeOnClickOutside: true,
     });
+  };
+
+  const saveYard = () => {
+    setIsAddingYard(true);
+    addNewYard({
+      images: yardPictures
+        .map((picture) => picture.file)
+        .filter((item) => item !== null),
+      yard: {
+        name: basicData.name,
+        address:
+          basicData.address +
+          `, ${
+            districts.find((d) => d.id === Number(selectedDistrict))
+              .districtName
+          }, ${
+            provinces.find((p) => p.id === Number(selectedProvince))
+              .provinceName
+          }`,
+        districtId: selectedDistrict,
+        openAt: TIMELINE.find((item) => item.value === Number(timeSlot.start))
+          .label,
+        closeAt: TIMELINE.find((item) => item.value === Number(timeSlot.end))
+          .label,
+        slotDuration: PERIODS.find(
+          (item) => item.value === Number(timeSlot.period)
+        ).label,
+        subYards: subYards.map((sub) => {
+          return {
+            ..._.pick(sub, ["id", "name", "type", "slots"]),
+            slots: sub.slots.map((slot) => {
+              return {
+                price: slot.price,
+                startTime: TIMELINE.find((t) => t.value === slot.startTime)
+                  .label,
+                endTime: TIMELINE.find((t) => t.value === slot.endTime).label,
+              };
+            }),
+          };
+        }),
+      },
+    })
+      .then((res) => {})
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsAddingYard(false);
+      });
   };
 
   return (
@@ -299,7 +307,9 @@ function YardDetails({ yard }) {
                 {isLoadingProvinces ? "Loading..." : "Select province"}
               </option>
               {provinces.map((province) => (
-                <option value={province.id}>{province.provinceName}</option>
+                <option value={province.id} key={province.id}>
+                  {province.provinceName}
+                </option>
               ))}
             </select>
           </div>
@@ -324,7 +334,9 @@ function YardDetails({ yard }) {
                 {isLoadingDistricts ? "Loading..." : "Select district"}
               </option>
               {districts.map((district) => (
-                <option value={district.id}>{district.districtName}</option>
+                <option value={district.id} key={district.id}>
+                  {district.districtName}
+                </option>
               ))}
             </select>
           </div>
@@ -366,11 +378,11 @@ function YardDetails({ yard }) {
               }}
               value={timeSlot.start}
             >
-              {TIMELINE.filter((value) => value.value < timeSlot.end).map(
-                (time) => (
-                  <option value={time.value}>{time.label}</option>
-                )
-              )}
+              {TIMELINE.map((time) => (
+                <option value={time.value} key={time.value}>
+                  {time.label}
+                </option>
+              ))}
             </select>
           </div>
           <div className="row p-2 py-1">
@@ -393,11 +405,11 @@ function YardDetails({ yard }) {
               }}
               value={timeSlot.end}
             >
-              {TIMELINE.filter((value) => value.value > timeSlot.start).map(
-                (time) => (
-                  <option value={time.value}>{time.label}</option>
-                )
-              )}
+              {TIMELINE.map((time) => (
+                <option value={time.value} key={time.value}>
+                  {time.label}
+                </option>
+              ))}
             </select>
           </div>
           <div className="row p-2 py-1">
@@ -420,26 +432,38 @@ function YardDetails({ yard }) {
               {PERIODS.filter(
                 (value) => (timeSlot.end - timeSlot.start) % value.value === 0
               ).map((time) => (
-                <option value={time.value}>{time.label}</option>
+                <option value={time.value} key={time.value}>
+                  {time.label}
+                </option>
               ))}
             </select>
           </div>
-          <div className="row p-2 py-1">
-            <label htmlFor="defaultPrice" style={{ paddingLeft: 0 }}>
+          <div className="row p-2">
+            <label
+              htmlFor="defaultPrice"
+              className="text-start"
+              style={{ paddingLeft: 0 }}
+            >
               Default Price
             </label>
-            <span className="col-1 lh-44 signup__icon-wrapper" title="Name">
+            <span className="col-1 signup__icon-wrapper">
               <i className="fas fa-dollar-sign"></i>
             </span>
             <input
               id="defaultPrice"
               name="defaultPrice"
               className="col-9 outline-none p-2 fg-pw__input-border"
-              type="number"
+              type="text"
               placeholder="Default price"
-              min={0}
+              value={defaultPrice}
+              onChange={(e) => setDefaultPrice(Number(e.target.value))}
             />
-            <button className="col-2 fg-pw__icon-wrapper">Apply</button>
+            <span
+              className="col-2 fg-pw__icon-wrapper"
+              onClick={() => setIsAppliedDefaultPrice(!isAppliedDefaultPrice)}
+            >
+              {isAppliedDefaultPrice ? "Remove" : "Apply"}
+            </span>
           </div>
         </form>
         <div className="flex-1 ps-4">
@@ -508,7 +532,7 @@ function YardDetails({ yard }) {
               />
             </div>
           </div>
-          <div className="p-3 overflow-y-auto h-300 pt-4">
+          <div className="p-3 pt-4 ">
             <h4 className="d-inline-block">Sub Yards</h4>
             <button
               className="btn btn-primary px-4 ms-5"
@@ -520,99 +544,142 @@ function YardDetails({ yard }) {
               ></i>
               <b>Add</b>
             </button>
-            <table className="table table-striped mt-3">
-              <thead>
-                <tr>
-                  <th scope="col" style={{ width: "15%" }}>
-                    Actions
-                  </th>
-                  <th scope="col">Reference</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <i
-                      className="trash-icon fas fa-trash-alt col-4"
-                      title="Delete"
-                      onClick={() =>
-                        onSimpleClick(
-                          "Delete",
-                          "Are you sure to delete this yard permanently?",
-                          handleDeleteClick
-                        )
-                      }
-                    ></i>
-                    <i
-                      className="trash-icon fas fa-ban col-4"
-                      title="Deactive"
-                      onClick={() =>
-                        onSimpleClick(
-                          "Disable",
-                          "Are you sure to disable this yard?",
-                          handleDisableYard
-                        )
-                      }
-                    ></i>
-                    <i
-                      className="trash-icon fas fa-check-circle col-4"
-                      title="Active"
-                      onClick={() =>
-                        onSimpleClick(
-                          "Enable",
-                          "Are you sure to activate this yard?",
-                          handleEnableYard
-                        )
-                      }
-                    ></i>
-                  </td>
-                  <td>
-                    <b className="trash-icon" onClick={() => onUpdateSubYard()}>
-                      1009
-                    </b>
-                  </td>
-                  <td className="text-truncate" title="Sân quận 9">
-                    Sân quận 9
-                  </td>
-                  <td>3 vs 3</td>
-                  <td className="green bold">ACTIVE</td>
-                </tr>
-                <tr>
-                  <td>
-                    <i
-                      className="trash-icon fas fa-times col-4"
-                      title="Delete"
-                      onClick={() => {}}
-                    ></i>
-                    <i
-                      className="trash-icon fas fa-edit col-4"
-                      title="Edit"
-                      onClick={() => onUpdateSubYard()}
-                    ></i>
-                  </td>
-                  <td>
-                    <b className="fsi fwl">Draft</b>
-                  </td>
-                  <td className="text-truncate fsi fwl" title="Sân quận 9">
-                    Sân quận 9
-                  </td>
-                  <td className="fsi fwl">3 vs 3</td>
-                  <td className="fsi fwl">N/A</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="overflow-y-auto mt-3 h-250">
+              {!subYards.length && (
+                <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
+                  <img src={empty} style={{ width: 80 }} />
+                  <p
+                    className="text-center nodata-text"
+                    style={{ fontSize: "0.9rem" }}
+                  >
+                    No sub yard available
+                  </p>
+                </div>
+              )}
+              {!!subYards.length && (
+                <table className="table table-striped mt-1">
+                  <thead>
+                    <tr>
+                      <th scope="col" style={{ width: "15%" }}>
+                        Actions
+                      </th>
+                      <th scope="col">Reference</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {subYards.map((item, index) => {
+                      return item.id ? (
+                        <tr key={item.id}>
+                          <td>
+                            <i
+                              className="trash-icon fas fa-trash-alt col-4"
+                              title="Delete"
+                              onClick={() =>
+                                onSimpleClick(
+                                  "Delete",
+                                  "Are you sure to delete this yard permanently?",
+                                  handleDeleteClick
+                                )
+                              }
+                            ></i>
+                            <i
+                              className="trash-icon fas fa-ban col-4"
+                              title="Deactive"
+                              onClick={() =>
+                                onSimpleClick(
+                                  "Disable",
+                                  "Are you sure to disable this yard?",
+                                  handleDisableYard
+                                )
+                              }
+                            ></i>
+                            <i
+                              className="trash-icon fas fa-check-circle col-4"
+                              title="Active"
+                              onClick={() =>
+                                onSimpleClick(
+                                  "Enable",
+                                  "Are you sure to activate this yard?",
+                                  handleEnableYard
+                                )
+                              }
+                            ></i>
+                          </td>
+                          <td>
+                            <b
+                              className="trash-icon"
+                              // onClick={() => onUpdateSubYard()}
+                            >
+                              1009
+                            </b>
+                          </td>
+                          <td className="text-truncate" title="Sân quận 9">
+                            Sân quận 9
+                          </td>
+                          <td>3 vs 3</td>
+                          <td className="green bold">ACTIVE</td>
+                        </tr>
+                      ) : (
+                        <tr key={index}>
+                          <td>
+                            <i
+                              className="trash-icon fas fa-times col-4"
+                              title="Delete"
+                              onClick={() => {}}
+                            ></i>
+                            <i
+                              className="trash-icon fas fa-edit col-4"
+                              title="Edit"
+                              onClick={() => onUpdateSubYard(item)}
+                            ></i>
+                          </td>
+                          <td>
+                            <b className="fsi fwl">Draft</b>
+                          </td>
+                          <td
+                            className="text-truncate fsi fwl"
+                            title="Sân quận 9"
+                          >
+                            {item.name || "N/A"}
+                          </td>
+                          <td className="fsi fwl">
+                            {
+                              YARD_TYPES.find(
+                                (type) => type.value === item.type
+                              ).lable
+                            }
+                          </td>
+                          <td className="fsi fwl">N/A</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <button className="btn btn-primary me-3 px-4" onClick={() => {}}>
+      <button className="btn btn-primary me-3 px-4" onClick={saveYard}>
         Save
       </button>
       <Link to="/owner/yards">
         <button className="btn btn-light">Back</button>
       </Link>
+      <Modal
+        isShowing={showUpdateSubYardModal}
+        hide={toggleShowUpdateSubYardModal}
+      >
+        <UpdateSubYardModal
+          toggleModal={toggleShowUpdateSubYardModal}
+          slots={defaultSlots}
+          yard={selectedSubYard}
+          onUpdateSubYardList={onUpdateSubYardList}
+        />
+      </Modal>
       <ToastContainer />
     </div>
   );

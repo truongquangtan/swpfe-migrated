@@ -8,6 +8,7 @@ import player1 from "../../assets/images/player-1.gif";
 import player2 from "../../assets/images/player-2.gif";
 import { getMyIncomingMatches } from "../../services/me.service";
 import Pagination from "../Pagination";
+import empty from "../../assets/images/empty.png";
 
 function IncomingMatchesWidget() {
   const ITEMS_PER_PAGE = 5;
@@ -124,6 +125,17 @@ function IncomingMatchesWidget() {
                 </div>
               </div>
             ))}
+            {!matches.length && (
+              <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column h-300">
+                <img src={empty} style={{ width: 80 }} />
+                <p
+                  className="text-center nodata-text"
+                  style={{ fontSize: "0.9rem" }}
+                >
+                  No incoming match available
+                </p>
+              </div>
+            )}
           </>
         )}
       </div>

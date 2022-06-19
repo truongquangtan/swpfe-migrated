@@ -70,7 +70,7 @@ const features = [
 
 function DashboardFeatures({ role }) {
   return (
-    <div className="row py-5 w-100 height-mincontent">
+    <div className="p-5 w-100 height-mincontent mx-0">
       <h2 className="mb-5 text-center mt-5">
         {role !== USER ? "Dashboard" : "Welcome to Basketball Playground"}
         {role === USER && (
