@@ -31,12 +31,6 @@ const features = [
     path: "/history",
   },
   {
-    title: "History",
-    icon: "fas fa-history",
-    allowedRoles: [OWNER],
-    path: "/owner/history",
-  },
-  {
     title: "Users",
     icon: "far fa-user",
     allowedRoles: [ADMIN],
@@ -47,6 +41,12 @@ const features = [
     icon: "fas fa-basketball-ball",
     allowedRoles: [OWNER],
     path: "/owner/match-management",
+  },
+  {
+    title: "History",
+    icon: "fas fa-history",
+    allowedRoles: [OWNER],
+    path: "/owner/history",
   },
   // {
   //   title: "Vouchers",
