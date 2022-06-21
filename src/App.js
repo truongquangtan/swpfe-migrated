@@ -24,6 +24,7 @@ import WelcomeWidget from "./components/WelcomeWidget";
 import OwnerPage from "./pages/OwnerPage";
 import AuthPage from "./pages/AuthPage";
 import AccountVerification from "./components/AccountVerification";
+import Statistics from "./components/Statistics";
 
 function App() {
   return (
@@ -77,6 +78,8 @@ function App() {
               path="/owner/match-management"
               element={<MatchManagementWidget />}
             ></Route>
+
+            <Route path="/owner/statistics" element={<Statistics />}></Route>
           </Route>
 
           <Route exact path="/admin" element={<HomePage />}>

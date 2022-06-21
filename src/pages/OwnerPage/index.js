@@ -14,13 +14,13 @@ function OwnerPage() {
 
   const role = decrypt(credential)?.role;
   if (role !== OWNER) {
-    return role === ADMIN ? <Navigate to="/admin" /> : <Navigate to="/" />
+    return role === ADMIN ? <Navigate to="/admin" /> : <Navigate to="/" />;
   }
 
   return (
     <div className="home">
       <Header auth={true} />
-      <div className="container d-flex justify-content-center features mt-5">
+      <div className="container-fluid d-flex justify-content-center features mt-5 px-5">
         <Outlet />
       </div>
     </div>
