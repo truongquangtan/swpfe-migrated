@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import { ToastContainer, toast } from "react-toastify";
@@ -24,6 +24,7 @@ import UpdateSubYardModal from "../../modals/UpdateSubYardModal";
 import empty from "../../assets/images/empty.png";
 import { YARD_TYPES } from "../../constants/type";
 import { addNewYard } from "../../services/yard.service";
+import DisableScreen from "../DisableScreen";
 
 const _URL = window.URL || window.webkitURL;
 
@@ -52,6 +53,7 @@ function YardDetails({ yard }) {
   const [showUpdateSubYardModal, toggleShowUpdateSubYardModal] = useModal();
   const [selectedSubYard, setSelectedSubYard] = useState(null);
   const [isAddingYard, setIsAddingYard] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     updateDefaulSlots();
@@ -243,21 +245,16 @@ function YardDetails({ yard }) {
         subYards: subYards.map((sub) => {
           return {
             ..._.pick(sub, ["id", "name", "type", "slots"]),
-            slots: sub.slots.map((slot) => {
-              return {
-                price: slot.price,
-                startTime: TIMELINE.find((t) => t.value === slot.startTime)
-                  .label,
-                endTime: TIMELINE.find((t) => t.value === slot.endTime).label,
-              };
-            }),
           };
         }),
       },
     })
-      .then((res) => {})
+      .then(() => {
+        toast.success("Save yard successfully.", TOAST_CONFIG);
+        navigate("/owner/yards");
+      })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.response.data.message, TOAST_CONFIG);
       })
       .finally(() => {
         setIsAddingYard(false);
@@ -266,6 +263,7 @@ function YardDetails({ yard }) {
 
   return (
     <div className="mt-5">
+      {isAddingYard && <DisableScreen />}
       <h4>{yard ? "Yard Details" : "Create Yard"}</h4>
       <div className="d-flex">
         <form className="my-3 col-3 mw-410">

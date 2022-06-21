@@ -1,9 +1,10 @@
 import * as _ from "lodash";
 import * as crypto from "crypto-js";
+import { EMPTY } from "../constants/default";
 
 const privateKey = "swp_booking_basketball_yard";
 
-export const encryptKey = (key, prefix = "") => {
+export const encryptKey = (key, prefix = EMPTY) => {
   return prefix + crypto.MD5(privateKey + key);
 };
 
@@ -24,7 +25,7 @@ export const decrypt = (data) => {
     const bytes = crypto["AES"].decrypt(data, privateKey),
       byteString = bytes.toString(crypto["enc"].Utf8);
 
-    if (byteString !== "") {
+    if (byteString !== EMPTY) {
       data = JSON.parse(byteString);
     }
   }

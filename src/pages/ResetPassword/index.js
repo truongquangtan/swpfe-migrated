@@ -90,7 +90,7 @@ function ResetPassword() {
             <span className="signup__filed--error">
               {formik.touched.re_password && formik.errors.re_password
                 ? formik.errors.re_password
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="row p-2">
@@ -119,7 +119,7 @@ function ResetPassword() {
               {formik.touched.confirm_re_password &&
               formik.errors.confirm_re_password
                 ? formik.errors.confirm_re_password
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="pl-3 pr-3 mt-3">

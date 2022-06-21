@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import * as yup from "yup";
-import { TOAST_CONFIG } from "../../constants/default";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import { PHONE_PATTERN } from "../../constants/regex";
 import { addOwner, updateUser } from "../../services/admin.service";
 
@@ -22,9 +22,9 @@ const validation = yup.object({
 const AddOwnerModal = ({ toggleModal, account, onSave }) => {
   const formik = useFormik({
     initialValues: {
-      email: account ? account.email : "",
-      fullName: account ? account.fullName : "",
-      phone: account ? account.phone : "",
+      email: account ? account.email : EMPTY,
+      fullName: account ? account.fullName : EMPTY,
+      phone: account ? account.phone : EMPTY,
     },
     validateOnMount: true,
     validationSchema: validation,
@@ -36,7 +36,7 @@ const AddOwnerModal = ({ toggleModal, account, onSave }) => {
     try {
       if (!account) {
         for (const key of Object.keys(values)) {
-          if (values[key].trim() === "") delete values[key];
+          if (values[key].trim() === EMPTY) delete values[key];
         }
         await addOwner(JSON.stringify(values));
         toast.success("Add new owner successfully.", TOAST_CONFIG);
@@ -79,7 +79,7 @@ const AddOwnerModal = ({ toggleModal, account, onSave }) => {
           <span className="signup__filed--error">
             {formik.touched.email && formik.errors.email
               ? formik.errors.email
-              : ""}{" "}
+              : EMPTY}{" "}
           </span>
         </div>
         <div className="row p-1">
@@ -105,7 +105,7 @@ const AddOwnerModal = ({ toggleModal, account, onSave }) => {
           <span className="signup__filed--error">
             {formik.touched.fullName && formik.errors.fullName
               ? formik.errors.fullName
-              : ""}{" "}
+              : EMPTY}{" "}
           </span>
         </div>
         <div className="row p-1">
@@ -131,7 +131,7 @@ const AddOwnerModal = ({ toggleModal, account, onSave }) => {
           <span className="signup__filed--error">
             {formik.touched.phone && formik.errors.phone
               ? formik.errors.phone
-              : ""}{" "}
+              : EMPTY}{" "}
           </span>
         </div>
         <div className="mt-3">

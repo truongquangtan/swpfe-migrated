@@ -12,7 +12,7 @@ import yard3 from "../../assets/images/yard-3.jpg";
 import noData from "../../assets/images/no-data.jpg";
 import { toast, ToastContainer } from "react-toastify";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import { TOAST_CONFIG } from "../../constants/default";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import Reviews from "../Reviews";
 import {
   bookingYard,
@@ -36,7 +36,7 @@ function Yard() {
   const [slots, setSlots] = useState([]);
   const [isAppliedVoucher, setIsAppliedVoucher] = useState(false);
   const [isLoadingVoucher, setIsLoadingVoucher] = useState(false);
-  const [voucherCode, setVoucherCode] = useState("");
+  const [voucherCode, setVoucherCode] = useState(EMPTY);
   const [isBooking, setIsBooking] = useState(false);
 
   useEffect(() => {

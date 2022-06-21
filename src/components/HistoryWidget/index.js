@@ -52,7 +52,7 @@ function HistoryWidget() {
     });
   };
   return (
-    <div className="pt-4 w-100">
+    <div className="pt-5 mt-5 w-100 px-5">
       <h4 className="text-center mb-4">
         <img src={transaction} alt="Transaction" className="width-60 pe-3" />
         History

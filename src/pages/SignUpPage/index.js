@@ -98,7 +98,7 @@ function SignUpPage() {
             <span className="signup__filed--error">
               {formik.touched.email && formik.errors.email
                 ? formik.errors.email
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="row p-2 pt-0">
@@ -126,7 +126,7 @@ function SignUpPage() {
             <span className="signup__filed--error">
               {formik.touched.password && formik.errors.password
                 ? formik.errors.password
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="row p-2 pt-0">
@@ -154,7 +154,7 @@ function SignUpPage() {
             <span className="signup__filed--error">
               {formik.touched.confirmPassword && formik.errors.confirmPassword
                 ? formik.errors.confirmPassword
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="row p-2 pt-0">
@@ -181,7 +181,7 @@ function SignUpPage() {
             <span className="signup__filed--error">
               {formik.touched.fullName && formik.errors.fullName
                 ? formik.errors.fullName
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="row p-2 pt-0">
@@ -208,7 +208,7 @@ function SignUpPage() {
             <span className="signup__filed--error">
               {formik.touched.phone && formik.errors.phone
                 ? formik.errors.phone
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="pl-3 pr-3 mt-3">
@@ -219,7 +219,7 @@ function SignUpPage() {
           <div className="pt-3 pb-3">
             <button
               type="submit"
-              className="btn btn-primary w-100 p-2 row"
+              className="btn btn-primary w-100 p-2"
               disabled={
                 formik.isSubmitting ||
                 !formik.isValid ||

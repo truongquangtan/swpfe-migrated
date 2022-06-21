@@ -106,8 +106,8 @@ function BookingWidget() {
   };
 
   const filterYard = (
-    provinceId = "",
-    districtId = "",
+    provinceId = EMPTY,
+    districtId = EMPTY,
     page = 1,
     itemsPerPage = ITEMS_PER_PAGE
   ) => {

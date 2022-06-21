@@ -200,10 +200,7 @@ function ManageUsersWidget() {
                       )}
                     </td>
                     <td>{account.fullName}</td>
-                    <td
-                      className="text-truncate"
-                      title="gianggiangph@gmail.com"
-                    >
+                    <td className="text-truncate" title={account.email}>
                       {account.email}
                     </td>
                     <td>{account.phone || "N/A"}</td>

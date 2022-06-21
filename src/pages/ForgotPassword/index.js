@@ -107,7 +107,7 @@ function ForgotPassword() {
             <span className="signup__filed--error">
               {formik.touched.re_email && formik.errors.re_email
                 ? formik.errors.re_email
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="row p-2" title="Resend code">
@@ -135,7 +135,7 @@ function ForgotPassword() {
             <span className="signup__filed--error">
               {formik.touched.code && formik.errors.code
                 ? formik.errors.code
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="pl-3 pr-3 mt-3">

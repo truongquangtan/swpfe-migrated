@@ -105,7 +105,7 @@ function LoginPage() {
             <span className="signup__filed--error">
               {formik.touched.username && formik.errors.username
                 ? formik.errors.username
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
 
@@ -134,7 +134,7 @@ function LoginPage() {
             <span className="signup__filed--error">
               {formik.touched.password && formik.errors.password
                 ? formik.errors.password
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="pl-3 pr-3 mt-3 row">
@@ -154,7 +154,7 @@ function LoginPage() {
                 formik.values.password === EMPTY
               }
               type="submit"
-              className="btn btn-primary w-100 p-2 row"
+              className="btn btn-primary w-100 p-2"
             >
               {!formik.isSubmitting ? (
                 "Login"

@@ -49,9 +49,9 @@ export const bookingYard = async (yardId, payload, token) => {
 export const addNewYard = async (payload) => {
   const form = new FormData();
   for (const image of payload.images) {
-    form.append("files", image);
+    form.append("images", image);
   }
-  form.append("data", payload.yard);
+  form.append("yard", JSON.stringify(payload.yard));
 
   const credential = localStorage.getItem(encryptKey("credential"));
   const response = await axios.post(`${SERVICE_URL}/v1/owners/me/yards`, form, {
@@ -60,6 +60,21 @@ export const addNewYard = async (payload) => {
       Authorization: `Bearer ${decrypt(credential).token}`,
     },
   });
+
+  return response ? response.data : null;
+};
+
+export const searchOwnerYard = async (payload) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/owners/me/yards/search`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      },
+    }
+  );
 
   return response ? response.data : null;
 };
