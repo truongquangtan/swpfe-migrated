@@ -226,8 +226,9 @@ function Yard() {
                     disabled={isAppliedVoucher}
                   >
                     <option value="">Select yard</option>
-                    {yard.subYards.map((sub) => (
+                    {yard.subYards.map((sub, index) => (
                       <option
+                        key={index}
                         value={sub.id}
                       >{`${sub.name} - (${sub.typeYard})`}</option>
                     ))}
@@ -243,8 +244,8 @@ function Yard() {
                 }
               >
                 {slots &&
-                  slots.map((slot) => (
-                    <div className="col-3 slot-details-container">
+                  slots.map((slot, index) => (
+                    <div key={index} className="col-3 slot-details-container">
                       <div
                         className={
                           slot.isBooked
@@ -341,8 +342,8 @@ function Yard() {
                     </p>
                   </div>
                 )}
-                {booking.map((item) => (
-                  <div className="match-container row mb-2">
+                {booking.map((item, index) => (
+                  <div key={index} className="match-container row mb-2">
                     <div className="col-1 basket__img-container d-flex justify-content-center align-items-center ps-3">
                       <p>
                         <i
@@ -399,10 +400,9 @@ function Yard() {
               </div>
             </div>
           </div>
-          <Reviews />
+          <Reviews yardId={id} />
         </>
       )}
-
       <ToastContainer />
     </div>
   );

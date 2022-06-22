@@ -78,3 +78,8 @@ export const searchOwnerYard = async (payload) => {
 
   return response ? response.data : null;
 };
+
+export const getAllRatingOfYard = async (yardId) => {
+  const response = await axios.get(`${SERVICE_URL}/v1/vote/yard/${yardId}`)
+  return response ?  response.data : [];
+}
