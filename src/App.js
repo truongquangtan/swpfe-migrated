@@ -73,6 +73,7 @@ function App() {
               path="/owner/voucher-management"
               element={<VoucherManagementWidget />}
             ></Route>
+            <Route path="/owner/history" element={<HistoryWidget />}></Route>
             <Route
               path="/owner/match-management"
               element={<MatchManagementWidget />}

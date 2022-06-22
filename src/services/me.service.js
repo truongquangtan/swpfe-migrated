@@ -17,7 +17,7 @@ export const getMyIncomingMatches = async (params) => {
 
 export const getMyBookingHistory = async (params) => {
   const credential = localStorage.getItem(encryptKey("credential"));
-  const response = await axios.post(`${SERVICE_URL}/v1/me/history`, params, {
+  const response = await axios.post(`${SERVICE_URL}/v1/me/history-booking`, params, {
     headers: { Authorization: `Bearer ${decrypt(credential).token}` },
   });
   return response ? response.data : null;
