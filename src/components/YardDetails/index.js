@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import { ToastContainer, toast } from "react-toastify";
@@ -23,12 +23,12 @@ import Modal, { useModal } from "../Modal";
 import UpdateSubYardModal from "../../modals/UpdateSubYardModal";
 import empty from "../../assets/images/empty.png";
 import { YARD_TYPES } from "../../constants/type";
-import { addNewYard } from "../../services/yard.service";
+import { addNewYard, getYardDetailById } from "../../services/yard.service";
 import DisableScreen from "../DisableScreen";
 
 const _URL = window.URL || window.webkitURL;
 
-function YardDetails({ yard }) {
+function YardDetails() {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(EMPTY);
@@ -54,6 +54,7 @@ function YardDetails({ yard }) {
   const [selectedSubYard, setSelectedSubYard] = useState(null);
   const [isAddingYard, setIsAddingYard] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     updateDefaulSlots();
@@ -99,6 +100,36 @@ function YardDetails({ yard }) {
   };
 
   useEffect(() => {
+    if (id !== "draft") {
+      setIsAddingYard(true);
+      getYardDetailById(id)
+        .then((res) => {
+          const addressDetail = res.address.split(", ");
+          setBasicData({
+            name: res.name,
+            address: addressDetail
+              .splice(0, addressDetail.length - 2)
+              .join(", "),
+          });
+          setSelectedProvince(res.provinceId);
+          setSelectedDistrict(res.districtId);
+          setTimeSlot({
+            start: TIMELINE.find((t) => t.label === res.openTime).value,
+            end: TIMELINE.find((t) => t.label === res.closeTime).value,
+            period: TIMELINE.find((t) => t.label === res.duration).value,
+          });
+          setSubYards(res.subYards);
+          setYardPictures(
+            res.images.map((url) => {
+              return { file: null, src: url };
+            })
+          );
+        })
+        .finally(() => {
+          setIsAddingYard(false);
+        });
+    }
+
     setIsLoadingProvinces(true);
     const storedProvinces = localStorage.getItem(encryptKey("provinces"));
     if (!storedProvinces) {
@@ -220,9 +251,7 @@ function YardDetails({ yard }) {
   const saveYard = () => {
     setIsAddingYard(true);
     addNewYard({
-      images: yardPictures
-        .map((picture) => picture.file)
-        .filter((item) => item !== null),
+      images: yardPictures.map((picture) => picture.file),
       yard: {
         name: basicData.name,
         address:
@@ -264,7 +293,7 @@ function YardDetails({ yard }) {
   return (
     <div className="mt-5">
       {isAddingYard && <DisableScreen />}
-      <h4>{yard ? "Yard Details" : "Create Yard"}</h4>
+      <h4>{id !== "draft" ? "Yard Details" : "Create Yard"}</h4>
       <div className="d-flex">
         <form className="my-3 col-3 mw-410">
           <div className="row p-2 py-1">
@@ -300,6 +329,7 @@ function YardDetails({ yard }) {
               onChange={(e) => setSelectedProvince(() => e.target.value)}
               disabled={isLoadingProvinces}
               name="provinceId"
+              value={selectedProvince}
             >
               <option value="" key="NO_PROVINCE">
                 {isLoadingProvinces ? "Loading..." : "Select province"}
@@ -327,6 +357,7 @@ function YardDetails({ yard }) {
               }}
               disabled={isLoadingDistricts || !selectedProvince}
               name="districtId"
+              value={selectedDistrict}
             >
               <option value="" key="NO_DISTRICT">
                 {isLoadingDistricts ? "Loading..." : "Select district"}
@@ -351,6 +382,7 @@ function YardDetails({ yard }) {
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
               placeholder="Address details"
+              value={basicData.address}
               onChange={(e) =>
                 setBasicData({ ...basicData, [e.target.name]: e.target.value })
               }
@@ -530,7 +562,7 @@ function YardDetails({ yard }) {
               />
             </div>
           </div>
-          <div className="p-3 pt-4 ">
+          <div className="pt-4 ">
             <h4 className="d-inline-block">Sub Yards</h4>
             <button
               className="btn btn-primary px-4 ms-5"
@@ -583,42 +615,51 @@ function YardDetails({ yard }) {
                                 )
                               }
                             ></i>
-                            <i
-                              className="trash-icon fas fa-ban col-4"
-                              title="Deactive"
-                              onClick={() =>
-                                onSimpleClick(
-                                  "Disable",
-                                  "Are you sure to disable this yard?",
-                                  handleDisableYard
-                                )
-                              }
-                            ></i>
-                            <i
-                              className="trash-icon fas fa-check-circle col-4"
-                              title="Active"
-                              onClick={() =>
-                                onSimpleClick(
-                                  "Enable",
-                                  "Are you sure to activate this yard?",
-                                  handleEnableYard
-                                )
-                              }
-                            ></i>
+                            {item.isActive ? (
+                              <i
+                                className="trash-icon fas fa-ban col-4"
+                                title="Deactive"
+                                onClick={() =>
+                                  onSimpleClick(
+                                    "Disable",
+                                    "Are you sure to disable this yard?",
+                                    handleDisableYard
+                                  )
+                                }
+                              ></i>
+                            ) : (
+                              <i
+                                className="trash-icon fas fa-check-circle col-4"
+                                title="Active"
+                                onClick={() =>
+                                  onSimpleClick(
+                                    "Enable",
+                                    "Are you sure to activate this yard?",
+                                    handleEnableYard
+                                  )
+                                }
+                              ></i>
+                            )}
                           </td>
                           <td>
                             <b
                               className="trash-icon"
-                              // onClick={() => onUpdateSubYard()}
+                              onClick={() => onUpdateSubYard(item)}
                             >
-                              1009
+                              {item.reference}
                             </b>
                           </td>
                           <td className="text-truncate" title="Sân quận 9">
-                            Sân quận 9
+                            {item.name}
                           </td>
-                          <td>3 vs 3</td>
-                          <td className="green bold">ACTIVE</td>
+                          <td>{item.typeYard}</td>
+                          <td
+                            className={
+                              item.isActive ? "green bold" : "red bold"
+                            }
+                          >
+                            {item.isActive ? "ACTIVE" : "INACTIVE"}
+                          </td>
                         </tr>
                       ) : (
                         <tr key={index}>

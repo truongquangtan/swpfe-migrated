@@ -3,6 +3,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { EMPTY } from "../../constants/default";
+import { YARD_TYPES } from "../../constants/type";
 
 const UpdateSubYardModal = ({
   toggleModal,
@@ -13,7 +14,7 @@ const UpdateSubYardModal = ({
   const [subYard, setSubYard] = useState({
     slots,
     name: EMPTY,
-    type: 3,
+    type: yard ? YARD_TYPES.find((t) => t.lable === yard.typeYard).value : 3,
     ...yard,
   });
 

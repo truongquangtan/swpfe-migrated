@@ -78,3 +78,17 @@ export const searchOwnerYard = async (payload) => {
 
   return response ? response.data : null;
 };
+
+export const getYardDetailById = async (yardId) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.get(
+    `${SERVICE_URL}/v1/owners/me/yards/search/${yardId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      },
+    }
+  );
+
+  return response ? response.data : null;
+};
