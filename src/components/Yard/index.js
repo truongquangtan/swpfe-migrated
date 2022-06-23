@@ -145,8 +145,8 @@ function Yard() {
   };
 
   return (
-    <div className="w-100 yard-container mt-5 container pb-5">
-      <div ref={container}></div>
+    <div className="w-100 yard-container mt-4 container pb-5">
+      <div ref={container}>.</div>
       {!yard && (
         <div className="w-100 d-flex justify-content-center align-items-center loading-height">
           <div className="spinner-border" role="status">
