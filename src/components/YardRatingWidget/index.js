@@ -4,30 +4,37 @@ import { useCallback, useEffect, useState } from "react";
 
 import ratingImg from "../../assets/images/rating.png";
 import PostRatingModal from "../../modals/PostRatingModal";
-import { getVote } from "../../services/me.service";
-import CircleDashedLoading from "../CircleDashedLoading";
+import { getVotes } from "../../services/me.service";
 import Modal, { useModal } from "../Modal";
+import Pagination from "../Pagination";
 import "./style.scss";
 
 function YardRatingWidget() {
-
+  const ITEMS_PER_PAGE = 6;
   const [votes, setVotes] = useState([])
   const [isLoading, setLoading] = useState(true);
   const [showVoteModal, setShowVoteModal] = useModal(false);
   const [voteBookingId, setVoteBookingId] = useState(null);
   const [submitPostSuccess, setSubmitPostSuccess] = useState(false);
+  const [maxPage, setMaxPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const loadVotes = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
+    setLoading(true);
+    getVotes({ page, itemsPerPage }).then(res => {
+      setVotes(res.votes);
+      setMaxPage(
+        res.maxResult % ITEMS_PER_PAGE === 0 && res.maxResult !== 0
+          ? res.maxResult / ITEMS_PER_PAGE
+          : Math.floor(res.maxResult / ITEMS_PER_PAGE) + 1
+      );
+    }).finally(() => {
+      setLoading(false)
+    })
+
+  }
 
   useEffect(() => {
-    const loadVotes = async () => {
-      try {
-        const vote = await getVote()
-        setVotes(vote);
-      } catch (error) {
-        setVotes([])
-      } finally {
-        setLoading(false)
-      }
-    }
     loadVotes();
   }, [])
 
@@ -42,14 +49,16 @@ function YardRatingWidget() {
 
   useEffect(() => {
     if (submitPostSuccess) {
-      setVotes(previousVotes => previousVotes?.filter(vote => vote?.bookingId != voteBookingId))
       setSubmitPostSuccess(false);
-      setShowVoteModal()
+      setShowVoteModal();
+      loadVotes(currentPage);
     }
-
   }, [submitPostSuccess])
 
-
+  const onChangePage = (page) => {
+    setCurrentPage(page);
+    loadVotes(page);
+  }
 
   // const handleRating = (rate) => {
   //   setRating(rate);
@@ -105,13 +114,21 @@ function YardRatingWidget() {
           Rating
         </h4>
         {
-          isLoading && <div className="d-flex justify-content-center"> <CircleDashedLoading /> </div>
+          isLoading && (
+            <div
+              className="w-100 d-flex justify-content-center align-items-center"
+              style={{ height: "50vh" }}
+            >
+              <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>)
         }
         <div className="overflow-auto h-75 p-3 row justify-content-around">
           {
             (!isLoading && votes.length > 0) &&
             votes.map(vote => (
-              <div key={vote?.bookingId} className="col-6 p-3">
+              <div key={vote?.bookingId} className="col-6 px-4">
                 <div className="match-container row mb-4">
                   <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
                     <div className="text-center">
@@ -145,7 +162,7 @@ function YardRatingWidget() {
               </div>
             ))
           }
-        
+          <Pagination maxPage={maxPage} onChangePage={onChangePage} />
         </div>
       </div>
     </>
