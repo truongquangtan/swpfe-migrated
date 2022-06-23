@@ -115,7 +115,12 @@ function HistoryWidget() {
               <>
                 {historyBookingModels.map((historyBooking) => (
                   <tr>
-                    <td>{historyBooking.bigYardName}</td>
+                    <td
+                      className="text-truncate"
+                      title={historyBooking.bigYardName}
+                    >
+                      {historyBooking.bigYardName}
+                    </td>
                     <td>{historyBooking.subYardName}</td>
                     <td>{historyBooking.type}</td>
                     <td
@@ -128,7 +133,10 @@ function HistoryWidget() {
                     <td className={getColor(historyBooking.bookingStatus)}>
                       {historyBooking.bookingStatus}
                     </td>
-                    <td className="text-truncate" title={historyBooking.note}>
+                    <td
+                      className="text-truncate"
+                      title={historyBooking.note || "N/A"}
+                    >
                       {historyBooking.note || "N/A"}
                     </td>
                     <td>{historyBooking.createdBy}</td>
