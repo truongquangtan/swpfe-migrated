@@ -14,7 +14,11 @@ const UpdateSubYardModal = ({
   const [subYard, setSubYard] = useState({
     slots,
     name: EMPTY,
-    type: yard ? YARD_TYPES.find((t) => t.lable === yard.typeYard).value : 3,
+    type: yard
+      ? yard.id
+        ? YARD_TYPES.find((t) => t.lable === yard.typeYard).value
+        : yard.type
+      : 3,
     ...yard,
   });
 

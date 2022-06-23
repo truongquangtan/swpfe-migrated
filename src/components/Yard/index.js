@@ -20,6 +20,7 @@ import {
   getYardById,
 } from "../../services/yard.service";
 import empty from "../../assets/images/empty.png";
+import DisableElement from "../DisableElement";
 
 function Yard() {
   const { id } = useParams();
@@ -149,9 +150,7 @@ function Yard() {
       <div ref={container}>.</div>
       {!yard && (
         <div className="w-100 d-flex justify-content-center align-items-center loading-height">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
+          <DisableElement />
         </div>
       )}
       {yard && (
@@ -171,7 +170,11 @@ function Yard() {
             <div className="col-4 ps-4 pe-4 pt-5 flex-column">
               <div className="text-center mb-4">
                 <b className="size-2 d-block mb-2">{yard.name}</b>
-                <Rating ratingValue={80} allowHalfIcon={true} readonly={true} />
+                <Rating
+                  ratingValue={yard.score}
+                  allowHalfIcon={true}
+                  readonly={true}
+                />
               </div>
               <div className="row mb-1 yard__details-field">
                 <span className="col-3 fw-bolder">Address:</span>
@@ -268,9 +271,7 @@ function Yard() {
                   ))}
                 {isLoadingSlots && !slots.length && (
                   <div className="w-100 d-flex justify-content-center pt-5">
-                    <div className="spinner-border" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
+                    <DisableElement />
                   </div>
                 )}
                 {(!selectedDate || !selectedSubYard) && !slots.length && (

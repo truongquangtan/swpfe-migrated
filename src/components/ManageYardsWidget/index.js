@@ -11,6 +11,8 @@ import Pagination from "../Pagination";
 import { toast } from "react-toastify";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { TOAST_CONFIG } from "../../constants/default";
+import DisableElement from "../DisableElement";
+import SearchBar from "../SearchBar";
 
 function ManageYardsWidget() {
   const ITEMS_PER_PAGE = 10;
@@ -79,21 +81,22 @@ function ManageYardsWidget() {
 
   return (
     <div className="pt-5 mt-5 w-100">
-      <h4 className="mb-4 d-inline-block">
-        <img src={playground} alt="Yard" className="width-60 pe-3" />
-        Yard Management
-      </h4>
-      <Link to="/owner/yards/draft">
-        <button className="btn btn-primary px-4 ms-5">
-          <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
-          <b>Add</b>
-        </button>
-      </Link>
+      <div>
+        <h4 className="mb-4 d-inline-block">
+          <img src={playground} alt="Yard" className="width-60 pe-3" />
+          Yard Management
+        </h4>
+        <Link to="/owner/yards/draft">
+          <button className="btn btn-primary px-4 ms-5">
+            <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
+            <b>Add</b>
+          </button>
+        </Link>
+        <SearchBar />
+      </div>
       {isLoading && (
         <div className="w-100 d-flex justify-content-center pt-5 h-300 align-items-center">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
+          <DisableElement />
         </div>
       )}
       {!isLoading && !!yards.length && (

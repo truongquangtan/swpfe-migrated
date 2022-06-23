@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import { SERVICE_URL } from "../constants/default";
-import { USER } from "../constants/roles";
 import { decrypt, encryptKey } from "../helpers/crypto.helper";
 
 export const getMyIncomingMatches = async (params) => {

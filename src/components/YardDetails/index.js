@@ -562,7 +562,7 @@ function YardDetails() {
               />
             </div>
           </div>
-          <div className="pt-4 ">
+          <div className="pt-4">
             <h4 className="d-inline-block">Sub Yards</h4>
             <button
               className="btn btn-primary px-4 ms-5"
@@ -590,7 +590,7 @@ function YardDetails() {
                 <table className="table table-striped mt-1">
                   <thead>
                     <tr>
-                      <th scope="col" style={{ width: "15%" }}>
+                      <th scope="col" style={{ width: "12%" }}>
                         Actions
                       </th>
                       <th scope="col">Reference</th>
@@ -667,7 +667,13 @@ function YardDetails() {
                             <i
                               className="trash-icon fas fa-times col-4"
                               title="Delete"
-                              onClick={() => {}}
+                              onClick={() => {
+                                setSubYards([
+                                  ...subYards.filter(
+                                    (yard) => yard.ref !== item.ref
+                                  ),
+                                ]);
+                              }}
                             ></i>
                             <i
                               className="trash-icon fas fa-edit col-4"

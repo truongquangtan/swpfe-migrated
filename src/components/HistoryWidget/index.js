@@ -13,6 +13,7 @@ import { SUCCESS, FAILED, CANCELED } from "../../constants/bookingStatus";
 import { EMPTY } from "../../constants/default";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import { OWNER, USER } from "../../constants/roles";
+import DisableElement from "../DisableElement";
 
 function HistoryWidget() {
   const ITEMS_PER_PAGE = 10;
@@ -66,9 +67,7 @@ function HistoryWidget() {
           className="w-100 d-flex justify-content-center align-items-center"
           style={{ height: "50vh" }}
         >
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
+          <DisableElement />
         </div>
       ) : !historyBookingModels.length ? (
         <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column h-300">
