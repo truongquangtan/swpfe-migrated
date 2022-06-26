@@ -57,6 +57,12 @@ function YardDetails() {
   const { id } = useParams();
 
   useEffect(() => {
+    if (isNaN(defaultPrice) || defaultPrice - 1 < 0) {
+      setDefaultPrice("");
+    }
+  }, [defaultPrice]);
+
+  useEffect(() => {
     updateDefaulSlots();
   }, [timeSlot]);
 
@@ -486,7 +492,7 @@ function YardDetails() {
               type="text"
               placeholder="Default price"
               value={defaultPrice}
-              onChange={(e) => setDefaultPrice(Number(e.target.value))}
+              onChange={(e) => setDefaultPrice(e.target.value)}
             />
             <span
               className="col-2 fg-pw__icon-wrapper"

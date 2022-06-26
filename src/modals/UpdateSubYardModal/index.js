@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { EMPTY } from "../../constants/default";
@@ -31,6 +31,12 @@ const UpdateSubYardModal = ({
       ...slot,
       price: Number(e.target.value),
     };
+
+    console.log(isNaN(e.target.value));
+    if (isNaN(e.target.value) || slotList[index].price - 1 < 0) {
+      slotList[index].price = "";
+    }
+
     setSubYard({
       ...subYard,
       slots: slotList,
@@ -100,7 +106,8 @@ const UpdateSubYardModal = ({
                         type="text"
                         value={slot.price}
                         onChange={(e) => onChangeSlotPrice(e, slot)}
-                      />{" "}
+                      />
+                      {""}
                       VND
                     </p>
                   </div>
