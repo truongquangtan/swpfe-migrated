@@ -229,9 +229,9 @@ function Yard() {
                     disabled={isAppliedVoucher}
                   >
                     <option value="">Select yard</option>
-                    {yard.subYards.map((sub, index) => (
+                    {yard.subYards.map((sub) => (
                       <option
-                        key={index}
+                        key={sub.id}
                         value={sub.id}
                       >{`${sub.name} - (${sub.typeYard})`}</option>
                     ))}
@@ -247,8 +247,8 @@ function Yard() {
                 }
               >
                 {slots &&
-                  slots.map((slot, index) => (
-                    <div key={index} className="col-3 slot-details-container">
+                  slots.map((slot) => (
+                    <div key={slot.id} className="col-3 slot-details-container">
                       <div
                         className={
                           slot.isBooked
