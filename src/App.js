@@ -24,6 +24,7 @@ import WelcomeWidget from "./components/WelcomeWidget";
 import OwnerPage from "./pages/OwnerPage";
 import AuthPage from "./pages/AuthPage";
 import AccountVerification from "./components/AccountVerification";
+import ProfileAccount from "./components/ProfileAccount"
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
               element={<AccountVerification />}
             ></Route>
             <Route path="/history" element={<HistoryWidget />}></Route>
+
+            <Route path="/me" element={<ProfileAccount/>} ></Route>
           </Route>
 
           <Route exact path="/auth" element={<AuthPage />}>

@@ -22,3 +22,26 @@ export const getMyBookingHistory = async (params) => {
   });
   return response ? response.data : null;
 };
+
+export const updateProfile = async (values) => {
+  const form = new FormData();
+
+  form.append("avatar");
+  form.append("account");
+
+  const credential = localStorage.getItem(encryptKey("credential"));
+  if (!credential) {
+    throw new Error("No token provided!");
+  }
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/me/update-profile`,
+    values,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      },
+    }
+  );
+  return response ? response.data : null;
+};

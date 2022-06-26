@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 import "./style.scss";
 import { logout } from "../../services/auth.service";
@@ -8,14 +10,20 @@ import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { TOAST_CONFIG } from "../../constants/default";
 import { encryptKey } from "../../helpers/crypto.helper";
 import DisableScreen from "../DisableScreen";
+import { confirmAlert } from "react-confirm-alert";
+import { EMPTY, PHONE_PATTERN } from "../../constants/default";
+import * as _ from "lodash";
 
 function Header({ auth }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   const popupFeatures = [
     {
       title: "Profile",
       icon: "fas fa-info-circle",
-      click: () => {},
+      click: () => {
+        navigate("/me");
+      },
     },
     {
       title: "Log Out",
