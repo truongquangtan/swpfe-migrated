@@ -26,3 +26,25 @@ export const getBookingHistory = async (params, role) => {
   );
   return response ? response.data : null;
 };
+
+export const getVotes = async (params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/me/votes`, params, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${decrypt(credential).token}`
+    },
+  });
+  return response ? response.data : null;
+};
+
+export const postVote = async (params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/me/vote`, params, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${decrypt(credential).token}`
+    },
+  });
+  return response ? response.data : null;
+};
