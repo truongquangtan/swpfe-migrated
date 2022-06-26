@@ -1,27 +1,22 @@
 import { Rating } from "react-simple-star-rating";
+import { memo, useEffect, useState } from "react";
 
 import "./style.scss";
 import reviewer from "../../assets/images/reviewer.jpg";
-import { memo, useEffect, useState } from "react";
 import { getAllRatingOfYard } from "../../services/yard.service";
 
 function Reviews({ yardId }) {
   const [ratings, setRatings] = useState([]);
-  const [loadingRatings, setLoadingRatings] = useState(true);
+  const [loadingRatings, setLoadingRatings] = useState(false);
 
   useEffect(() => {
-    try {
-      const getAllRating = async () => {
-        const ratings = await getAllRatingOfYard(yardId);
-        setRatings(ratings)
-      }
-      if (yardId) {
-        getAllRating();
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingRatings(false)
+    if (yardId) {
+      setLoadingRatings(true);
+      getAllRatingOfYard(yardId).then(res => {
+       setRatings(res);
+      }).finally(() => {
+        setLoadingRatings(false);
+      });
     }
   }, []);
 
