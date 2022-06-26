@@ -19,7 +19,6 @@ const PostRatingModal = ({ bookingId, toogleShowModal, handleSubmitPostSuccess }
     }
 
     const handlePostRating = async () => {
-
         try {
             setIsSubmiting(true);
             const data = JSON.stringify({
@@ -30,6 +29,7 @@ const PostRatingModal = ({ bookingId, toogleShowModal, handleSubmitPostSuccess }
 
             await postVote(data);
             toast.success("Rating yard success!", TOAST_CONFIG);
+            toogleShowModal();
             handleSubmitPostSuccess();
         } catch (error) {
             toast.error("Rating yard failed. Try again!", TOAST_CONFIG);
