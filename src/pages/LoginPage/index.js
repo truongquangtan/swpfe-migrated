@@ -25,10 +25,7 @@ const validation = yup.object({
     .string(REQUEST_EMAIL)
     .email("Enter a valid email")
     .required(REQUIRED_EMAIL),
-  password: yup
-    .string(REQUEST_PASSWORD)
-    .min(8, "Password should be of minimum 8 characters length")
-    .required(REQUIRED_PASSWORD),
+  password: yup.string(REQUEST_PASSWORD).required(REQUIRED_PASSWORD),
 });
 
 function LoginPage() {

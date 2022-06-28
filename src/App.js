@@ -14,7 +14,6 @@ import WelcomePage from "./pages/WelcomePage";
 import ManageUsersWidget from "./components/ManageUsersWidget";
 import ManageYardsWidget from "./components/ManageYardsWidget";
 import YardRatingWidget from "./components/YardRatingWidget";
-import VouchersWidget from "./components/VouchersWidget";
 import VoucherManagementWidget from "./components/VoucherManagementWidget";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
@@ -37,7 +36,6 @@ function App() {
               path="/incoming-matches"
               element={<IncomingMatchesWidget />}
             ></Route>
-            <Route path="/vouchers" element={<VouchersWidget />}></Route>
             <Route path="/rating" element={<YardRatingWidget />}></Route>
             <Route
               path="/verification"

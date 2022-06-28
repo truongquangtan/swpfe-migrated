@@ -23,7 +23,11 @@ import Modal, { useModal } from "../Modal";
 import UpdateSubYardModal from "../../modals/UpdateSubYardModal";
 import empty from "../../assets/images/empty.png";
 import { YARD_TYPES } from "../../constants/type";
-import { addNewYard, getYardDetailById } from "../../services/yard.service";
+import {
+  addNewYard,
+  getYardDetailById,
+  updateYard,
+} from "../../services/yard.service";
 import DisableScreen from "../DisableScreen";
 
 const _URL = window.URL || window.webkitURL;
@@ -35,6 +39,7 @@ function YardDetails() {
   const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
   const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
+  const [firstChangeTimeSlot, setFirstChangeTimeSlot] = useState(false);
   const [timeSlot, setTimeSlot] = useState({
     start: START,
     end: END,
@@ -79,7 +84,6 @@ function YardDetails() {
   };
 
   const onUpdateSubYard = (yard) => {
-    const slots = yard ? yard.slots : _.cloneDeep(defaultSlots);
     setSelectedSubYard(yard ? yard : null);
     toggleShowUpdateSubYardModal();
   };
@@ -118,12 +122,21 @@ function YardDetails() {
             end: TIMELINE.find((t) => t.label === res.closeTime).value,
             period: TIMELINE.find((t) => t.label === res.duration).value,
           });
+          res.subYards = res.subYards.map((sub) => {
+            return {
+              ...sub,
+              type: YARD_TYPES.find((t) => t.lable === sub.typeYard).value,
+            };
+          });
           setSubYards(res.subYards);
           setYardPictures(
             res.images.map((url) => {
-              return { file: null, src: url };
+              return { newImage: null, src: url, currentImage: url };
             })
           );
+        })
+        .catch((error) => {
+          navigate("/not-found");
         })
         .finally(() => {
           setIsAddingYard(false);
@@ -250,44 +263,113 @@ function YardDetails() {
 
   const saveYard = () => {
     setIsAddingYard(true);
-    addNewYard({
-      images: yardPictures.map((picture) => picture.file),
-      yard: {
-        name: basicData.name,
-        address:
-          basicData.address +
-          `, ${
-            districts.find((d) => d.id === Number(selectedDistrict))
-              .districtName
-          }, ${
-            provinces.find((p) => p.id === Number(selectedProvince))
-              .provinceName
-          }`,
-        districtId: selectedDistrict,
-        openAt: TIMELINE.find((item) => item.value === Number(timeSlot.start))
-          .label,
-        closeAt: TIMELINE.find((item) => item.value === Number(timeSlot.end))
-          .label,
-        slotDuration: PERIODS.find(
-          (item) => item.value === Number(timeSlot.period)
-        ).label,
-        subYards: subYards.map((sub) => {
-          return {
-            ..._.pick(sub, ["id", "name", "type", "slots"]),
-          };
-        }),
-      },
-    })
-      .then(() => {
-        toast.success("Save yard successfully.", TOAST_CONFIG);
-        navigate("/owner/yards");
+    if (id === "draft") {
+      addNewYard({
+        images: yardPictures.map((picture) => picture.file),
+        yard: {
+          name: basicData.name,
+          address:
+            basicData.address +
+            `, ${
+              districts.find((d) => d.id === Number(selectedDistrict))
+                .districtName
+            }, ${
+              provinces.find((p) => p.id === Number(selectedProvince))
+                .provinceName
+            }`,
+          districtId: selectedDistrict,
+          openAt: TIMELINE.find((item) => item.value === Number(timeSlot.start))
+            .label,
+          closeAt: TIMELINE.find((item) => item.value === Number(timeSlot.end))
+            .label,
+          slotDuration: PERIODS.find(
+            (item) => item.value === Number(timeSlot.period)
+          ).label,
+          subYards: subYards.map((sub) => {
+            return {
+              ..._.pick(sub, ["id", "name", "type", "slots"]),
+            };
+          }),
+        },
       })
-      .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
-      })
-      .finally(() => {
-        setIsAddingYard(false);
-      });
+        .then(() => {
+          toast.success("Save yard successfully.", TOAST_CONFIG);
+          navigate("/owner/yards");
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, TOAST_CONFIG);
+        })
+        .finally(() => {
+          setIsAddingYard(false);
+        });
+    } else {
+      updateYard(
+        {
+          images: yardPictures
+            .filter((picture) => picture.isUpdate)
+            .map((picture) => picture.currentImage),
+          newImages: yardPictures
+            .filter((picture) => picture.isUpdate)
+            .map((picture) => picture.newImage),
+          yard: {
+            name: basicData.name,
+            address:
+              basicData.address +
+              `, ${
+                districts.find((d) => d.id === Number(selectedDistrict))
+                  .districtName
+              }, ${
+                provinces.find((p) => p.id === Number(selectedProvince))
+                  .provinceName
+              }`,
+            districtId: selectedDistrict,
+            openAt: TIMELINE.find(
+              (item) => item.value === Number(timeSlot.start)
+            ).label,
+            closeAt: TIMELINE.find(
+              (item) => item.value === Number(timeSlot.end)
+            ).label,
+            slotDuration: PERIODS.find(
+              (item) => item.value === Number(timeSlot.period)
+            ).label,
+            subYards: subYards.map((sub) => {
+              return {
+                ..._.pick(sub, ["id", "name", "type", "slots"]),
+              };
+            }),
+          },
+        },
+        id
+      )
+        .then(() => {
+          toast.success("Save yard successfully.", TOAST_CONFIG);
+        })
+        .catch((error) => {
+          toast.error(
+            error.response.data.message || INTERNAL_SERVER_ERROR,
+            TOAST_CONFIG
+          );
+        })
+        .finally(() => {
+          setIsAddingYard(false);
+        });
+    }
+  };
+
+  const uploadImage = (position, e) => {
+    const cloned = _.cloneDeep(yardPictures);
+    const file = e.target.files[0];
+    cloned[position] = {
+      ...cloned[position],
+      file,
+      src: _URL.createObjectURL(file),
+      newImage: file,
+    };
+
+    if (id !== "draft") {
+      cloned[position] = { ...cloned[position], isUpdate: true };
+    }
+    setYardPictures(cloned);
   };
 
   return (
@@ -405,6 +487,9 @@ function YardDetails() {
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
                 setTimeSlot({ ...timeSlot, start: e.target.value });
+                if (!firstChangeTimeSlot) {
+                  setFirstChangeTimeSlot(true);
+                }
               }}
               value={timeSlot.start}
             >
@@ -432,6 +517,9 @@ function YardDetails() {
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
                 setTimeSlot({ ...timeSlot, end: e.target.value });
+                if (!firstChangeTimeSlot) {
+                  setFirstChangeTimeSlot(true);
+                }
               }}
               value={timeSlot.end}
             >
@@ -456,6 +544,9 @@ function YardDetails() {
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
                 setTimeSlot({ ...timeSlot, period: e.target.value });
+                if (!firstChangeTimeSlot) {
+                  setFirstChangeTimeSlot(true);
+                }
               }}
               value={timeSlot.period}
             >
@@ -512,10 +603,7 @@ function YardDetails() {
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
                 onChange={(e) => {
-                  const cloned = _.cloneDeep(yardPictures);
-                  const file = e.target.files[0];
-                  cloned[0] = { file, src: _URL.createObjectURL(file) };
-                  setYardPictures(cloned);
+                  uploadImage(0, e);
                 }}
               />
             </div>
@@ -533,10 +621,7 @@ function YardDetails() {
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
                 onChange={(e) => {
-                  const cloned = _.cloneDeep(yardPictures);
-                  const file = e.target.files[0];
-                  cloned[1] = { file, src: _URL.createObjectURL(file) };
-                  setYardPictures(cloned);
+                  uploadImage(1, e);
                 }}
               />
             </div>
@@ -554,10 +639,7 @@ function YardDetails() {
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
                 onChange={(e) => {
-                  const cloned = _.cloneDeep(yardPictures);
-                  const file = e.target.files[0];
-                  cloned[2] = { file, src: _URL.createObjectURL(file) };
-                  setYardPictures(cloned);
+                  uploadImage(2, e);
                 }}
               />
             </div>
@@ -723,6 +805,7 @@ function YardDetails() {
           slots={defaultSlots}
           yard={selectedSubYard}
           onUpdateSubYardList={onUpdateSubYardList}
+          firstChangeTimeSlot={firstChangeTimeSlot}
         />
       </Modal>
       <ToastContainer />

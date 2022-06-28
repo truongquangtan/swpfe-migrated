@@ -1,23 +1,25 @@
-import React from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 
 import "./style.scss";
 import noData from "../../assets/images/no-data.jpg";
 import voucher from "../../assets/images/voucher.png";
 import voucher1 from "../../assets/images/voucher-1.png";
-import { ToastContainer, toast } from "react-toastify";
-import { TOAST_CONFIG } from "../../constants/default";
 
-function VouchersWidget() {
+const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
   const copyToClipBoard = (value) => {
     navigator.clipboard.writeText(value);
     toast.info("Copy to clipboard", TOAST_CONFIG);
   };
 
   return (
-    <div className="w-100 pt-5 mt-5 px-5">
+    <div
+      className="p-5"
+      style={{ backgroundColor: "white", width: "90vw", borderRadius: 5 }}
+    >
       <h4 className="text-center mb-4 size-2">
         <img src={voucher1} alt="Transaction" className="width-60 pe-3" />
-        Vouchers
+        Available Vouchers
       </h4>
       <div className="row mt-5 yard__result-container">
         <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
@@ -398,9 +400,9 @@ function VouchersWidget() {
           </div>
         </div>
         {/* <div className=" row justify-content-center align-items-center">
-        <img className="nodata-img" src={noData} alt="No data availble" />
-        <p className="text-center nodata-text">No yards available</p>
-      </div> */}
+      <img className="nodata-img" src={noData} alt="No data availble" />
+      <p className="text-center nodata-text">No yards available</p>
+    </div> */}
       </div>
       <div className="yard-pagination mt-4">
         <div>
@@ -415,9 +417,13 @@ function VouchersWidget() {
           </span>
         </div>
       </div>
+      <button className="btn btn-primary me-3 px-4">Apply</button>
+      <button onClick={toggleModal} className="btn btn-light">
+        Cancel
+      </button>
       <ToastContainer />
     </div>
   );
-}
+};
 
-export default VouchersWidget;
+export default VoucherStorageModal;

@@ -85,19 +85,6 @@ function VoucherManagementWidget() {
                 <div className="row p-2">
                   <span
                     className="col-1 lh-44 signup__icon-wrapper"
-                    title="Default price/slot"
-                  >
-                    <i className="fas fa-money-bill-wave"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="text"
-                    placeholder="Max amount of discount"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
                     title="Start Date"
                   >
                     <i className="far fa-clock"></i>
@@ -197,19 +184,6 @@ function VoucherManagementWidget() {
                 <div className="row p-2">
                   <span
                     className="col-1 lh-44 signup__icon-wrapper"
-                    title="Default price/slot"
-                  >
-                    <i className="fas fa-money-bill-wave"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="text"
-                    placeholder="Min cost of bill"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
                     title="Start Date"
                   >
                     <i className="far fa-clock"></i>
@@ -264,7 +238,7 @@ function VoucherManagementWidget() {
   const handleDeleteClick = () => {};
 
   return (
-    <div className="pt-4 w-100">
+    <div className="pt-5 mt-5 w-100">
       <h4 className="mb-4 d-inline-block">
         <img src={coupon} alt="Yard" className="width-60 pe-3" />
         Voucher Management
@@ -296,7 +270,7 @@ function VoucherManagementWidget() {
             <th scope="col" style={{ width: "22%" }}>
               Effective Date
             </th>
-            <th scope="col">Restriction</th>
+            <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -353,7 +327,7 @@ function VoucherManagementWidget() {
             >
               27/05/2022 - 31/05/2022
             </td>
-            <td>Up to 20.000 VND</td>
+            <td className="red bold">INACTIVE</td>
           </tr>
         </tbody>
       </table>
