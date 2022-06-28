@@ -24,7 +24,7 @@ function Reviews({ yardId }) {
 
   return (
     <div>
-      <h2 className="mb-3">Reviews</h2>
+      <h2 className="mb-3">{!!ratings.length || "Reviews"}</h2>
       <div className="reviews-container">
         {ratings.map((rating) => (
           <div key={rating.voteId} className="review">

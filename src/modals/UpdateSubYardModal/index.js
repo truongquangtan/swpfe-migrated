@@ -10,7 +10,6 @@ const UpdateSubYardModal = ({
   slots,
   yard,
   onUpdateSubYardList,
-  firstChangeTimeSlot,
 }) => {
   const [subYard, setSubYard] = useState({
     name: EMPTY,
@@ -20,7 +19,7 @@ const UpdateSubYardModal = ({
         : yard.type
       : 3,
     ...yard,
-    slots: !yard || firstChangeTimeSlot ? _.cloneDeep(slots) : yard.slots,
+    slots: !yard ? _.cloneDeep(slots) : yard.slots,
   });
 
   const onChangeSlotPrice = (e, slot) => {

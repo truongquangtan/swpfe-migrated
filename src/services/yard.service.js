@@ -151,3 +151,35 @@ export const updateYard = async (payload, yardId) => {
 
   return response ? response.data : null;
 };
+
+export const deactivateSubYard = async (yardId) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.put(
+    `${SERVICE_URL}/v1/owners/me/sub-yards/${yardId}/deactivate`,
+    null,
+    { headers: { Authorization: `Bearer ${decrypt(credential).token}` } }
+  );
+
+  return response ? response.data : null;
+};
+
+export const activateSubYard = async (yardId) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.put(
+    `${SERVICE_URL}/v1/owners/me/sub-yards/${yardId}/activate`,
+    null,
+    { headers: { Authorization: `Bearer ${decrypt(credential).token}` } }
+  );
+
+  return response ? response.data : null;
+};
+
+export const deleteSubYard = async (yardId) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.delete(
+    `${SERVICE_URL}/v1/owners/me/sub-yards/${yardId}`,
+    { headers: { Authorization: `Bearer ${decrypt(credential).token}` } }
+  );
+
+  return response ? response.data : null;
+};

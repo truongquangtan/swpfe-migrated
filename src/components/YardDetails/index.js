@@ -24,7 +24,10 @@ import UpdateSubYardModal from "../../modals/UpdateSubYardModal";
 import empty from "../../assets/images/empty.png";
 import { YARD_TYPES } from "../../constants/type";
 import {
+  activateSubYard,
   addNewYard,
+  deactivateSubYard,
+  deleteSubYard,
   getYardDetailById,
   updateYard,
 } from "../../services/yard.service";
@@ -80,6 +83,14 @@ function YardDetails() {
       start += period;
     }
 
+    if (firstChangeTimeSlot) {
+      setSubYards(
+        subYards.map((sub) => {
+          return { ...sub, slots: _.cloneDeep(slots) };
+        })
+      );
+    }
+
     setDefaultSlots(slots);
   };
 
@@ -103,44 +114,46 @@ function YardDetails() {
     }
   };
 
+  const fetchYard = () => {
+    setIsAddingYard(true);
+    getYardDetailById(id)
+      .then((res) => {
+        const addressDetail = res.address.split(", ");
+        setBasicData({
+          name: res.name,
+          address: addressDetail.splice(0, addressDetail.length - 2).join(", "),
+        });
+        setSelectedProvince(res.provinceId);
+        setSelectedDistrict(res.districtId);
+        setTimeSlot({
+          start: TIMELINE.find((t) => t.label === res.openTime).value,
+          end: TIMELINE.find((t) => t.label === res.closeTime).value,
+          period: TIMELINE.find((t) => t.label === res.duration).value,
+        });
+        res.subYards = res.subYards.map((sub) => {
+          return {
+            ...sub,
+            type: YARD_TYPES.find((t) => t.lable === sub.typeYard).value,
+          };
+        });
+        setSubYards(res.subYards);
+        setYardPictures(
+          res.images.map((url) => {
+            return { newImage: null, src: url, currentImage: url };
+          })
+        );
+      })
+      .catch((error) => {
+        navigate("/not-found");
+      })
+      .finally(() => {
+        setIsAddingYard(false);
+      });
+  };
+
   useEffect(() => {
     if (id !== "draft") {
-      setIsAddingYard(true);
-      getYardDetailById(id)
-        .then((res) => {
-          const addressDetail = res.address.split(", ");
-          setBasicData({
-            name: res.name,
-            address: addressDetail
-              .splice(0, addressDetail.length - 2)
-              .join(", "),
-          });
-          setSelectedProvince(res.provinceId);
-          setSelectedDistrict(res.districtId);
-          setTimeSlot({
-            start: TIMELINE.find((t) => t.label === res.openTime).value,
-            end: TIMELINE.find((t) => t.label === res.closeTime).value,
-            period: TIMELINE.find((t) => t.label === res.duration).value,
-          });
-          res.subYards = res.subYards.map((sub) => {
-            return {
-              ...sub,
-              type: YARD_TYPES.find((t) => t.lable === sub.typeYard).value,
-            };
-          });
-          setSubYards(res.subYards);
-          setYardPictures(
-            res.images.map((url) => {
-              return { newImage: null, src: url, currentImage: url };
-            })
-          );
-        })
-        .catch((error) => {
-          navigate("/not-found");
-        })
-        .finally(() => {
-          setIsAddingYard(false);
-        });
+      fetchYard();
     }
 
     setIsLoadingProvinces(true);
@@ -226,12 +239,52 @@ function YardDetails() {
       });
   };
 
-  const handleDisableYard = () => {};
+  const handleDisableYard = (yard) => {
+    deactivateSubYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Deactivate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        fetchYard();
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
 
-  const handleEnableYard = () => {};
+  const handleEnableYard = (yard) => {
+    activateSubYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Activate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        fetchYard();
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
 
   const handleDeleteClick = (yard) => {
-    setSubYards(subYards.filter((item) => item !== yard));
+    deleteSubYard(yard.id)
+      .then(() => {
+        toast.success(`Delete yard "${yard.name}" successfully.`, TOAST_CONFIG);
+        fetchYard();
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
   };
 
   const onSimpleClick = (title, question, callback) => {
@@ -261,56 +314,12 @@ function YardDetails() {
     });
   };
 
-  const saveYard = () => {
+  const saveYard = async () => {
     setIsAddingYard(true);
-    if (id === "draft") {
-      addNewYard({
-        images: yardPictures.map((picture) => picture.file),
-        yard: {
-          name: basicData.name,
-          address:
-            basicData.address +
-            `, ${
-              districts.find((d) => d.id === Number(selectedDistrict))
-                .districtName
-            }, ${
-              provinces.find((p) => p.id === Number(selectedProvince))
-                .provinceName
-            }`,
-          districtId: selectedDistrict,
-          openAt: TIMELINE.find((item) => item.value === Number(timeSlot.start))
-            .label,
-          closeAt: TIMELINE.find((item) => item.value === Number(timeSlot.end))
-            .label,
-          slotDuration: PERIODS.find(
-            (item) => item.value === Number(timeSlot.period)
-          ).label,
-          subYards: subYards.map((sub) => {
-            return {
-              ..._.pick(sub, ["id", "name", "type", "slots"]),
-            };
-          }),
-        },
-      })
-        .then(() => {
-          toast.success("Save yard successfully.", TOAST_CONFIG);
-          navigate("/owner/yards");
-        })
-        .catch((error) => {
-          toast.error(error.response.data.message, TOAST_CONFIG);
-        })
-        .finally(() => {
-          setIsAddingYard(false);
-        });
-    } else {
-      updateYard(
-        {
-          images: yardPictures
-            .filter((picture) => picture.isUpdate)
-            .map((picture) => picture.currentImage),
-          newImages: yardPictures
-            .filter((picture) => picture.isUpdate)
-            .map((picture) => picture.newImage),
+    try {
+      if (id === "draft") {
+        await addNewYard({
+          images: yardPictures.map((picture) => picture.file),
           yard: {
             name: basicData.name,
             address:
@@ -338,21 +347,59 @@ function YardDetails() {
               };
             }),
           },
-        },
-        id
-      )
-        .then(() => {
-          toast.success("Save yard successfully.", TOAST_CONFIG);
-        })
-        .catch((error) => {
-          toast.error(
-            error.response.data.message || INTERNAL_SERVER_ERROR,
-            TOAST_CONFIG
-          );
-        })
-        .finally(() => {
-          setIsAddingYard(false);
         });
+        navigate("/owner/yards");
+      } else {
+        await updateYard(
+          {
+            images: yardPictures
+              .filter((picture) => picture.isUpdate)
+              .map((picture) => picture.currentImage),
+            newImages: yardPictures
+              .filter((picture) => picture.isUpdate)
+              .map((picture) => picture.newImage),
+            yard: {
+              name: basicData.name,
+              address:
+                basicData.address +
+                `, ${
+                  districts.find((d) => d.id === Number(selectedDistrict))
+                    .districtName
+                }, ${
+                  provinces.find((p) => p.id === Number(selectedProvince))
+                    .provinceName
+                }`,
+              districtId: selectedDistrict,
+              openAt: TIMELINE.find(
+                (item) => item.value === Number(timeSlot.start)
+              ).label,
+              closeAt: TIMELINE.find(
+                (item) => item.value === Number(timeSlot.end)
+              ).label,
+              slotDuration: PERIODS.find(
+                (item) => item.value === Number(timeSlot.period)
+              ).label,
+              subYards: subYards.map((sub) => {
+                return {
+                  ..._.pick(sub, ["id", "name", "type", "slots"]),
+                };
+              }),
+            },
+          },
+          id
+        );
+        fetchYard();
+        setIsAppliedDefaultPrice(false);
+        setDefaultPrice("");
+      }
+      toast.success("Save yard successfully.", TOAST_CONFIG);
+    } catch (error) {
+      toast.error(
+        error.response.data.message || INTERNAL_SERVER_ERROR,
+        TOAST_CONFIG
+      );
+    } finally {
+      setIsAddingYard(false);
     }
   };
 
@@ -578,10 +625,16 @@ function YardDetails() {
               placeholder="Default price"
               value={defaultPrice}
               onChange={(e) => setDefaultPrice(Number(e.target.value))}
+              disabled={isAppliedDefaultPrice}
             />
             <span
               className="col-2 fg-pw__icon-wrapper"
-              onClick={() => setIsAppliedDefaultPrice(!isAppliedDefaultPrice)}
+              onClick={() => {
+                if (isAppliedDefaultPrice) {
+                  setDefaultPrice("");
+                }
+                setIsAppliedDefaultPrice(!isAppliedDefaultPrice);
+              }}
             >
               {isAppliedDefaultPrice ? "Remove" : "Apply"}
             </span>
@@ -693,7 +746,7 @@ function YardDetails() {
                                 onSimpleClick(
                                   "Delete",
                                   "Are you sure to delete this yard permanently?",
-                                  handleDeleteClick
+                                  () => handleDeleteClick(item)
                                 )
                               }
                             ></i>
@@ -705,7 +758,7 @@ function YardDetails() {
                                   onSimpleClick(
                                     "Disable",
                                     "Are you sure to disable this yard?",
-                                    handleDisableYard
+                                    () => handleDisableYard(item)
                                   )
                                 }
                               ></i>
@@ -717,7 +770,7 @@ function YardDetails() {
                                   onSimpleClick(
                                     "Enable",
                                     "Are you sure to activate this yard?",
-                                    handleEnableYard
+                                    () => handleEnableYard(item)
                                   )
                                 }
                               ></i>

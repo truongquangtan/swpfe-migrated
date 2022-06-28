@@ -56,11 +56,17 @@ function ManageYardsWidget() {
   const handleDisableYard = (yard) => {
     deactivateYard(yard.id)
       .then(() => {
-        toast.success(`Activate yard ${yard.name} successfully.`, TOAST_CONFIG);
+        toast.success(
+          `Deactivate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
         getYards(currentPage);
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 
@@ -68,13 +74,16 @@ function ManageYardsWidget() {
     activateYard(yard.id)
       .then(() => {
         toast.success(
-          `Deactivate yard ${yard.name} successfully.`,
+          `Activate yard "${yard.name}" successfully.`,
           TOAST_CONFIG
         );
         getYards(currentPage);
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 
@@ -85,7 +94,10 @@ function ManageYardsWidget() {
         getYards(currentPage);
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 

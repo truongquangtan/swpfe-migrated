@@ -17,6 +17,7 @@ import {
 import { sendForgotPassword } from "../../services/auth.service";
 import { verifyForgotPassword } from "../../services/auth.service";
 import { encryptKey } from "../../helpers/crypto.helper";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 
 const validation = yup.object({
   re_email: yup
@@ -49,7 +50,10 @@ function ForgotPassword() {
           navigate("/auth/reset-password");
         })
         .catch((error) => {
-          toast.error(error.response.data.message, TOAST_CONFIG);
+          toast.error(
+            error.response.data.message || INTERNAL_SERVER_ERROR,
+            TOAST_CONFIG
+          );
         });
     },
   });
@@ -66,7 +70,10 @@ function ForgotPassword() {
         toast.success("Code has been sent.", TOAST_CONFIG);
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 

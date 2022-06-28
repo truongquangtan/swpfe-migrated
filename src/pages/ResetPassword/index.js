@@ -15,6 +15,7 @@ import {
 } from "../../constants/default";
 import { updatePassword } from "../../services/auth.service";
 import { encryptKey } from "../../helpers/crypto.helper";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 
 const validation = yup.object({
   re_password: yup.string(REQUEST_PASSWORD).required(REQUIRED_PASSWORD),
@@ -47,7 +48,10 @@ function ResetPassword() {
             localStorage.removeItem(encryptKey("temporaryToken"));
           })
           .catch((error) => {
-            toast.error(error.response.data.message, TOAST_CONFIG);
+            toast.error(
+              error.response.data.message || INTERNAL_SERVER_ERROR,
+              TOAST_CONFIG
+            );
           });
       } else {
         toast.error("Missing token!", TOAST_CONFIG);

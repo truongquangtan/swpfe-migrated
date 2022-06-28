@@ -23,6 +23,7 @@ import empty from "../../assets/images/empty.png";
 import DisableElement from "../DisableElement";
 import Modal, { useModal } from "../Modal";
 import VoucherStorageModal from "../../modals/VoucherStorageModal";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 
 function Yard() {
   const { id } = useParams();
@@ -109,7 +110,10 @@ function Yard() {
           }
         })
         .catch((error) => {
-          toast.error(error.response.data.message, TOAST_CONFIG);
+          toast.error(
+            error.response.data.message || INTERNAL_SERVER_ERROR,
+            TOAST_CONFIG
+          );
         })
         .finally(() => {
           setIsBooking(false);
