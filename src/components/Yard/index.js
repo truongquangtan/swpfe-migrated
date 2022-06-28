@@ -396,7 +396,7 @@ function Yard() {
                       <div></div>
                     </div>
                   ) : (
-                    "Booking"
+                    "Book"
                   )}
                 </button>
               </div>
