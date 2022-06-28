@@ -129,9 +129,7 @@ function BookingWidget() {
       })
       .catch((error) => {
         toast.error(
-          error.response.status >= 500
-            ? INTERNAL_SERVER_ERROR
-            : error.response.data.message,
+          error.response.data.message || INTERNAL_SERVER_ERROR,
           TOAST_CONFIG
         );
       })

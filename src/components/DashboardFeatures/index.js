@@ -12,12 +12,12 @@ const features = [
     allowedRoles: [OWNER],
     path: "/owner/yards",
   },
-  // {
-  //   title: "Statistics",
-  //   icon: "fas fa-chart-bar",
-  //   allowedRoles: [OWNER],
-  //   path: "/owner/statistics",
-  // },
+  {
+    title: "Statistics",
+    icon: "fas fa-chart-bar",
+    allowedRoles: [OWNER],
+    path: "/owner/statistics",
+  },
   {
     title: "Incoming Matches",
     icon: "far fa-calendar-check",
@@ -48,12 +48,6 @@ const features = [
     allowedRoles: [OWNER],
     path: "/owner/history",
   },
-  // {
-  //   title: "Vouchers",
-  //   icon: "fas fa-money-bill",
-  //   allowedRoles: [USER],
-  //   path: "/vouchers",
-  // },
   {
     title: "Voucher Management",
     icon: "fas fa-wallet",

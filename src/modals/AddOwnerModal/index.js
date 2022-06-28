@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import * as yup from "yup";
 import { EMPTY, TOAST_CONFIG } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { PHONE_PATTERN } from "../../constants/regex";
 import { addOwner, updateUser } from "../../services/admin.service";
 
@@ -47,7 +48,10 @@ const AddOwnerModal = ({ toggleModal, account, onSave }) => {
       toggleModal();
       onSave();
     } catch (error) {
-      toast.error(error.response.data.message, TOAST_CONFIG);
+      toast.error(
+        error.response.data.message || INTERNAL_SERVER_ERROR,
+        TOAST_CONFIG
+      );
     }
   };
 

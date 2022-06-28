@@ -5,7 +5,12 @@ import * as moment from "moment";
 import "./style.scss";
 import playground from "../../assets/images/playground.png";
 import { Link } from "react-router-dom";
-import { searchOwnerYard } from "../../services/yard.service";
+import {
+  activateYard,
+  deactivateYard,
+  deleteYard,
+  searchOwnerYard,
+} from "../../services/yard.service";
 import { useState } from "react";
 import Pagination from "../Pagination";
 import { toast } from "react-toastify";
@@ -18,7 +23,9 @@ function ManageYardsWidget() {
   const ITEMS_PER_PAGE = 10;
   const [yards, setYards] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
   const onSimpleClick = (title, question, callback) => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -46,17 +53,60 @@ function ManageYardsWidget() {
     });
   };
 
-  const handleDisableYard = () => {};
+  const handleDisableYard = (yard) => {
+    deactivateYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Deactivate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        getYards(currentPage);
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
 
-  const handleEnableYard = () => {};
+  const handleEnableYard = (yard) => {
+    activateYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Activate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        getYards(currentPage);
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
 
-  const handleDeleteClick = () => {};
+  const handleDeleteClick = (yard) => {
+    deleteYard(yard.id)
+      .then(() => {
+        toast.success(`Delete yard ${yard.name} successfully.`, TOAST_CONFIG);
+        getYards(currentPage);
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
 
   const onChangePage = (page) => {
+    setCurrentPage(page);
     getYards(page);
   };
 
-  const getYards = (page, itemsPerPage = ITEMS_PER_PAGE) => {
+  const getYards = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
     setIsLoading(true);
     searchOwnerYard({ page, itemsPerPage })
       .then((res) => {
@@ -135,7 +185,7 @@ function ManageYardsWidget() {
                       onSimpleClick(
                         "Delete",
                         "Are you sure to delete this yard permanently?",
-                        handleDeleteClick
+                        () => handleDeleteClick(yard)
                       )
                     }
                   ></i>
@@ -147,7 +197,7 @@ function ManageYardsWidget() {
                         onSimpleClick(
                           "Disable",
                           "Are you sure to disable this yard?",
-                          handleDisableYard
+                          () => handleDisableYard(yard)
                         )
                       }
                     ></i>
@@ -159,7 +209,7 @@ function ManageYardsWidget() {
                         onSimpleClick(
                           "Enable",
                           "Are you sure to activate this yard?",
-                          handleEnableYard
+                          () => handleEnableYard(yard)
                         )
                       }
                     ></i>

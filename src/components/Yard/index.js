@@ -21,6 +21,9 @@ import {
 } from "../../services/yard.service";
 import empty from "../../assets/images/empty.png";
 import DisableElement from "../DisableElement";
+import Modal, { useModal } from "../Modal";
+import VoucherStorageModal from "../../modals/VoucherStorageModal";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 
 function Yard() {
   const { id } = useParams();
@@ -39,6 +42,7 @@ function Yard() {
   const [isLoadingVoucher, setIsLoadingVoucher] = useState(false);
   const [voucherCode, setVoucherCode] = useState(EMPTY);
   const [isBooking, setIsBooking] = useState(false);
+  const [showVoucherStorageModal, toggleShowVoucherStorageModal] = useModal();
 
   useEffect(() => {
     getYardById(id).then((res) => {
@@ -106,7 +110,10 @@ function Yard() {
           }
         })
         .catch((error) => {
-          toast.error(error.response.data.message, TOAST_CONFIG);
+          toast.error(
+            error.response.data.message || INTERNAL_SERVER_ERROR,
+            TOAST_CONFIG
+          );
         })
         .finally(() => {
           setIsBooking(false);
@@ -316,18 +323,16 @@ function Yard() {
                   type="text"
                   placeholder="Enter voucher code"
                   value={voucherCode}
-                  onChange={(e) => {
-                    setVoucherCode(e.target.value);
-                  }}
-                  disabled={!booking.length}
+                  readOnly
                 />
                 <button
                   id="voucher-btn"
                   className="col-2 lh-44 fg-pw__icon-wrapper"
-                  disabled={!voucherCode}
-                  onClick={handleOnClickVoucher}
+                  onClick={() => {
+                    toggleShowVoucherStorageModal();
+                  }}
                 >
-                  {isAppliedVoucher ? "Remove" : "Apply"}
+                  {isAppliedVoucher ? "Remove" : "Select"}
                 </button>
               </div>
               <div className="matches-container">
@@ -395,7 +400,7 @@ function Yard() {
                       <div></div>
                     </div>
                   ) : (
-                    "Booking"
+                    "Book"
                   )}
                 </button>
               </div>
@@ -404,6 +409,16 @@ function Yard() {
           <Reviews yardId={id} />
         </>
       )}
+      <Modal
+        isShowing={showVoucherStorageModal}
+        hide={toggleShowVoucherStorageModal}
+      >
+        <VoucherStorageModal
+          toggleModal={toggleShowVoucherStorageModal}
+          ownerId={null}
+          onSelect={() => {}}
+        />
+      </Modal>
       <ToastContainer />
     </div>
   );

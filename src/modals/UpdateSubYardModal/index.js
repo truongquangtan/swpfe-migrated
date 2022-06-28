@@ -12,7 +12,6 @@ const UpdateSubYardModal = ({
   onUpdateSubYardList,
 }) => {
   const [subYard, setSubYard] = useState({
-    slots,
     name: EMPTY,
     type: yard
       ? yard.id
@@ -20,6 +19,7 @@ const UpdateSubYardModal = ({
         : yard.type
       : 3,
     ...yard,
+    slots: !yard ? _.cloneDeep(slots) : yard.slots,
   });
 
   const onChangeSlotPrice = (e, slot) => {

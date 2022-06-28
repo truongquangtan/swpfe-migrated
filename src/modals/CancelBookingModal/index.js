@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import * as yup from "yup";
 import { EMPTY, TOAST_CONFIG } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { cancelBooking } from "../../services/booking.service";
 
 const validation = yup.object({
@@ -28,7 +29,10 @@ const CancelBookingModal = ({ toggleModal, bookingId, onSave }) => {
         onSave();
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 
