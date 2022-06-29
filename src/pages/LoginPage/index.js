@@ -25,10 +25,7 @@ const validation = yup.object({
     .string(REQUEST_EMAIL)
     .email("Enter a valid email")
     .required(REQUIRED_EMAIL),
-  password: yup
-    .string(REQUEST_PASSWORD)
-    .min(8, "Password should be of minimum 8 characters length")
-    .required(REQUIRED_PASSWORD),
+  password: yup.string(REQUEST_PASSWORD).required(REQUIRED_PASSWORD),
 });
 
 function LoginPage() {
@@ -62,9 +59,7 @@ function LoginPage() {
         })
         .catch((error) => {
           toast.error(
-            error.response.status >= 500
-              ? INTERNAL_SERVER_ERROR
-              : error.response.data.message,
+            error.response.data.message || INTERNAL_SERVER_ERROR,
             TOAST_CONFIG
           );
         });
@@ -79,7 +74,7 @@ function LoginPage() {
         <h3 className=" bold size-4 pt-5">Welcome</h3>
         <img src={user} alt="user" className="width-120 mt-4" />
         <form className="mt-5" onSubmit={formik.handleSubmit}>
-          <div className="row p-2 position-relative">
+          <div className="row p-2">
             <label
               htmlFor="email"
               className="text-start"
@@ -105,11 +100,11 @@ function LoginPage() {
             <span className="signup__filed--error">
               {formik.touched.username && formik.errors.username
                 ? formik.errors.username
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
 
-          <div className="row p-2 position-relative pt-0">
+          <div className="row p-2 pt-0">
             <label
               htmlFor="password"
               className="text-start"
@@ -134,7 +129,7 @@ function LoginPage() {
             <span className="signup__filed--error">
               {formik.touched.password && formik.errors.password
                 ? formik.errors.password
-                : ""}{" "}
+                : EMPTY}{" "}
             </span>
           </div>
           <div className="pl-3 pr-3 mt-3 row">

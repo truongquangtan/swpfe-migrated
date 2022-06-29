@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { TOAST_CONFIG, INTERNAL_SERVER_ERROR } from "../../constants/default";
+import {
+  TOAST_CONFIG,
+  INTERNAL_SERVER_ERROR,
+  EMPTY,
+} from "../../constants/default";
 import { ADMIN, OWNER } from "../../constants/roles";
 import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
 import { receiveVerifyCode, verifyAccount } from "../../services/auth.service";
@@ -10,7 +14,7 @@ import "./style.scss";
 function AccountVerification() {
   const credential = localStorage.getItem(encryptKey("credential"));
   const navigate = useNavigate();
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(EMPTY);
 
   if (!credential) {
     return <Navigate to="/auth/login" />;
@@ -34,16 +38,14 @@ function AccountVerification() {
       })
       .catch((error) => {
         toast.error(
-          error.response.status >= 500
-            ? INTERNAL_SERVER_ERROR
-            : error.response.data.message,
+          error.response.data.message || INTERNAL_SERVER_ERROR,
           TOAST_CONFIG
         );
       });
   };
 
   const handleRequestCode = () => {
-    setCode("");
+    setCode(EMPTY);
     toast.info("Code will be sent soon.", TOAST_CONFIG);
 
     receiveVerifyCode(decrypt(credential).token)
@@ -51,7 +53,10 @@ function AccountVerification() {
         toast.success("Code has been sent.", TOAST_CONFIG);
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 

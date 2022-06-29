@@ -45,7 +45,7 @@ function WelcomeWidget() {
         ))}
       </Slide>
       {auth && <DashboardFeatures role="user" />}
-      <OutstandingYard />
+      {/* <OutstandingYard /> */}
       <BookingWidget />
       <Footer />
     </>

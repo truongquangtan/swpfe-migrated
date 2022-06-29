@@ -70,7 +70,11 @@ function Header({ auth }) {
         <div className="profile-popup">
           {popupFeatures.map((feature) => {
             return (
-              <div className="profile__popup-feature" onClick={feature.click}>
+              <div
+                className="profile__popup-feature"
+                onClick={feature.click}
+                key={feature.title}
+              >
                 <i className={feature.icon + " p-2"}></i>
                 <span>{feature.title}</span>
               </div>

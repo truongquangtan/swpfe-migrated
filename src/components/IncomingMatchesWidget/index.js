@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 import "./style.scss";
@@ -8,12 +7,21 @@ import player1 from "../../assets/images/player-1.gif";
 import player2 from "../../assets/images/player-2.gif";
 import { getMyIncomingMatches } from "../../services/me.service";
 import Pagination from "../Pagination";
+import empty from "../../assets/images/empty.png";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
+import { toast, ToastContainer } from "react-toastify";
+import Modal, { useModal } from "../Modal";
+import CancelBookingModal from "../../modals/CancelBookingModal";
+import DisableElement from "../DisableElement";
 
 function IncomingMatchesWidget() {
   const ITEMS_PER_PAGE = 5;
+  const [showCancelBookingModal, toggleShowCancelBookingModal] = useModal();
   const [isLoading, setIsLoading] = useState(false);
   const [matches, setMatches] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [bookingId, setBookingId] = useState(EMPTY);
 
   useEffect(() => {
     getIncomingMatches();
@@ -35,45 +43,23 @@ function IncomingMatchesWidget() {
       });
   };
 
-  const onCancelBooking = (bookingId) => {
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className="custom-confirm">
-            <h4>Cancel Booking</h4>
-            <p className="mb-3">
-              Give us your reason why you cancel this booking
-            </p>
-            <textarea
-              className="w-100 mb-3"
-              style={{ height: "100px", borderRadius: "5px", resize: "none" }}
-            />
-            <button
-              className="btn btn-primary me-3"
-              onClick={() => {
-                this.handleClickDelete();
-                onClose();
-              }}
-            >
-              Confirm
-            </button>
-            <button onClick={onClose} className="btn btn-light">
-              Cancel
-            </button>
-          </div>
-        );
-      },
-      closeOnEscape: true,
-      closeOnClickOutside: true,
-    });
-  };
-
   const onChangePage = (page) => {
     getIncomingMatches(page);
+    setCurrentPage(page);
   };
 
   return (
     <div className="col-6 ps-4 pe-4 flex-column pt-4 m-auto mt-5">
+      <Modal
+        isShowing={showCancelBookingModal}
+        hide={toggleShowCancelBookingModal}
+      >
+        <CancelBookingModal
+          toggleModal={toggleShowCancelBookingModal}
+          bookingId={bookingId}
+          onSave={() => getIncomingMatches(currentPage)}
+        />
+      </Modal>
       <img src={player1} alt="Player" className="incoming-player-1" />
       <img src={player2} alt="Player" className="incoming-player-2" />
       <h4 className="text-center mb-4">
@@ -86,9 +72,7 @@ function IncomingMatchesWidget() {
             className="w-100 d-flex justify-content-center align-items-center"
             style={{ height: "50vh" }}
           >
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
+            <DisableElement />
           </div>
         ) : (
           <>
@@ -119,15 +103,30 @@ function IncomingMatchesWidget() {
                   <i
                     className="far fa-trash-alt trash-icon"
                     title="Cancel booking"
-                    onClick={() => onCancelBooking(match.bookingId)}
+                    onClick={() => {
+                      setBookingId(match.bookingId);
+                      toggleShowCancelBookingModal();
+                    }}
                   ></i>
                 </div>
               </div>
             ))}
+            {!matches.length && (
+              <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column h-300">
+                <img src={empty} style={{ width: 80 }} />
+                <p
+                  className="text-center nodata-text"
+                  style={{ fontSize: "0.9rem" }}
+                >
+                  No incoming match available
+                </p>
+              </div>
+            )}
           </>
         )}
       </div>
       <Pagination maxPage={maxPage} onChangePage={onChangePage} />
+      <ToastContainer />
     </div>
   );
 }

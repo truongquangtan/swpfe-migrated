@@ -12,7 +12,7 @@ import yard3 from "../../assets/images/yard-3.jpg";
 import noData from "../../assets/images/no-data.jpg";
 import { toast, ToastContainer } from "react-toastify";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import { TOAST_CONFIG } from "../../constants/default";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import Reviews from "../Reviews";
 import {
   bookingYard,
@@ -20,6 +20,10 @@ import {
   getYardById,
 } from "../../services/yard.service";
 import empty from "../../assets/images/empty.png";
+import DisableElement from "../DisableElement";
+import Modal, { useModal } from "../Modal";
+import VoucherStorageModal from "../../modals/VoucherStorageModal";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 
 function Yard() {
   const { id } = useParams();
@@ -36,8 +40,9 @@ function Yard() {
   const [slots, setSlots] = useState([]);
   const [isAppliedVoucher, setIsAppliedVoucher] = useState(false);
   const [isLoadingVoucher, setIsLoadingVoucher] = useState(false);
-  const [voucherCode, setVoucherCode] = useState("");
+  const [voucherCode, setVoucherCode] = useState(EMPTY);
   const [isBooking, setIsBooking] = useState(false);
+  const [showVoucherStorageModal, toggleShowVoucherStorageModal] = useModal();
 
   useEffect(() => {
     getYardById(id).then((res) => {
@@ -105,7 +110,10 @@ function Yard() {
           }
         })
         .catch((error) => {
-          toast.error(error.response.data.message, TOAST_CONFIG);
+          toast.error(
+            error.response.data.message || INTERNAL_SERVER_ERROR,
+            TOAST_CONFIG
+          );
         })
         .finally(() => {
           setIsBooking(false);
@@ -145,13 +153,11 @@ function Yard() {
   };
 
   return (
-    <div className="w-100 yard-container mt-5 container pb-5">
-      <div ref={container}></div>
+    <div className="w-100 yard-container mt-4 container pb-5">
+      <div ref={container}>.</div>
       {!yard && (
         <div className="w-100 d-flex justify-content-center align-items-center loading-height">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
+          <DisableElement />
         </div>
       )}
       {yard && (
@@ -171,7 +177,11 @@ function Yard() {
             <div className="col-4 ps-4 pe-4 pt-5 flex-column">
               <div className="text-center mb-4">
                 <b className="size-2 d-block mb-2">{yard.name}</b>
-                <Rating ratingValue={80} allowHalfIcon={true} readonly={true} />
+                <Rating
+                  ratingValue={yard.score}
+                  allowHalfIcon={true}
+                  readonly={true}
+                />
               </div>
               <div className="row mb-1 yard__details-field">
                 <span className="col-3 fw-bolder">Address:</span>
@@ -228,6 +238,7 @@ function Yard() {
                     <option value="">Select yard</option>
                     {yard.subYards.map((sub) => (
                       <option
+                        key={sub.id}
                         value={sub.id}
                       >{`${sub.name} - (${sub.typeYard})`}</option>
                     ))}
@@ -244,7 +255,7 @@ function Yard() {
               >
                 {slots &&
                   slots.map((slot) => (
-                    <div className="col-3 slot-details-container">
+                    <div key={slot.id} className="col-3 slot-details-container">
                       <div
                         className={
                           slot.isBooked
@@ -268,9 +279,7 @@ function Yard() {
                   ))}
                 {isLoadingSlots && !slots.length && (
                   <div className="w-100 d-flex justify-content-center pt-5">
-                    <div className="spinner-border" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
+                    <DisableElement />
                   </div>
                 )}
                 {(!selectedDate || !selectedSubYard) && !slots.length && (
@@ -314,18 +323,16 @@ function Yard() {
                   type="text"
                   placeholder="Enter voucher code"
                   value={voucherCode}
-                  onChange={(e) => {
-                    setVoucherCode(e.target.value);
-                  }}
-                  disabled={!booking.length}
+                  readOnly
                 />
                 <button
                   id="voucher-btn"
                   className="col-2 lh-44 fg-pw__icon-wrapper"
-                  disabled={!voucherCode}
-                  onClick={handleOnClickVoucher}
+                  onClick={() => {
+                    toggleShowVoucherStorageModal();
+                  }}
                 >
-                  {isAppliedVoucher ? "Remove" : "Apply"}
+                  {isAppliedVoucher ? "Remove" : "Select"}
                 </button>
               </div>
               <div className="matches-container">
@@ -341,8 +348,8 @@ function Yard() {
                     </p>
                   </div>
                 )}
-                {booking.map((item) => (
-                  <div className="match-container row mb-2">
+                {booking.map((item, index) => (
+                  <div key={index} className="match-container row mb-2">
                     <div className="col-1 basket__img-container d-flex justify-content-center align-items-center ps-3">
                       <p>
                         <i
@@ -393,16 +400,25 @@ function Yard() {
                       <div></div>
                     </div>
                   ) : (
-                    "Booking"
+                    "Book"
                   )}
                 </button>
               </div>
             </div>
           </div>
-          <Reviews />
+          <Reviews yardId={id} />
         </>
       )}
-
+      <Modal
+        isShowing={showVoucherStorageModal}
+        hide={toggleShowVoucherStorageModal}
+      >
+        <VoucherStorageModal
+          toggleModal={toggleShowVoucherStorageModal}
+          ownerId={null}
+          onSelect={() => {}}
+        />
+      </Modal>
       <ToastContainer />
     </div>
   );

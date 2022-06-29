@@ -31,12 +31,6 @@ const features = [
     path: "/history",
   },
   {
-    title: "History",
-    icon: "fas fa-history",
-    allowedRoles: [OWNER],
-    path: "/owner/history",
-  },
-  {
     title: "Users",
     icon: "far fa-user",
     allowedRoles: [ADMIN],
@@ -49,10 +43,10 @@ const features = [
     path: "/owner/match-management",
   },
   {
-    title: "Vouchers",
-    icon: "fas fa-money-bill",
-    allowedRoles: [USER],
-    path: "/vouchers",
+    title: "History",
+    icon: "fas fa-history",
+    allowedRoles: [OWNER],
+    path: "/owner/history",
   },
   {
     title: "Voucher Management",
@@ -70,7 +64,7 @@ const features = [
 
 function DashboardFeatures({ role }) {
   return (
-    <div className="row py-5 w-100 height-mincontent">
+    <div className="p-5 w-100 height-mincontent mx-0">
       <h2 className="mb-5 text-center mt-5">
         {role !== USER ? "Dashboard" : "Welcome to Basketball Playground"}
         {role === USER && (
