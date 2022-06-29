@@ -1,6 +1,6 @@
 import { defaults } from "lodash";
 //import React from "react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as moment from "moment";
 import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
 import { Chart as chartjs } from "chart.js/auto";
@@ -8,8 +8,19 @@ import { Chart as chartjs } from "chart.js/auto";
 import "./style.scss";
 
 function Statistics() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedDate2, setSelectedDate2] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false);
+  const [yardStatisticModel, setYardStatisticModel] = useState(null);
+  const [numberOfBookingsByHours, setNumberOfBookingsByHours] = useState([]);
+
+  useEffect( () => {
+    if(startDate && endDate)
+    {
+
+    }
+  }
+  )
 
   return (
     <div className="pt-4 w-100">
@@ -28,9 +39,9 @@ function Statistics() {
               className="col-10 outline-none p-2 signup__input-border"
               type="date"
               placeholder="Date"
-              value={selectedDate}
+              value={startDate}
               onChange={(e) => {
-                setSelectedDate(e.target.value);
+                setStartDate(e.target.value);
               }}
               required
             />
@@ -47,9 +58,9 @@ function Statistics() {
               className="col-10 outline-none p-2 signup__input-border"
               type="date"
               placeholder="Date"
-              value={selectedDate2}
+              value={endDate}
               onChange={(e) => {
-                setSelectedDate2(e.target.value);
+                setEndDate(e.target.value);
               }}
               required
             />
