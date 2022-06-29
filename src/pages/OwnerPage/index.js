@@ -20,11 +20,7 @@ function OwnerPage() {
   return (
     <div className="home">
       <Header auth={true} />
-<<<<<<< HEAD
-      <div className="container-fluid d-flex justify-content-center features mt-5 px-5">
-=======
       <div className="d-flex justify-content-center features mt-5 px-5">
->>>>>>> f47bb59b3694e14a0affb5b9b6694044a5a38605
         <Outlet />
       </div>
     </div>

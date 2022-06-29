@@ -48,3 +48,14 @@ export const postVote = async (params) => {
   });
   return response ? response.data : null;
 };
+
+export const getStatistic = async (params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/owners/me/dashboard`, params, {
+    headers: {
+      "Content-Type" : "application/json",
+      Authorization: `Bearer ${decrypt(credential).token}`
+    },
+  });
+  return response ? response.data : null;
+}
