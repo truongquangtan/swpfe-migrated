@@ -16,6 +16,7 @@ function Statistics() {
   const [numberOfBookingsByHours, setNumberOfBookingsByHours] = useState([]);
   const [maxBookings, setMaxBookings] = useState(0);
   const [hasData, setHasData] = useState(false);
+  var numOfColor=0;
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -23,6 +24,11 @@ function Statistics() {
       setHasData(true);
     }
   }, [startDate, endDate])
+
+  const selectColor = (number) => {
+    const approximation = number*137.508;
+    return `hsl(${approximation},50%,75%)`;
+  }
 
   const getStatisticObject = () => {
     setIsLoading(true);
@@ -101,9 +107,11 @@ function Statistics() {
                       {
                         label: "Booking",
                         data: yardStatisticModel.map(yardModel => yardModel.totalIncome),
-                        backgroundColor: yardStatisticModel.map(yardModel => "rgba(255, 99, 132, 1)"),
+                        backgroundColor: yardStatisticModel.map(yardModel => selectColor(numOfColor++)),
                         borderColor: "white",
                         borderWidth: 1,
+                        hoverBackgroundColor: "rgb(255, 204, 153)",
+                        spacing: 0.5
                       },
                     ],
                   }}
@@ -118,8 +126,8 @@ function Statistics() {
 
 
                   }}
-                /></div>) : (<><img className="nodata-img" src={noData} alt="No data available" />
-                <p className="text-center nodata-text">No data</p></>)}
+                /></div>) : (<><img className="nodata-img-for-dashboard" src={noData} alt="No data available" />
+                <p className="text-center nodata-text-for-dashboard">No data</p></>)}
                 
               </div>
 
@@ -172,8 +180,8 @@ function Statistics() {
                           },
                         },
                       }}
-                    />) : (<><img className="nodata-img" src={noData} alt="No data available" />
-                    <p className="text-center nodata-text">No data</p></>)}
+                    />) : (<><img className="nodata-img-for-dashboard" src={noData} alt="No data available" />
+                    <p className="text-center nodata-text-for-dashboard">No data</p></>)}
                   </div>
                 </div>
               </div>
@@ -228,8 +236,8 @@ function Statistics() {
                           },
                         },
                       }}
-                    />) : (<><img className="nodata-img" src={noData} alt="No data available" />
-                    <p className="text-center nodata-text">No data</p></>)}
+                    />) : (<><img className="nodata-img-for-dashboard" src={noData} alt="No data available" />
+                    <p className="text-center nodata-text-for-dashboard">No data</p></>)}
                   </div>
                 </div>
               </div>
