@@ -5,11 +5,12 @@ import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
 import { Chart as chartjs } from "chart.js/auto";
 import { getStatistic } from "../../services/me.service";
 import DisableElement from "../DisableElement";
+import noData from "../../assets/images/empty.png";
 import "./style.scss";
 
 function Statistics() {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [yardStatisticModel, setYardStatisticModel] = useState([]);
   const [numberOfBookingsByHours, setNumberOfBookingsByHours] = useState([]);
@@ -90,10 +91,10 @@ function Statistics() {
       ) : (
         <div className="pt-4 w-100">
           <div className=" pt-4 w-100">
-            <div className="d-flex">
+            <div className="d-flex padding-right-20">
               <div className="doughnut-chart col-4 text-center border border-1">
-                <h2 className="pie-title">Yard Business Contribution</h2>
-                <Pie
+                <h4 className="pie-title w-100">Yard Business Contribution</h4>
+                {hasData ? (<div className="mg-top-40"><Pie
                   data={{
                     labels: yardStatisticModel.map(yardModel => yardModel.yardName),
                     datasets: [
@@ -117,26 +118,28 @@ function Statistics() {
 
 
                   }}
-                />
+                /></div>) : (<><img className="nodata-img" src={noData} alt="No data available" />
+                <p className="text-center nodata-text">No data</p></>)}
+                
               </div>
 
-              <div className=" col-8 border border-1">
+              <div className="bar-chart col-8 border border-1 chart-padding">
                 <div>
-                  <h3 class="chart-title">Booking Statistic</h3>
-                  <div>
-                    <Bar
+                  <h4 class="chart-title">Booking Statistic</h4>
+                  <div className="text-center">
+                    {hasData ? (<Bar
                       data={{
                         labels: yardStatisticModel.map(yardModel => yardModel.yardName.split(" ")),
                         datasets: [
                           {
-                            label: "Booking",
+                            label: "Booked",
                             data: yardStatisticModel.map(yardModel => yardModel.numberOfBookings),
                             backgroundColor: "#0000FF",
                             borderColor: "white",
                             borderWidth: 1,
                           },
                           {
-                            label: "Cancel",
+                            label: "Cancelled",
                             data: yardStatisticModel.map(yardModel => yardModel.numberOfBookingCanceled),
                             backgroundColor: "#FF0000",
                             borderColor: "white",
@@ -169,7 +172,8 @@ function Statistics() {
                           },
                         },
                       }}
-                    />
+                    />) : (<><img className="nodata-img" src={noData} alt="No data available" />
+                    <p className="text-center nodata-text">No data</p></>)}
                   </div>
                 </div>
               </div>
@@ -177,10 +181,10 @@ function Statistics() {
             </div>
             <div className="d-flex row">
               <div className="pt-4 w-100">
-                <div className=" border border-2">
-                  <h3 class="chart-title">Booking In Time</h3>
-                  <div className="line-chart">
-                    <Line
+                <div className="border border-1 chart-padding">
+                  <h4 class="chart-title">Booking In Time</h4>
+                  <div className="line-chart text-center">
+                    {hasData ? (<Line
                       data={{
                         labels: [
                           "00:00", "00:30", "01:00", "01:30", "02:00", "02:30", "03:00", "03:30", "04:00", "04:30", "05:00", "05:30", "06:00",
@@ -196,7 +200,7 @@ function Statistics() {
                             borderColor: "#008cea",
                             borderWidth: 1,
                             pointRadius: 0.4,
-                            lineTension: 0.3
+                            lineTension: 0.3,
                           },
                         ],
                       }}
@@ -224,7 +228,8 @@ function Statistics() {
                           },
                         },
                       }}
-                    />
+                    />) : (<><img className="nodata-img" src={noData} alt="No data available" />
+                    <p className="text-center nodata-text">No data</p></>)}
                   </div>
                 </div>
               </div>

@@ -31,15 +31,15 @@
 }
 
 .doughnut-chart {
-  margin-right: 20px;
-  padding: 10px 60px;
+  margin-right: 10px;
+  padding: 5px 60px;
 }
 
 .pie-title {
   color: #0d6efd;
   padding: 5px;
   margin: 5px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   text-align: center;
 }
 
@@ -53,4 +53,27 @@
 
 .page-title {
   padding-top: 20px;
+}
+
+.nodata-img {
+  width: 80px;
+}
+.nodata-text {
+  color: #999;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  padding-bottom: 5px;
+}
+.chart-padding {
+  padding: 5px;
+}
+.bar-chart {
+  margin-left: 10px;
+}
+.padding-right-20 {
+  padding-right: 20px;
+}
+.mg-top-40 {
+  margin-top: 40px;
 }
