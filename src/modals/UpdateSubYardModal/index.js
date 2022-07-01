@@ -32,9 +32,8 @@ const UpdateSubYardModal = ({
       price: Number(e.target.value),
     };
 
-    console.log(isNaN(e.target.value));
     if (isNaN(e.target.value) || slotList[index].price - 1 < 0) {
-      slotList[index].price = "";
+      slotList[index].price = 0;
     }
 
     setSubYard({
