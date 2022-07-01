@@ -1,30 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import "./App.scss";
-import HistoryWidget from "./components/HistoryWidget";
+import AccountVerification from "./components/AccountVerification";
 import BookingWidget from "./components/BookingWidget";
 import DashboardFeatures from "./components/DashboardFeatures";
+import HistoryWidget from "./components/HistoryWidget";
 import IncomingMatchesWidget from "./components/IncomingMatchesWidget";
+import ManageUsersWidget from "./components/ManageUsersWidget";
+import ManageYardsWidget from "./components/ManageYardsWidget";
+import MatchManagementWidget from "./components/MatchManagementWidget";
+import ProfileAccount from "./components/ProfileAccount";
+import VoucherManagementWidget from "./components/VoucherManagementWidget";
+import VouchersWidget from "./components/VouchersWidget";
+import WelcomeWidget from "./components/WelcomeWidget";
 import Yard from "./components/Yard";
+import YardDetails from "./components/YardDetails";
+import YardRatingWidget from "./components/YardRatingWidget";
+import AuthPage from "./pages/AuthPage";
+import ForgotPassword from "./pages/ForgotPassword";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFound";
+import OwnerPage from "./pages/OwnerPage";
+import ResetPassword from "./pages/ResetPassword";
 import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
-import ManageUsersWidget from "./components/ManageUsersWidget";
-import ManageYardsWidget from "./components/ManageYardsWidget";
-import YardRatingWidget from "./components/YardRatingWidget";
-import VouchersWidget from "./components/VouchersWidget";
-import VoucherManagementWidget from "./components/VoucherManagementWidget";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import MatchManagementWidget from "./components/MatchManagementWidget";
-import YardDetails from "./components/YardDetails";
-import WelcomeWidget from "./components/WelcomeWidget";
-import OwnerPage from "./pages/OwnerPage";
-import AuthPage from "./pages/AuthPage";
-import AccountVerification from "./components/AccountVerification";
-import ProfileAccount from "./components/ProfileAccount"
 
 function App() {
   return (
@@ -80,6 +80,7 @@ function App() {
               path="/owner/match-management"
               element={<MatchManagementWidget />}
             ></Route>
+            <Route path="/owner/me" element={<ProfileAccount/>} ></Route>
           </Route>
 
           <Route exact path="/admin" element={<HomePage />}>
@@ -95,6 +96,7 @@ function App() {
             ></Route>
 
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
+            <Route path="/admin/me" element={<ProfileAccount/>} ></Route>
           </Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>

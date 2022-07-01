@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
-import "./style.scss";
 import Header from "../../components/Header";
+import { ADMIN, OWNER } from "../../constants/roles";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import { OWNER, ADMIN } from "../../constants/roles";
+import "./style.scss";
 
 function WelcomePage() {
   const [auth, setAuth] = useState(false);

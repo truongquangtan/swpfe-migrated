@@ -23,11 +23,11 @@ export const getMyBookingHistory = async (params) => {
   return response ? response.data : null;
 };
 
-export const updateProfile = async (values) => {
+export const updateProfile = async (file, values) => {
   const form = new FormData();
 
-  form.append("avatar");
-  form.append("account");
+  form.append("avatar", file);
+  form.append("account", values);
 
   const credential = localStorage.getItem(encryptKey("credential"));
   if (!credential) {
@@ -35,7 +35,7 @@ export const updateProfile = async (values) => {
   }
   const response = await axios.post(
     `${SERVICE_URL}/v1/me/update-profile`,
-    values,
+    form,
     {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -45,3 +45,11 @@ export const updateProfile = async (values) => {
   );
   return response ? response.data : null;
 };
+
+export const changePasswordRequest = async (values) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/me/verify-password`, values, {
+    headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+  });
+  return response ? response.data : null;
+}

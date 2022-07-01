@@ -1,175 +1,204 @@
-import React from "react";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import "./style.scss";
-import * as _ from "lodash";
-import { EMPTY } from "../../constants/default";
 
-import { useState } from "react";
-import { confirmAlert } from "react-confirm-alert";
+import { useFormik } from "formik";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import ProfileUpdatePasswordModal from "../../modals/ProfileUpdatePasswordModal";
+import { updateProfile } from "../../services/me.service";
+import Modal, { useModal } from "../Modal";
 const _URL = window.URL || window.webkitURL;
 
+
 function ProfileAccount() {
-  const [profilePictures, setProfilePictures] = useState([
-    { file: null, src: EMPTY },
-  ]);
+	const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
+	const navigate = useNavigate();
 
-  const changePassword = () => {
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div
-            className="rounded border border-3 custom-confirm"
-            style={{ width: 500 }}
-          >
-            <form className="my-3">
-              <div className="row p-1">
-                <label
-                  htmlFor="old-password"
-                  className="text-start"
-                  style={{ paddingLeft: 0 }}
-                >
-                  Old Password
-                </label>
-                <span className="col-1 lh-44 signup__icon-wrapper">
-                  <i className="fas fa-user-lock"></i>
-                </span>
-                <input
-                  className="col-11 outline-none p-2 signup__input-border"
-                  type="text"
-                  placeholder="Enter old password"
-                  name="oldPassword"
-                />
-              </div>
-              <div className="mt-3 d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary px-4">
-                  Save
-                </button>
-                <div className="btn btn-light mx-4 cancel" onClick={onClose}>
-                  Cancel
-                </div>
-              </div>
-            </form>
-          </div>
-        );
-      },
-      closeOnEscape: true,
-      closeOnClickOutside: true,
-    });
-  };
+	const [currentUser] = useState(() => {
+		const credentials = localStorage.getItem(encryptKey("credential"));
+		if (credentials) {
+			return decrypt(credentials);
+		}
+		return null;
+	})
 
-  return (
-    <div className="big">
-      <div className="d-flex big-father justify-content-between">
-        <div className="col-3">
-          <div>
-            <div className="p-1 info-avatar">
-              <div
-                className="upload__img-wrapper mb-2 color-blur rounded-circle"
-                style={{
-                  backgroundImage: `url(${profilePictures[0]["src"]})`,
-                  backgroundSize: "cover",
-                  height: 350,
-                }}
-              >
-                {!profilePictures[0] && "Intro image"}
-              </div>
-              <input
-                className="outline-none custom-bg-input p-0 w-100"
-                type="file"
-                onChange={(e) => {
-                  const cloned = _.cloneDeep(profilePictures);
-                  const file = e.target.files[0];
-                  cloned[0] = { file, src: _URL.createObjectURL(file) };
-                  setProfilePictures(cloned);
-                }}
-              />
-            </div>
-            <div className="pt-4"></div>
-          </div>
-        </div>
+	const [avatarImage, setAvatarImage] = useState(() => {
+		const credentials = localStorage.getItem(encryptKey("credential"));
+		if (credentials) {
+			return {
+				file: null,
+				url: decrypt(credentials)?.avatar,
+				preview: null
+			}
+		}
+		return {
+			file: null,
+			url: null,
+			preview: null
+		};
+	})
 
-        <div className="col-9 text-center info-text ">
-          <div>
-            <h4>PROFILE USER</h4>
-          </div>
-          <div className="custom-confirm" style={{ width: 1000 }}>
-            <form>
-              <div className="row p-1">
-                <label
-                  htmlFor="email"
-                  className="text-start"
-                  style={{ paddingLeft: 0 }}
-                >
-                  Email
-                </label>
-                <span className="col-1 lh-44 signup__icon-wrapper">
-                  <i className="fas fa-envelope"></i>
-                </span>
-                <input
-                  className="col-11 outline-none p-2 signup__input-border"
-                  type="text"
-                  placeholder="Email"
-                  name="email"
-                  readOnly
-                />
-              </div>
-              <div className="row p-1">
-                <label
-                  htmlFor="fullname"
-                  className="text-start"
-                  style={{ paddingLeft: 0 }}
-                >
-                  Fullname
-                </label>
-                <span className="col-1 lh-44 signup__icon-wrapper">
-                  <i className="fas fa-address-card"></i>
-                </span>
-                <input
-                  className="col-11 outline-none p-2 signup__input-border"
-                  type="text"
-                  name="fullName"
-                  placeholder="Full name"
-                />
-              </div>
-              <div className="row p-1">
-                <label
-                  htmlFor="phone"
-                  className="text-start"
-                  style={{ paddingLeft: 0 }}
-                >
-                  Phone
-                </label>
-                <span className="col-1 lh-44 signup__icon-wrapper">
-                  <i className="fas fa-phone-alt"></i>
-                </span>
-                <input
-                  className="col-11 outline-none p-2 signup__input-border"
-                  type="text"
-                  name="phone"
-                  placeholder="Phone number"
-                />
-              </div>
-              <div className="d-flex justify-content-end">
-                <button
-                  className="rounded-pill border border-2"
-                  onClick={changePassword()}
-                >
-                  Change Password
-                </button>
-              </div>
-              <div className="mt-3">
-                <div className="d-flex">
-                  <button type="submit" className="btn btn-primary px-4">
-                    Confirm
-                  </button>
-                  <div className="btn btn-light mx-4 cancel">Cancel</div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+	const handleUploadAvatarOnChange = useCallback((file) => {
+		setAvatarImage(previousAvatar => {
+			if (previousAvatar.preview) {
+				URL.revokeObjectURL(previousAvatar.preview);
+			}
+			return {
+				...previousAvatar,
+				file: file,
+				preview: URL.createObjectURL(file)
+			}
+		})
+	}, [])
+
+	const handleUpdateProfile = useCallback(async (values) => {
+		try {
+			const data = { phone: values.phone, fullName: values.fullName }
+			await updateProfile(avatarImage.file, JSON.stringify(data))
+			localStorage.removeItem(encryptKey("credential"))
+			navigate("/auth/login")
+		} catch (error) {
+			console.log(error.response.data.message);
+			toast.error(error.response.data.message, {...TOAST_CONFIG, containerId: "toast-profile-account"})
+		}
+	}, [avatarImage])
+
+	const formik = useFormik({
+		initialValues: {
+			email: currentUser?.email ? currentUser.email : EMPTY,
+			fullName: currentUser?.fullName ? currentUser.fullName : EMPTY,
+			phone: currentUser?.phone ? currentUser.phone : EMPTY
+		},
+		validateOnMount: true,
+		validateOnChange: true,
+		onSubmit: handleUpdateProfile
+	})
+
+	return (
+
+		<div className="profile-wrapper w-100">
+			<Modal
+				isShowing={showUpdatePasswordModal}
+				hide={setShowUpdatePasswordModal}
+			>
+				<ProfileUpdatePasswordModal toggleModal={setShowUpdatePasswordModal} />
+			</Modal>
+			<div className="d-flex">
+				<div className="col-3">
+					<div className="profile-avatar-wrapper">
+						<img className="mb-2 profile-avatar__img color-blur rounded-circle" src={avatarImage.preview || avatarImage.url} />
+						<label className="profile-avatar__upload-lable">
+							<input
+								className="profile-avatar__upload-input"
+								type="file"
+								onChange={(e) => {
+									handleUploadAvatarOnChange(e.target.files[0])
+								}}
+							/>
+
+							<div className="profile-avatar__upload-button">Upload</div>
+						</label>
+					</div>
+				</div>
+
+				<div className="flex-grow-1">
+					<div className="profile-info-wrapper">
+						<h4 className="text-center">PROFILE USER</h4>
+						<div>
+							<form
+								id="update-profile-form"
+								onSubmit={formik.handleSubmit}
+							>
+								<div className="row p-1">
+									<label
+										htmlFor="email"
+										className="text-start"
+										style={{ paddingLeft: 0 }}
+									>
+										Email
+									</label>
+									<span className="col-1 lh-44 signup__icon-wrapper">
+										<i className="fas fa-envelope"></i>
+									</span>
+									<input
+										className="col-11 outline-none p-2 signup__input-border"
+										type="text"
+										placeholder="Email"
+										name="email"
+										onChange={formik.handleChange}
+										value={formik.values.email}
+										readOnly
+									/>
+								</div>
+								<div className="row p-1">
+									<label
+										htmlFor="fullname"
+										className="text-start"
+										style={{ paddingLeft: 0 }}
+									>
+										Full Name
+									</label>
+									<span className="col-1 lh-44 signup__icon-wrapper">
+										<i className="fas fa-address-card"></i>
+									</span>
+									<input
+										className="col-11 outline-none p-2 signup__input-border"
+										type="text"
+										name="fullName"
+										value={formik.values.fullName}
+										onChange={formik.handleChange}
+										placeholder="Full name"
+									/>
+								</div>
+								<div className="row p-1">
+									<label
+										htmlFor="phone"
+										className="text-start"
+										style={{ paddingLeft: 0 }}
+									>
+										Phone
+									</label>
+									<span className="col-1 lh-44 signup__icon-wrapper">
+										<i className="fas fa-phone-alt"></i>
+									</span>
+									<input
+										className="col-11 outline-none p-2 signup__input-border"
+										type="text"
+										name="phone"
+										value={formik.values.phone}
+										onChange={formik.handleChange}
+										placeholder="Phone number"
+									/>
+								</div>
+								<div className="d-flex justify-content-end">
+									<button
+										className="rounded-pill border border-2"
+										onClick={(e) => {
+											e.preventDefault()
+											setShowUpdatePasswordModal()
+										}}
+									>
+										Change Password
+									</button>
+								</div>
+								<div className="mt-3">
+									<div className="d-flex">
+										<button disabled={!formik.isValid || formik.isSubmitting} type="submit" className="btn btn-primary px-4">
+											Save
+										</button>
+										<div className="btn btn-light mx-4 cancel">Cancel</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ToastContainer containerId="toast-profile-account"/>
+		</div>
+	);
 }
 
 export default ProfileAccount;
