@@ -89,7 +89,6 @@ function App() {
               path="/admin/incoming-matches"
               element={<IncomingMatchesWidget />}
             ></Route>
-
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
           </Route>
           <Route path="*" element={<NotFoundPage />}></Route>

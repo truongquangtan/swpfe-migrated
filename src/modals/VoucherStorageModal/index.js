@@ -11,6 +11,7 @@ import { searchVouchers } from "../../services/voucher.service";
 import { useEffect } from "react";
 import VOUCHER_TYPE from "../../constants/voucher";
 import DisableElement from "../../components/DisableElement";
+import empty from "../../assets/images/empty.png";
 
 const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
   const ITEMS_PER_PAGE = 9;
@@ -214,6 +215,17 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
               );
             }
           })}
+        {!isLoading && !vouchers.length && (
+          <div className="w-100 d-flex justify-content-center align-items-center flex-column">
+            <img src={empty} style={{ width: 80 }} />
+            <p
+              className="text-center nodata-text"
+              style={{ fontSize: "0.9rem" }}
+            >
+              No voucher available
+            </p>
+          </div>
+        )}
       </div>
       <div className="yard-pagination mt-4">
         <div>

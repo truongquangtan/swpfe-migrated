@@ -16,6 +16,7 @@ import { searchYard } from "../../services/yard.service";
 import yard1 from "../../assets/images/yard-1.jpg";
 import Pagination from "../Pagination";
 import DisableElement from "../DisableElement";
+import { getLatitudeLongitude } from "../../helpers/geocode.helper";
 
 function BookingWidget() {
   const ITEMS_PER_PAGE = 8;
@@ -129,7 +130,7 @@ function BookingWidget() {
       })
       .catch((error) => {
         toast.error(
-          error.response.data.message || INTERNAL_SERVER_ERROR,
+          error.response?.data.message || INTERNAL_SERVER_ERROR,
           TOAST_CONFIG
         );
       })

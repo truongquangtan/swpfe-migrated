@@ -1,6 +1,13 @@
-.search-bar {
-    max-width: 900;
-    background-color: "red";
-    float: "right";
-    height: 68;
+.search-sort {
+    display: inline-flex;
+    width: 100%;
+    max-width: 840px;
+    float: right;
+    flex-direction: row;
+    justify-content: end;
+
+    .search-input {
+        border-radius: 3px;
+        border: 1px solid #999;
+    }
 }

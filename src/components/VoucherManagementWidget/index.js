@@ -3,6 +3,7 @@ import { confirmAlert } from "react-confirm-alert";
 
 import "./style.scss";
 import coupon from "../../assets/images/coupon.png";
+import SearchBar from "../SearchBar";
 
 function VoucherManagementWidget() {
   const onSimpleClick = (title, question, callback) => {
@@ -257,6 +258,7 @@ function VoucherManagementWidget() {
         <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
         <b>Voucher $</b>
       </button>
+      <SearchBar />
       <table className="table table-striped">
         <thead>
           <tr>

@@ -32,6 +32,7 @@ function Yard() {
   const [yard, setYard] = useState(null);
   const [booking, setBooking] = useState([]);
   const [total, setTotal] = useState(0);
+  const [originalTotal, setOriginalTotal] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const [slideImages, setSlideImages] = useState([]);
@@ -79,27 +80,30 @@ function Yard() {
   useEffect(() => {
     if (voucherCode) {
       calculateBookingList(voucherCode, booking).then((res) => {
+        let newTotal = 0;
+        setOriginalTotal(total);
         setBooking(
-          res.bookingList.map((item) =>
-            _.pick(item, [
-              "refSubYard",
-              "slotId",
-              "price",
-              "date",
-              "originalPrice",
-            ])
-          )
+          res.bookingList.map((item) => {
+            newTotal += item.price;
+            const found = _.find(booking, { refSubYard: item.refSubYard });
+            return { ...found, ..._.pick(item, ["price", "originalPrice"]) };
+          })
         );
+        setTotal(newTotal);
       });
     } else {
+      setTotal(originalTotal);
       setBooking(
         booking.map((item) => {
+          const found = _.find(booking, { refSubYard: item.refSubYard });
           return {
-            ..._.pick(item, ["refSubYard", "slotId", "price", "date"]),
+            ...found,
             price: item.originalPrice || item.price,
+            originalPrice: 0,
           };
         })
       );
+      setOriginalTotal(0);
     }
   }, [voucherCode]);
 
@@ -114,7 +118,7 @@ function Yard() {
       bookingYard(
         yard.id,
         {
-          voucherId: voucherCode || null,
+          voucherCode: voucherCode || null,
           bookingList: booking,
         },
         decrypt(credential).token
@@ -133,6 +137,8 @@ function Yard() {
               });
             setBooking([]);
             setTotal(0);
+            setVoucherCode(EMPTY);
+            setOriginalTotal(0);
             toast.success("Booking successfully.", TOAST_CONFIG);
           }
         })
@@ -400,9 +406,18 @@ function Yard() {
                         <b>{item.yardName}</b> - ({item.yardType})
                       </p>
                     </div>
-                    <div className="col-3 basket__img-container d-flex justify-content-center align-items-center">
+                    <div className="col-3 basket__img-container d-flex justify-content-center align-items-center  text-center">
                       <p>
                         <b>{item.price} VND</b>
+                        <br />
+                        {!!item.originalPrice && (
+                          <span
+                            className="original-price"
+                            style={{ fontSize: "0.9rem" }}
+                          >
+                            {item.originalPrice} VND
+                          </span>
+                        )}
                       </p>
                     </div>
                   </div>
@@ -412,6 +427,15 @@ function Yard() {
                 <div className="col-3">Total</div>
                 <div className="col-9 text-end">
                   <b>{total} VND</b>
+                  <br />
+                  {!!originalTotal && (
+                    <span
+                      className="original-price"
+                      style={{ fontSize: "0.9rem" }}
+                    >
+                      {originalTotal} VND
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="pt-3 pb-3 justify-content-around">

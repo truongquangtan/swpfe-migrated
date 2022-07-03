@@ -101,7 +101,7 @@ function IncomingMatchesWidget() {
                   style={{ fontSize: "1.5rem" }}
                 >
                   <i
-                    className="far fa-trash-alt trash-icon"
+                    className="far fa-trash-alt trash-icon red"
                     title="Cancel booking"
                     onClick={() => {
                       setBookingId(match.bookingId);

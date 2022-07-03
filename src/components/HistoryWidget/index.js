@@ -14,6 +14,7 @@ import { EMPTY } from "../../constants/default";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import { OWNER, USER } from "../../constants/roles";
 import DisableElement from "../DisableElement";
+import SearchBar from "../SearchBar";
 
 function HistoryWidget() {
   const ITEMS_PER_PAGE = 10;
@@ -58,10 +59,11 @@ function HistoryWidget() {
 
   return (
     <div className="pt-5 mt-5 w-100 px-5">
-      <h4 className="text-center mb-4">
+      <h4 className="mb-4 d-inline-block">
         <img src={transaction} alt="Transaction" className="width-60 pe-3" />
         Booking History
       </h4>
+      <SearchBar />
       {isLoading ? (
         <div
           className="w-100 d-flex justify-content-center align-items-center"
@@ -78,7 +80,7 @@ function HistoryWidget() {
         </div>
       ) : (
         <>
-          <table className="table">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col" style={{ width: "15%" }}>

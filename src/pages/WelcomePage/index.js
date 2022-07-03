@@ -26,7 +26,9 @@ function WelcomePage() {
   return (
     <div className="welcome__page-container overflow-x-hidden">
       <Header auth={auth} />
-      <Outlet />
+      <div className="pt-5">
+        <Outlet />
+      </div>
     </div>
   );
 }

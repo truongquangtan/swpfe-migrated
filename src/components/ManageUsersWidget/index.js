@@ -12,6 +12,7 @@ import { TOAST_CONFIG } from "../../constants/default";
 import empty from "../../assets/images/empty.png";
 import Pagination from "../Pagination";
 import DisableElement from "../DisableElement";
+import SearchBar from "../SearchBar";
 
 function ManageUsersWidget() {
   const ITEMS_PER_PAGE = 10;
@@ -118,6 +119,7 @@ function ManageUsersWidget() {
             <img src={userGroup} alt="User" className="width-60 pe-3" />
             Users
           </h4>
+          <SearchBar />
           <button
             className="btn btn-primary px-4 ms-5"
             onClick={() => onInviteClick(null)}

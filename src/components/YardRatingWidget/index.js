@@ -7,6 +7,7 @@ import DisableElement from "../DisableElement";
 import Modal, { useModal } from "../Modal";
 import Pagination from "../Pagination";
 import "./style.scss";
+import empty from "../../assets/images/empty.png";
 
 function YardRatingWidget() {
   const ITEMS_PER_PAGE = 6;
@@ -113,6 +114,17 @@ function YardRatingWidget() {
                 </div>
               </div>
             ))}
+          {!isLoading && !votes.length && (
+            <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
+              <img src={empty} style={{ width: 80 }} />
+              <p
+                className="text-center nodata-text"
+                style={{ fontSize: "0.9rem" }}
+              >
+                No result available
+              </p>
+            </div>
+          )}
           <Pagination maxPage={maxPage} onChangePage={onChangePage} />
         </div>
       </div>
