@@ -51,11 +51,49 @@ export const postVote = async (params) => {
 
 export const getStatistic = async (params) => {
   const credential = localStorage.getItem(encryptKey("credential"));
-  const response = await axios.post(`${SERVICE_URL}/v1/owners/me/dashboard`, params, {
-    headers: {
-      "Content-Type" : "application/json",
-      Authorization: `Bearer ${decrypt(credential).token}`
-    },
-  });
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/owners/me/dashboard`,
+    params,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      },
+    }
+  );
   return response ? response.data : null;
-}
+};
+export const updateProfile = async (file, values) => {
+  const form = new FormData();
+
+  form.append("avatar", file);
+  form.append("account", values);
+
+  const credential = localStorage.getItem(encryptKey("credential"));
+  if (!credential) {
+    throw new Error("No token provided!");
+  }
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/me/update-profile`,
+    form,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      },
+    }
+  );
+  return response ? response.data : null;
+};
+
+export const changePasswordRequest = async (values) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/me/verify-password`,
+    values,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  );
+  return response ? response.data : null;
+};

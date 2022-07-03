@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-import "./style.scss";
-import { logout } from "../../services/auth.service";
-import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { TOAST_CONFIG } from "../../constants/default";
-import { encryptKey } from "../../helpers/crypto.helper";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import { logout } from "../../services/auth.service";
 import DisableScreen from "../DisableScreen";
+import "./style.scss";
+
 
 function Header({ auth }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   const popupFeatures = [
     {
       title: "Profile",
       icon: "fas fa-info-circle",
-      click: () => {},
+      click: () => {
+        const account = decrypt(localStorage.getItem(encryptKey("credential")));
+        const role = account?.role;
+        switch(role){
+          case 'admin':
+            navigate("/admin/me");
+            break;
+          case 'owner':
+            navigate("/owner/me");
+            break;
+          default:
+            navigate("/me")
+        }
+      },
     },
     {
       title: "Log Out",
