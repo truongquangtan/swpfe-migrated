@@ -1,408 +1,219 @@
 import { ToastContainer, toast } from "react-toastify";
-import { EMPTY, TOAST_CONFIG } from "../../constants/default";
+import * as moment from "moment";
 
 import "./style.scss";
+import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import noData from "../../assets/images/no-data.jpg";
-import voucher from "../../assets/images/voucher.png";
+import voucherImg from "../../assets/images/voucher.png";
 import voucher1 from "../../assets/images/voucher-1.png";
+import { useState } from "react";
+import { searchVouchers } from "../../services/voucher.service";
+import { useEffect } from "react";
+import VOUCHER_TYPE from "../../constants/voucher";
+import DisableElement from "../../components/DisableElement";
 
 const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
+  const ITEMS_PER_PAGE = 9;
+  const [isLoading, setIsLoading] = useState(false);
+  const [vouchers, setVouchers] = useState([]);
+  const [code, setCode] = useState("");
+
   const copyToClipBoard = (value) => {
     navigator.clipboard.writeText(value);
     toast.info("Copy to clipboard", TOAST_CONFIG);
   };
 
+  const fetchVouchers = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
+    setIsLoading(true);
+    searchVouchers({ page, itemsPerPage }, ownerId)
+      .then((res) => {
+        setVouchers(res.vouchers);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  const onApply = () => {
+    onSelect(code);
+  };
+
+  useEffect(() => {
+    fetchVouchers(1);
+  }, []);
+
   return (
     <div
       className="p-5"
-      style={{ backgroundColor: "white", width: "90vw", borderRadius: 5 }}
+      style={{
+        backgroundColor: "white",
+        width: "90vw",
+        borderRadius: 5,
+        height: 853,
+      }}
     >
       <h4 className="text-center mb-4 size-2">
         <img src={voucher1} alt="Transaction" className="width-60 pe-3" />
         Available Vouchers
       </h4>
-      <div className="row mt-5 yard__result-container">
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10%</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Up to 15.000 VND</span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
-                >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="32% already in use">
-                <progress id="file" value="32" max="100">
-                  {" "}
-                  32%{" "}
-                </progress>
-              </p>
-            </div>
+      <div className="row mt-5 yard__result-container" style={{ height: 576 }}>
+        {isLoading && (
+          <div className="w-100 d-flex justify-content-center align-items-center">
+            <DisableElement />
           </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10.000 VND</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  Bill at least 100.000 VND
-                </span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
+        )}
+        {!isLoading &&
+          !!vouchers.length &&
+          vouchers.map((voucher) =>
+            voucher.type === VOUCHER_TYPE.CASH ? (
+              <div
+                className="voucher-wrapper col-4 p-3 pe-2"
+                key={voucher.voucherCode}
               >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
+                <div
+                  className={
+                    voucher.voucherCode === code
+                      ? "yard-result voucher-wrapper-selected"
+                      : "yard-result"
+                  }
+                  onClick={() => {
+                    setCode(voucher.voucherCode);
+                  }}
                 >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="64% already in use">
-                <progress id="file" value="64" max="100">
-                  {" "}
-                  64%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10.000 VND</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  Bill at least 100.000 VND
-                </span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
+                  <img src={voucherImg} alt="basketball yard" />
+                  <div className="yard-details p-3">
+                    <b className="d-block mb-2">
+                      Discount {voucher.amountDiscount} VND
+                    </b>
+                    <p
+                      className="row mb-1"
+                      title="Effective date"
+                      style={{ fontSize: "0.9rem" }}
+                    >
+                      <i className="fas fa-clock col-1 pt-1"></i>
+                      <span className="ps-2 color-blur col-10">
+                        {moment(voucher.startDate).format("DD/MM/yyyy")} -{" "}
+                        {moment(voucher.endDate).format("DD/MM/yyyy")}
+                      </span>
+                    </p>
+                    <p className="row mb-1">
+                      <i
+                        className="trash-icon fas fa-copy col-1 pt-1"
+                        title="Copy"
+                        onClick={() => copyToClipBoard(voucher.voucherCode)}
+                      ></i>
+                      <span
+                        className="ps-2 bold col-10 voucher-code"
+                        value={voucher.voucherCode}
+                      >
+                        {voucher.voucherCode}
+                      </span>
+                    </p>
+                    <p
+                      className="row mt-2 ps-2"
+                      title={`${
+                        (voucher.usages * 100) / voucher.maxQuantity
+                      }% already in use`}
+                    >
+                      <progress
+                        id="file"
+                        value={voucher.usages}
+                        max={voucher.maxQuantity}
+                      >
+                        {" "}
+                        {(voucher.usages * 100) / voucher.maxQuantity}%{" "}
+                      </progress>
+                    </p>
+                    <p className="row mb-1" style={{ fontSize: "0.8rem" }}>
+                      <span className="ps-2 color-blur col-10">
+                        Already used{" "}
+                        {(voucher.usages * 100) / voucher.maxQuantity}%
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div
+                className="voucher-wrapper col-4 p-3 pe-2"
+                key={voucher.voucherCode}
               >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
+                <div
+                  className={
+                    voucher.voucherCode === code
+                      ? "yard-result voucher-wrapper-selected"
+                      : "yard-result"
+                  }
+                  onClick={() => {
+                    setCode(voucher.voucherCode);
+                  }}
                 >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="64% already in use">
-                <progress id="file" value="64" max="100">
-                  {" "}
-                  64%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10%</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Up to 15.000 VND</span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
-                >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="32% already in use">
-                <progress id="file" value="32" max="100">
-                  {" "}
-                  32%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10%</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Up to 15.000 VND</span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
-                >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="32% already in use">
-                <progress id="file" value="32" max="100">
-                  {" "}
-                  32%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10.000 VND</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  Bill at least 100.000 VND
-                </span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
-                >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="64% already in use">
-                <progress id="file" value="64" max="100">
-                  {" "}
-                  64%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10%</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Up to 15.000 VND</span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
-                >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="32% already in use">
-                <progress id="file" value="32" max="100">
-                  {" "}
-                  32%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10%</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">Up to 15.000 VND</span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
-                >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="32% already in use">
-                <progress id="file" value="32" max="100">
-                  {" "}
-                  32%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="voucher-wrapper col-4 p-3 pe-2" to="/home/yard/1">
-          <div className="yard-result">
-            <img src={voucher} alt="basketball yard" />
-            <div className="yard-details p-3">
-              <b className="d-block mb-2">Discount 10.000 VND</b>
-              <p className="row mb-1" style={{ fontSize: "0.9rem" }}>
-                <i className="fas fa-expand-arrows-alt col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  Bill at least 100.000 VND
-                </span>
-              </p>
-              <p
-                className="row mb-1"
-                title="Effective date"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <i className="fas fa-clock col-1 pt-1"></i>
-                <span className="ps-2 color-blur col-10">
-                  27/05/2022 - 01/06/2022
-                </span>
-              </p>
-              <p className="row mb-1">
-                <i
-                  className="trash-icon fas fa-copy col-1 pt-1"
-                  title="Copy"
-                  onClick={() => copyToClipBoard("qR8KU5x1qFKtqxS")}
-                ></i>
-                <span
-                  className="ps-2 bold col-10 voucher-code"
-                  value="qR8KU5x1qFKtqxS"
-                >
-                  qR8KU5x1qFKtqxS
-                </span>
-              </p>
-              <p className="row mt-2 ps-2" title="64% already in use">
-                <progress id="file" value="64" max="100">
-                  {" "}
-                  64%{" "}
-                </progress>
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* <div className=" row justify-content-center align-items-center">
-      <img className="nodata-img" src={noData} alt="No data availble" />
-      <p className="text-center nodata-text">No yards available</p>
-    </div> */}
+                  <img src={voucherImg} alt="basketball yard" />
+                  <div className="yard-details p-3">
+                    <b className="d-block mb-2">
+                      Discount {voucher.percentDiscount}%
+                    </b>
+                    <p
+                      className="row mb-1"
+                      title="Effective date"
+                      style={{ fontSize: "0.9rem" }}
+                    >
+                      <i className="fas fa-clock col-1 pt-1"></i>
+                      <span className="ps-2 color-blur col-10">
+                        {moment(voucher.startDate).format("DD/MM/yyyy")} -{" "}
+                        {moment(voucher.endDate).format("DD/MM/yyyy")}
+                      </span>
+                    </p>
+                    <p className="row mb-1">
+                      <i
+                        className="trash-icon fas fa-copy col-1 pt-1"
+                        title="Copy"
+                        onClick={() => copyToClipBoard(voucher.voucherCode)}
+                      ></i>
+                      <span
+                        className="ps-2 bold col-10 voucher-code"
+                        value={voucher.voucherCode}
+                      >
+                        {voucher.voucherCode}
+                      </span>
+                    </p>
+                    <p
+                      className="row mt-2 ps-2"
+                      title={`${
+                        (voucher.usages * 100) / voucher.maxQuantity
+                      }% already in use`}
+                    >
+                      <progress
+                        id="file"
+                        value={voucher.usages}
+                        max={voucher.maxQuantity}
+                      >
+                        {" "}
+                        ${(voucher.usages * 100) / voucher.maxQuantity}%{" "}
+                      </progress>
+                    </p>
+                    <p className="row mb-1" style={{ fontSize: "0.8rem" }}>
+                      <span className="ps-2 color-blur col-10">
+                        Already used{" "}
+                        {(voucher.usages * 100) / voucher.maxQuantity}%
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+        {!isLoading &&
+          ITEMS_PER_PAGE - vouchers.length > 0 &&
+          !!vouchers.length &&
+          vouchers.map((voucher, index) => {
+            if (index < ITEMS_PER_PAGE - vouchers.length) {
+              return (
+                <div
+                  className="voucher-wrapper col-4 p-3 pe-2"
+                  key={index}
+                ></div>
+              );
+            }
+          })}
       </div>
       <div className="yard-pagination mt-4">
         <div>
@@ -417,7 +228,16 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
           </span>
         </div>
       </div>
-      <button className="btn btn-primary me-3 px-4">Apply</button>
+      <button
+        className="btn btn-primary me-3 px-4"
+        disabled={!code}
+        onClick={() => {
+          onApply();
+          toggleModal();
+        }}
+      >
+        Apply
+      </button>
       <button onClick={toggleModal} className="btn btn-light">
         Cancel
       </button>

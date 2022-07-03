@@ -24,6 +24,7 @@ import DisableElement from "../DisableElement";
 import Modal, { useModal } from "../Modal";
 import VoucherStorageModal from "../../modals/VoucherStorageModal";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import { calculateBookingList } from "../../services/voucher.service";
 
 function Yard() {
   const { id } = useParams();
@@ -38,7 +39,6 @@ function Yard() {
   const [selectedSubYard, setSelectedSubYard] = useState(null);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [slots, setSlots] = useState([]);
-  const [isAppliedVoucher, setIsAppliedVoucher] = useState(false);
   const [isLoadingVoucher, setIsLoadingVoucher] = useState(false);
   const [voucherCode, setVoucherCode] = useState(EMPTY);
   const [isBooking, setIsBooking] = useState(false);
@@ -75,6 +75,33 @@ function Yard() {
       }
     }
   }, [selectedDate, selectedSubYard]);
+
+  useEffect(() => {
+    if (voucherCode) {
+      calculateBookingList(voucherCode, booking).then((res) => {
+        setBooking(
+          res.bookingList.map((item) =>
+            _.pick(item, [
+              "refSubYard",
+              "slotId",
+              "price",
+              "date",
+              "originalPrice",
+            ])
+          )
+        );
+      });
+    } else {
+      setBooking(
+        booking.map((item) => {
+          return {
+            ..._.pick(item, ["refSubYard", "slotId", "price", "date"]),
+            price: item.originalPrice || item.price,
+          };
+        })
+      );
+    }
+  }, [voucherCode]);
 
   const onBooking = () => {
     const credential = localStorage.getItem(encryptKey("credential"));
@@ -122,7 +149,7 @@ function Yard() {
   };
 
   const onSelectSlot = (slot) => {
-    if (!isAppliedVoucher && !slot.isBooked) {
+    if (!voucherCode && !slot.isBooked) {
       slot.isSelected = !slot.isSelected;
       if (slot.isSelected) {
         const subYard = _.find(yard.subYards, { id: slot.refSubYard });
@@ -143,13 +170,6 @@ function Yard() {
         setTotal(total - slot.price);
       }
     }
-  };
-
-  const handleOnClickVoucher = () => {
-    if (isAppliedVoucher) {
-    } else {
-    }
-    setIsAppliedVoucher(!isAppliedVoucher);
   };
 
   return (
@@ -216,7 +236,7 @@ function Yard() {
                     }}
                     min={moment(new Date()).format("yyyy-mm-DD")}
                     required
-                    disabled={isAppliedVoucher}
+                    disabled={voucherCode}
                   />
                 </div>
                 <div className="row p-2 col-6 justify-content-end size-1 ps-3">
@@ -233,7 +253,7 @@ function Yard() {
                     onChange={(e) => {
                       setSelectedSubYard(e.target.value);
                     }}
-                    disabled={isAppliedVoucher}
+                    disabled={voucherCode}
                   >
                     <option value="">Select yard</option>
                     {yard.subYards.map((sub) => (
@@ -249,9 +269,7 @@ function Yard() {
                 </div>
               </div>
               <div
-                className={
-                  !isAppliedVoucher ? "row ps-2" : "row ps-2 div-disabled"
-                }
+                className={!voucherCode ? "row ps-2" : "row ps-2 div-disabled"}
               >
                 {slots &&
                   slots.map((slot) => (
@@ -329,10 +347,15 @@ function Yard() {
                   id="voucher-btn"
                   className="col-2 lh-44 fg-pw__icon-wrapper"
                   onClick={() => {
-                    toggleShowVoucherStorageModal();
+                    if (!voucherCode) {
+                      toggleShowVoucherStorageModal();
+                    } else {
+                      setVoucherCode("");
+                    }
                   }}
+                  disabled={!booking.length}
                 >
-                  {isAppliedVoucher ? "Remove" : "Select"}
+                  {voucherCode ? "Remove" : "Select"}
                 </button>
               </div>
               <div className="matches-container">
@@ -355,6 +378,11 @@ function Yard() {
                         <i
                           className="far fa-trash-alt trash-icon"
                           title="Remove"
+                          onClick={() => {
+                            setBooking(
+                              booking.filter((b) => b.slotId !== item.slotId)
+                            );
+                          }}
                         ></i>
                       </p>
                     </div>
@@ -415,8 +443,10 @@ function Yard() {
       >
         <VoucherStorageModal
           toggleModal={toggleShowVoucherStorageModal}
-          ownerId={null}
-          onSelect={() => {}}
+          ownerId={yard?.ownerId}
+          onSelect={(code) => {
+            setVoucherCode(code);
+          }}
         />
       </Modal>
       <ToastContainer />

@@ -105,12 +105,13 @@ function ForgotPassword() {
               placeholder="Enter your registered mail to receive code"
               required
             />
-            <span
+            <button
               onClick={requestCode}
               className="col-3 lh-44 fg-pw__icon-wrapper"
+              disabled={!formik.values.re_email}
             >
               Resend mail
-            </span>
+            </button>
             <span className="signup__filed--error">
               {formik.touched.re_email && formik.errors.re_email
                 ? formik.errors.re_email
@@ -137,7 +138,6 @@ function ForgotPassword() {
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
               placeholder="Enter 6-digits code"
-              required
             />
             <span className="signup__filed--error">
               {formik.touched.code && formik.errors.code

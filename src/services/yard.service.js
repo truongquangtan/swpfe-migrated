@@ -94,7 +94,7 @@ export const getYardDetailById = async (yardId) => {
 };
 
 export const getAllRatingOfYard = async (yardId) => {
-  const response = await axios.get(`${SERVICE_URL}/v1/vote/yard/${yardId}`);
+  const response = await axios.post(`${SERVICE_URL}/v1/vote/yards/${yardId}`);
   return response ? response.data : [];
 };
 
