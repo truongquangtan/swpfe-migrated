@@ -321,38 +321,46 @@ function YardDetails() {
   };
 
   const saveYard = async () => {
+    const data = {
+      name: basicData.name,
+      address:
+        basicData.address +
+        `, ${
+          districts.find((d) => d.id === Number(selectedDistrict)).districtName
+        }, ${
+          provinces.find((p) => p.id === Number(selectedProvince)).provinceName
+        }`,
+      districtId: selectedDistrict,
+      openAt: TIMELINE.find((item) => item.value === Number(timeSlot.start))
+        .label,
+      closeAt: TIMELINE.find((item) => item.value === Number(timeSlot.end))
+        .label,
+      slotDuration: PERIODS.find(
+        (item) => item.value === Number(timeSlot.period)
+      ).label,
+      subYards: subYards.map((sub) => {
+        return {
+          ..._.pick(sub, ["id", "name", "type", "slots"]),
+        };
+      }),
+    };
+
+    for (const sub of data.subYards) {
+      if (checkSlotOfSubYard(sub)) {
+        toast.error(
+          `Sub yard "${sub.name}" has one or more zero-price slots!`,
+          TOAST_CONFIG
+        );
+        return;
+      }
+    }
+
     setIsAddingYard(true);
     try {
       if (id === "draft") {
         await addNewYard({
           images: yardPictures.map((picture) => picture.file),
-          yard: {
-            name: basicData.name,
-            address:
-              basicData.address +
-              `, ${
-                districts.find((d) => d.id === Number(selectedDistrict))
-                  .districtName
-              }, ${
-                provinces.find((p) => p.id === Number(selectedProvince))
-                  .provinceName
-              }`,
-            districtId: selectedDistrict,
-            openAt: TIMELINE.find(
-              (item) => item.value === Number(timeSlot.start)
-            ).label,
-            closeAt: TIMELINE.find(
-              (item) => item.value === Number(timeSlot.end)
-            ).label,
-            slotDuration: PERIODS.find(
-              (item) => item.value === Number(timeSlot.period)
-            ).label,
-            subYards: subYards.map((sub) => {
-              return {
-                ..._.pick(sub, ["id", "name", "type", "slots"]),
-              };
-            }),
-          },
+          yard: data,
         });
         navigate("/owner/yards");
       } else {
@@ -364,33 +372,7 @@ function YardDetails() {
             newImages: yardPictures
               .filter((picture) => picture.isUpdate)
               .map((picture) => picture.newImage),
-            yard: {
-              name: basicData.name,
-              address:
-                basicData.address +
-                `, ${
-                  districts.find((d) => d.id === Number(selectedDistrict))
-                    .districtName
-                }, ${
-                  provinces.find((p) => p.id === Number(selectedProvince))
-                    .provinceName
-                }`,
-              districtId: selectedDistrict,
-              openAt: TIMELINE.find(
-                (item) => item.value === Number(timeSlot.start)
-              ).label,
-              closeAt: TIMELINE.find(
-                (item) => item.value === Number(timeSlot.end)
-              ).label,
-              slotDuration: PERIODS.find(
-                (item) => item.value === Number(timeSlot.period)
-              ).label,
-              subYards: subYards.map((sub) => {
-                return {
-                  ..._.pick(sub, ["id", "name", "type", "slots"]),
-                };
-              }),
-            },
+            yard: data,
           },
           id
         );
@@ -407,6 +389,10 @@ function YardDetails() {
     } finally {
       setIsAddingYard(false);
     }
+  };
+
+  const checkSlotOfSubYard = (subYard) => {
+    return subYard.slots.some((slot) => Number(slot.price) === 0);
   };
 
   const uploadImage = (position, e) => {

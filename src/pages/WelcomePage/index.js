@@ -6,6 +6,8 @@ import Header from "../../components/Header";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import { OWNER, ADMIN } from "../../constants/roles";
 
+const privatePaths = ["/incoming-matches", "/rating", "/history"];
+
 function WelcomePage() {
   const [auth, setAuth] = useState(false);
   const credential = localStorage.getItem(encryptKey("credential"));
@@ -21,6 +23,8 @@ function WelcomePage() {
     } else if (role === OWNER) {
       return <Navigate to="/owner" />;
     }
+  } else if (privatePaths.includes(window.location.pathname)) {
+    return <Navigate to="/auth/login" />;
   }
 
   return (
