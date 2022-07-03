@@ -16,7 +16,8 @@ function Statistics() {
   const [numberOfBookingsByHours, setNumberOfBookingsByHours] = useState([]);
   const [maxBookings, setMaxBookings] = useState(0);
   const [hasData, setHasData] = useState(false);
-  var numOfColor=0;
+  const [totalIncome, setTotalIncome] = useState(0);
+  let numOfColor = 0;
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -26,8 +27,8 @@ function Statistics() {
   }, [startDate, endDate])
 
   const selectColor = (number) => {
-    const approximation = number*137.508;
-    return `hsl(${approximation},50%,75%)`;
+    const approximation = number * 137.508;
+    return `hsl(${approximation},50%,50%)`;
   }
 
   const getStatisticObject = () => {
@@ -36,12 +37,17 @@ function Statistics() {
       .then((res) => {
         setYardStatisticModel(res.yardStatistic);
         setNumberOfBookingsByHours(res.bookingStatisticByTime);
-        setMaxBookings(Math.round(res.maxOfBooking + 0.2 * res.maxOfBooking))
+        setMaxBookings(Math.round(res.maxOfBooking + 0.2 * res.maxOfBooking));
+        setTotalIncome(res.totalIncome);
       })
       .finally(() => {
         setIsLoading(false);
       })
   }
+
+  const numberWithCommas = function(x) {
+    return "abc";
+  };
 
   return (
     <div className="pt-4 w-100">
@@ -100,35 +106,47 @@ function Statistics() {
             <div className="d-flex padding-right-20">
               <div className="doughnut-chart col-4 text-center border border-1">
                 <h4 className="pie-title w-100">Yard Business Contribution</h4>
-                {hasData ? (<div className="mg-top-40"><Pie
-                  data={{
-                    labels: yardStatisticModel.map(yardModel => yardModel.yardName),
-                    datasets: [
-                      {
-                        label: "Booking",
-                        data: yardStatisticModel.map(yardModel => yardModel.totalIncome),
-                        backgroundColor: yardStatisticModel.map(yardModel => selectColor(numOfColor++)),
-                        borderColor: "white",
-                        borderWidth: 1,
-                        hoverBackgroundColor: "rgb(255, 204, 153)",
-                        spacing: 0.5
-                      },
-                    ],
-                  }}
-                  height={600}
-                  width={900}
-                  options={{
-                    plugins: {
-                      legend: {
-                        display: false,
-                      },
-                    },
+                {hasData ? (
+                  <>
+                    <div className="total-income">
+                    Total Income: {totalIncome} VND
+                    </div>
+                    <div className="mg-top-20"><Pie
+                      data={{
+                        labels: yardStatisticModel.map(yardModel => yardModel.yardName),
+                        datasets: [
+                          {
+                            label: "Booking",
+                            data: yardStatisticModel.map(yardModel => yardModel.totalIncome),
+                            backgroundColor: yardStatisticModel.map(yardModel => selectColor(numOfColor++)),
+                            borderColor: "white",
+                            borderWidth: 1,
+                            spacing: 0.5
+                          },
+                        ],
+                      }}
+                      height={600}
+                      width={900}
+                      options={{
+                        plugins: {
+                          legend: {
+                            display: false,
+                          },
+                          tooltip: {
+                            callbacks: {
+                              label: function (context) {
+                                return context.label + ": " + context.dataset.data[context.dataIndex] + " VND";
+                              }
+                            }
+                          }
+                        },
+                      }}
+                    />
+                    </div>
+                  </>
+                ) : (<><img className="nodata-img-for-dashboard" src={noData} alt="No data available" />
+                  <p className="text-center nodata-text-for-dashboard">No data</p></>)}
 
-
-                  }}
-                /></div>) : (<><img className="nodata-img-for-dashboard" src={noData} alt="No data available" />
-                <p className="text-center nodata-text-for-dashboard">No data</p></>)}
-                
               </div>
 
               <div className="bar-chart col-8 border border-1 chart-padding">
@@ -140,20 +158,20 @@ function Statistics() {
                         labels: yardStatisticModel.map(yardModel => yardModel.yardName.split(" ")),
                         datasets: [
                           {
-                            label: "Booked",
+                            label: "Number of bookings",
                             data: yardStatisticModel.map(yardModel => yardModel.numberOfBookings),
                             backgroundColor: "#0000FF",
                             borderColor: "white",
                             borderWidth: 1,
                           },
                           {
-                            label: "Cancelled",
+                            label: "Number of cancellations",
                             data: yardStatisticModel.map(yardModel => yardModel.numberOfBookingCanceled),
                             backgroundColor: "#FF0000",
                             borderColor: "white",
                           },
                           {
-                            label: "Played",
+                            label: "Number of turns played",
                             data: yardStatisticModel.map(yardModel => yardModel.numberOfBookingPlayed),
                             backgroundColor: "#00FF00",
                             borderColor: "white",
@@ -170,18 +188,29 @@ function Statistics() {
                             max: maxBookings,
                             beginAtZero: true,
                             ticks: {
-                              precision: 0
+                              precision: 0,
                             }
-                          }
+                          },
+                          
                         },
                         legend: {
                           labels: {
                             fontSize: 25,
                           },
+                          display: true,
                         },
+                        plugins: {
+                          tooltip: {
+                            callbacks: {
+                              title: function (context) {
+                                return context[0].label.replaceAll(","," ");
+                              }
+                            }
+                          }
+                        }
                       }}
                     />) : (<><img className="nodata-img-for-dashboard" src={noData} alt="No data available" />
-                    <p className="text-center nodata-text-for-dashboard">No data</p></>)}
+                      <p className="text-center nodata-text-for-dashboard">No data</p></>)}
                   </div>
                 </div>
               </div>
@@ -202,7 +231,7 @@ function Statistics() {
                         ],
                         datasets: [
                           {
-                            label: "Booking",
+                            label: "Number of bookings",
                             data: numberOfBookingsByHours,
                             backgroundColor: "blue",
                             borderColor: "#008cea",
@@ -237,7 +266,7 @@ function Statistics() {
                         },
                       }}
                     />) : (<><img className="nodata-img-for-dashboard" src={noData} alt="No data available" />
-                    <p className="text-center nodata-text-for-dashboard">No data</p></>)}
+                      <p className="text-center nodata-text-for-dashboard">No data</p></>)}
                   </div>
                 </div>
               </div>
