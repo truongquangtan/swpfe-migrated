@@ -15,6 +15,7 @@ import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { searchYard } from "../../services/yard.service";
 import yard1 from "../../assets/images/yard-1.jpg";
 import Pagination from "../Pagination";
+import DisableElement from "../DisableElement";
 
 function BookingWidget() {
   const ITEMS_PER_PAGE = 8;
@@ -128,9 +129,7 @@ function BookingWidget() {
       })
       .catch((error) => {
         toast.error(
-          error.response.status >= 500
-            ? INTERNAL_SERVER_ERROR
-            : error.response.data.message,
+          error.response.data.message || INTERNAL_SERVER_ERROR,
           TOAST_CONFIG
         );
       })
@@ -213,9 +212,7 @@ function BookingWidget() {
         <div className="row mt-5 yard__result-container">
           {isLoadingYard && (
             <div className="w-100 d-flex justify-content-center">
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
+              <DisableElement />
             </div>
           )}
           {!isLoadingYard &&
@@ -229,7 +226,7 @@ function BookingWidget() {
                   <div className="yard-details p-3">
                     <b className="d-block">{yard.name}</b>
                     <Rating
-                      ratingValue={80}
+                      ratingValue={yard.score}
                       allowHalfIcon={true}
                       readonly={true}
                       size={20}

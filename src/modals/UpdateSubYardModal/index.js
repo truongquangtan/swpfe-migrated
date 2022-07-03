@@ -1,8 +1,9 @@
 import _ from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { EMPTY } from "../../constants/default";
+import { YARD_TYPES } from "../../constants/type";
 
 const UpdateSubYardModal = ({
   toggleModal,
@@ -11,10 +12,14 @@ const UpdateSubYardModal = ({
   onUpdateSubYardList,
 }) => {
   const [subYard, setSubYard] = useState({
-    slots,
     name: EMPTY,
-    type: 3,
+    type: yard
+      ? yard.id
+        ? YARD_TYPES.find((t) => t.lable === yard.typeYard).value
+        : yard.type
+      : 3,
     ...yard,
+    slots: !yard ? _.cloneDeep(slots) : yard.slots,
   });
 
   const onChangeSlotPrice = (e, slot) => {
@@ -26,6 +31,12 @@ const UpdateSubYardModal = ({
       ...slot,
       price: Number(e.target.value),
     };
+
+    console.log(isNaN(e.target.value));
+    if (isNaN(e.target.value) || slotList[index].price - 1 < 0) {
+      slotList[index].price = "";
+    }
+
     setSubYard({
       ...subYard,
       slots: slotList,
@@ -95,7 +106,8 @@ const UpdateSubYardModal = ({
                         type="text"
                         value={slot.price}
                         onChange={(e) => onChangeSlotPrice(e, slot)}
-                      />{" "}
+                      />
+                      {""}
                       VND
                     </p>
                   </div>

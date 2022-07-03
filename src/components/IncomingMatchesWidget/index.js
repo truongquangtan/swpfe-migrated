@@ -12,6 +12,7 @@ import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import { toast, ToastContainer } from "react-toastify";
 import Modal, { useModal } from "../Modal";
 import CancelBookingModal from "../../modals/CancelBookingModal";
+import DisableElement from "../DisableElement";
 
 function IncomingMatchesWidget() {
   const ITEMS_PER_PAGE = 5;
@@ -71,9 +72,7 @@ function IncomingMatchesWidget() {
             className="w-100 d-flex justify-content-center align-items-center"
             style={{ height: "50vh" }}
           >
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
+            <DisableElement />
           </div>
         ) : (
           <>

@@ -11,6 +11,7 @@ import "./style.scss";
 import { TOAST_CONFIG } from "../../constants/default";
 import empty from "../../assets/images/empty.png";
 import Pagination from "../Pagination";
+import DisableElement from "../DisableElement";
 
 function ManageUsersWidget() {
   const ITEMS_PER_PAGE = 10;
@@ -130,9 +131,7 @@ function ManageUsersWidget() {
         </div>
         {isLoading && (
           <div className="w-100 d-flex justify-content-center pt-5">
-            <div className="spinner-border" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
+            <DisableElement />
           </div>
         )}
         {!accounts.length && !isLoading && (

@@ -25,10 +25,7 @@ const validation = yup.object({
     .string(REQUEST_EMAIL)
     .email("Enter a valid email")
     .required(REQUIRED_EMAIL),
-  password: yup
-    .string(REQUEST_PASSWORD)
-    .min(8, "Password should be of minimum 8 characters length")
-    .required(REQUIRED_PASSWORD),
+  password: yup.string(REQUEST_PASSWORD).required(REQUIRED_PASSWORD),
 });
 
 function LoginPage() {
@@ -62,9 +59,7 @@ function LoginPage() {
         })
         .catch((error) => {
           toast.error(
-            error.response.status >= 500
-              ? INTERNAL_SERVER_ERROR
-              : error.response.data.message,
+            error.response.data.message || INTERNAL_SERVER_ERROR,
             TOAST_CONFIG
           );
         });

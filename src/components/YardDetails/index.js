@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import { ToastContainer, toast } from "react-toastify";
@@ -23,18 +23,26 @@ import Modal, { useModal } from "../Modal";
 import UpdateSubYardModal from "../../modals/UpdateSubYardModal";
 import empty from "../../assets/images/empty.png";
 import { YARD_TYPES } from "../../constants/type";
-import { addNewYard } from "../../services/yard.service";
+import {
+  activateSubYard,
+  addNewYard,
+  deactivateSubYard,
+  deleteSubYard,
+  getYardDetailById,
+  updateYard,
+} from "../../services/yard.service";
 import DisableScreen from "../DisableScreen";
 
 const _URL = window.URL || window.webkitURL;
 
-function YardDetails({ yard }) {
+function YardDetails() {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(EMPTY);
   const [selectedDistrict, setSelectedDistrict] = useState(EMPTY);
   const [isLoadingProvinces, setIsLoadingProvinces] = useState(false);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
+  const [firstChangeTimeSlot, setFirstChangeTimeSlot] = useState(false);
   const [timeSlot, setTimeSlot] = useState({
     start: START,
     end: END,
@@ -54,6 +62,13 @@ function YardDetails({ yard }) {
   const [selectedSubYard, setSelectedSubYard] = useState(null);
   const [isAddingYard, setIsAddingYard] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (isNaN(defaultPrice) || defaultPrice - 1 < 0) {
+      setDefaultPrice("");
+    }
+  }, [defaultPrice]);
 
   useEffect(() => {
     updateDefaulSlots();
@@ -74,11 +89,18 @@ function YardDetails({ yard }) {
       start += period;
     }
 
+    if (firstChangeTimeSlot) {
+      setSubYards(
+        subYards.map((sub) => {
+          return { ...sub, slots: _.cloneDeep(slots) };
+        })
+      );
+    }
+
     setDefaultSlots(slots);
   };
 
   const onUpdateSubYard = (yard) => {
-    const slots = yard ? yard.slots : _.cloneDeep(defaultSlots);
     setSelectedSubYard(yard ? yard : null);
     toggleShowUpdateSubYardModal();
   };
@@ -98,7 +120,48 @@ function YardDetails({ yard }) {
     }
   };
 
+  const fetchYard = () => {
+    setIsAddingYard(true);
+    getYardDetailById(id)
+      .then((res) => {
+        const addressDetail = res.address.split(", ");
+        setBasicData({
+          name: res.name,
+          address: addressDetail.splice(0, addressDetail.length - 2).join(", "),
+        });
+        setSelectedProvince(res.provinceId);
+        setSelectedDistrict(res.districtId);
+        setTimeSlot({
+          start: TIMELINE.find((t) => t.label === res.openTime).value,
+          end: TIMELINE.find((t) => t.label === res.closeTime).value,
+          period: TIMELINE.find((t) => t.label === res.duration).value,
+        });
+        res.subYards = res.subYards.map((sub) => {
+          return {
+            ...sub,
+            type: YARD_TYPES.find((t) => t.lable === sub.typeYard).value,
+          };
+        });
+        setSubYards(res.subYards);
+        setYardPictures(
+          res.images.map((url) => {
+            return { newImage: null, src: url, currentImage: url };
+          })
+        );
+      })
+      .catch((error) => {
+        navigate("/not-found");
+      })
+      .finally(() => {
+        setIsAddingYard(false);
+      });
+  };
+
   useEffect(() => {
+    if (id !== "draft") {
+      fetchYard();
+    }
+
     setIsLoadingProvinces(true);
     const storedProvinces = localStorage.getItem(encryptKey("provinces"));
     if (!storedProvinces) {
@@ -182,12 +245,52 @@ function YardDetails({ yard }) {
       });
   };
 
-  const handleDisableYard = () => {};
+  const handleDisableYard = (yard) => {
+    deactivateSubYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Deactivate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        fetchYard();
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
 
-  const handleEnableYard = () => {};
+  const handleEnableYard = (yard) => {
+    activateSubYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Activate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        fetchYard();
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
 
   const handleDeleteClick = (yard) => {
-    setSubYards(subYards.filter((item) => item !== yard));
+    deleteSubYard(yard.id)
+      .then(() => {
+        toast.success(`Delete yard "${yard.name}" successfully.`, TOAST_CONFIG);
+        fetchYard();
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
   };
 
   const onSimpleClick = (title, question, callback) => {
@@ -217,54 +320,115 @@ function YardDetails({ yard }) {
     });
   };
 
-  const saveYard = () => {
+  const saveYard = async () => {
     setIsAddingYard(true);
-    addNewYard({
-      images: yardPictures
-        .map((picture) => picture.file)
-        .filter((item) => item !== null),
-      yard: {
-        name: basicData.name,
-        address:
-          basicData.address +
-          `, ${
-            districts.find((d) => d.id === Number(selectedDistrict))
-              .districtName
-          }, ${
-            provinces.find((p) => p.id === Number(selectedProvince))
-              .provinceName
-          }`,
-        districtId: selectedDistrict,
-        openAt: TIMELINE.find((item) => item.value === Number(timeSlot.start))
-          .label,
-        closeAt: TIMELINE.find((item) => item.value === Number(timeSlot.end))
-          .label,
-        slotDuration: PERIODS.find(
-          (item) => item.value === Number(timeSlot.period)
-        ).label,
-        subYards: subYards.map((sub) => {
-          return {
-            ..._.pick(sub, ["id", "name", "type", "slots"]),
-          };
-        }),
-      },
-    })
-      .then(() => {
-        toast.success("Save yard successfully.", TOAST_CONFIG);
+    try {
+      if (id === "draft") {
+        await addNewYard({
+          images: yardPictures.map((picture) => picture.file),
+          yard: {
+            name: basicData.name,
+            address:
+              basicData.address +
+              `, ${
+                districts.find((d) => d.id === Number(selectedDistrict))
+                  .districtName
+              }, ${
+                provinces.find((p) => p.id === Number(selectedProvince))
+                  .provinceName
+              }`,
+            districtId: selectedDistrict,
+            openAt: TIMELINE.find(
+              (item) => item.value === Number(timeSlot.start)
+            ).label,
+            closeAt: TIMELINE.find(
+              (item) => item.value === Number(timeSlot.end)
+            ).label,
+            slotDuration: PERIODS.find(
+              (item) => item.value === Number(timeSlot.period)
+            ).label,
+            subYards: subYards.map((sub) => {
+              return {
+                ..._.pick(sub, ["id", "name", "type", "slots"]),
+              };
+            }),
+          },
+        });
         navigate("/owner/yards");
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
-      })
-      .finally(() => {
-        setIsAddingYard(false);
-      });
+      } else {
+        await updateYard(
+          {
+            images: yardPictures
+              .filter((picture) => picture.isUpdate)
+              .map((picture) => picture.currentImage),
+            newImages: yardPictures
+              .filter((picture) => picture.isUpdate)
+              .map((picture) => picture.newImage),
+            yard: {
+              name: basicData.name,
+              address:
+                basicData.address +
+                `, ${
+                  districts.find((d) => d.id === Number(selectedDistrict))
+                    .districtName
+                }, ${
+                  provinces.find((p) => p.id === Number(selectedProvince))
+                    .provinceName
+                }`,
+              districtId: selectedDistrict,
+              openAt: TIMELINE.find(
+                (item) => item.value === Number(timeSlot.start)
+              ).label,
+              closeAt: TIMELINE.find(
+                (item) => item.value === Number(timeSlot.end)
+              ).label,
+              slotDuration: PERIODS.find(
+                (item) => item.value === Number(timeSlot.period)
+              ).label,
+              subYards: subYards.map((sub) => {
+                return {
+                  ..._.pick(sub, ["id", "name", "type", "slots"]),
+                };
+              }),
+            },
+          },
+          id
+        );
+        fetchYard();
+        setIsAppliedDefaultPrice(false);
+        setDefaultPrice("");
+      }
+      toast.success("Save yard successfully.", TOAST_CONFIG);
+    } catch (error) {
+      toast.error(
+        error.response.data.message || INTERNAL_SERVER_ERROR,
+        TOAST_CONFIG
+      );
+    } finally {
+      setIsAddingYard(false);
+    }
+  };
+
+  const uploadImage = (position, e) => {
+    const cloned = _.cloneDeep(yardPictures);
+    const file = e.target.files[0];
+    cloned[position] = {
+      ...cloned[position],
+      file,
+      src: _URL.createObjectURL(file),
+      newImage: file,
+    };
+
+    if (id !== "draft") {
+      cloned[position] = { ...cloned[position], isUpdate: true };
+    }
+    setYardPictures(cloned);
   };
 
   return (
     <div className="mt-5">
       {isAddingYard && <DisableScreen />}
-      <h4>{yard ? "Yard Details" : "Create Yard"}</h4>
+      <h4>{id !== "draft" ? "Yard Details" : "Create Yard"}</h4>
       <div className="d-flex">
         <form className="my-3 col-3 mw-410">
           <div className="row p-2 py-1">
@@ -300,6 +464,7 @@ function YardDetails({ yard }) {
               onChange={(e) => setSelectedProvince(() => e.target.value)}
               disabled={isLoadingProvinces}
               name="provinceId"
+              value={selectedProvince}
             >
               <option value="" key="NO_PROVINCE">
                 {isLoadingProvinces ? "Loading..." : "Select province"}
@@ -327,6 +492,7 @@ function YardDetails({ yard }) {
               }}
               disabled={isLoadingDistricts || !selectedProvince}
               name="districtId"
+              value={selectedDistrict}
             >
               <option value="" key="NO_DISTRICT">
                 {isLoadingDistricts ? "Loading..." : "Select district"}
@@ -351,6 +517,7 @@ function YardDetails({ yard }) {
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
               placeholder="Address details"
+              value={basicData.address}
               onChange={(e) =>
                 setBasicData({ ...basicData, [e.target.name]: e.target.value })
               }
@@ -373,6 +540,9 @@ function YardDetails({ yard }) {
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
                 setTimeSlot({ ...timeSlot, start: e.target.value });
+                if (!firstChangeTimeSlot) {
+                  setFirstChangeTimeSlot(true);
+                }
               }}
               value={timeSlot.start}
             >
@@ -400,6 +570,9 @@ function YardDetails({ yard }) {
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
                 setTimeSlot({ ...timeSlot, end: e.target.value });
+                if (!firstChangeTimeSlot) {
+                  setFirstChangeTimeSlot(true);
+                }
               }}
               value={timeSlot.end}
             >
@@ -424,6 +597,9 @@ function YardDetails({ yard }) {
               style={{ backgroundColor: "white" }}
               onChange={(e) => {
                 setTimeSlot({ ...timeSlot, period: e.target.value });
+                if (!firstChangeTimeSlot) {
+                  setFirstChangeTimeSlot(true);
+                }
               }}
               value={timeSlot.period}
             >
@@ -455,10 +631,16 @@ function YardDetails({ yard }) {
               placeholder="Default price"
               value={defaultPrice}
               onChange={(e) => setDefaultPrice(Number(e.target.value))}
+              disabled={isAppliedDefaultPrice}
             />
             <span
               className="col-2 fg-pw__icon-wrapper"
-              onClick={() => setIsAppliedDefaultPrice(!isAppliedDefaultPrice)}
+              onClick={() => {
+                if (isAppliedDefaultPrice) {
+                  setDefaultPrice("");
+                }
+                setIsAppliedDefaultPrice(!isAppliedDefaultPrice);
+              }}
             >
               {isAppliedDefaultPrice ? "Remove" : "Apply"}
             </span>
@@ -480,10 +662,7 @@ function YardDetails({ yard }) {
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
                 onChange={(e) => {
-                  const cloned = _.cloneDeep(yardPictures);
-                  const file = e.target.files[0];
-                  cloned[0] = { file, src: _URL.createObjectURL(file) };
-                  setYardPictures(cloned);
+                  uploadImage(0, e);
                 }}
               />
             </div>
@@ -501,10 +680,7 @@ function YardDetails({ yard }) {
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
                 onChange={(e) => {
-                  const cloned = _.cloneDeep(yardPictures);
-                  const file = e.target.files[0];
-                  cloned[1] = { file, src: _URL.createObjectURL(file) };
-                  setYardPictures(cloned);
+                  uploadImage(1, e);
                 }}
               />
             </div>
@@ -522,15 +698,12 @@ function YardDetails({ yard }) {
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
                 onChange={(e) => {
-                  const cloned = _.cloneDeep(yardPictures);
-                  const file = e.target.files[0];
-                  cloned[2] = { file, src: _URL.createObjectURL(file) };
-                  setYardPictures(cloned);
+                  uploadImage(2, e);
                 }}
               />
             </div>
           </div>
-          <div className="p-3 pt-4 ">
+          <div className="pt-4">
             <h4 className="d-inline-block">Sub Yards</h4>
             <button
               className="btn btn-primary px-4 ms-5"
@@ -558,7 +731,7 @@ function YardDetails({ yard }) {
                 <table className="table table-striped mt-1">
                   <thead>
                     <tr>
-                      <th scope="col" style={{ width: "15%" }}>
+                      <th scope="col" style={{ width: "12%" }}>
                         Actions
                       </th>
                       <th scope="col">Reference</th>
@@ -579,46 +752,55 @@ function YardDetails({ yard }) {
                                 onSimpleClick(
                                   "Delete",
                                   "Are you sure to delete this yard permanently?",
-                                  handleDeleteClick
+                                  () => handleDeleteClick(item)
                                 )
                               }
                             ></i>
-                            <i
-                              className="trash-icon fas fa-ban col-4"
-                              title="Deactive"
-                              onClick={() =>
-                                onSimpleClick(
-                                  "Disable",
-                                  "Are you sure to disable this yard?",
-                                  handleDisableYard
-                                )
-                              }
-                            ></i>
-                            <i
-                              className="trash-icon fas fa-check-circle col-4"
-                              title="Active"
-                              onClick={() =>
-                                onSimpleClick(
-                                  "Enable",
-                                  "Are you sure to activate this yard?",
-                                  handleEnableYard
-                                )
-                              }
-                            ></i>
+                            {item.isActive ? (
+                              <i
+                                className="trash-icon fas fa-ban col-4"
+                                title="Deactive"
+                                onClick={() =>
+                                  onSimpleClick(
+                                    "Disable",
+                                    "Are you sure to disable this yard?",
+                                    () => handleDisableYard(item)
+                                  )
+                                }
+                              ></i>
+                            ) : (
+                              <i
+                                className="trash-icon fas fa-check-circle col-4"
+                                title="Active"
+                                onClick={() =>
+                                  onSimpleClick(
+                                    "Enable",
+                                    "Are you sure to activate this yard?",
+                                    () => handleEnableYard(item)
+                                  )
+                                }
+                              ></i>
+                            )}
                           </td>
                           <td>
                             <b
                               className="trash-icon"
-                              // onClick={() => onUpdateSubYard()}
+                              onClick={() => onUpdateSubYard(item)}
                             >
-                              1009
+                              {item.reference}
                             </b>
                           </td>
                           <td className="text-truncate" title="Sân quận 9">
-                            Sân quận 9
+                            {item.name}
                           </td>
-                          <td>3 vs 3</td>
-                          <td className="green bold">ACTIVE</td>
+                          <td>{item.typeYard}</td>
+                          <td
+                            className={
+                              item.isActive ? "green bold" : "red bold"
+                            }
+                          >
+                            {item.isActive ? "ACTIVE" : "INACTIVE"}
+                          </td>
                         </tr>
                       ) : (
                         <tr key={index}>
@@ -626,7 +808,13 @@ function YardDetails({ yard }) {
                             <i
                               className="trash-icon fas fa-times col-4"
                               title="Delete"
-                              onClick={() => {}}
+                              onClick={() => {
+                                setSubYards([
+                                  ...subYards.filter(
+                                    (yard) => yard.ref !== item.ref
+                                  ),
+                                ]);
+                              }}
                             ></i>
                             <i
                               className="trash-icon fas fa-edit col-4"
@@ -676,6 +864,7 @@ function YardDetails({ yard }) {
           slots={defaultSlots}
           yard={selectedSubYard}
           onUpdateSubYardList={onUpdateSubYardList}
+          firstChangeTimeSlot={firstChangeTimeSlot}
         />
       </Modal>
       <ToastContainer />

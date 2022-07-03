@@ -20,6 +20,11 @@ import {
   getYardById,
 } from "../../services/yard.service";
 import empty from "../../assets/images/empty.png";
+import DisableElement from "../DisableElement";
+import Modal, { useModal } from "../Modal";
+import VoucherStorageModal from "../../modals/VoucherStorageModal";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import { calculateBookingList } from "../../services/voucher.service";
 
 function Yard() {
   const { id } = useParams();
@@ -34,10 +39,10 @@ function Yard() {
   const [selectedSubYard, setSelectedSubYard] = useState(null);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [slots, setSlots] = useState([]);
-  const [isAppliedVoucher, setIsAppliedVoucher] = useState(false);
   const [isLoadingVoucher, setIsLoadingVoucher] = useState(false);
   const [voucherCode, setVoucherCode] = useState(EMPTY);
   const [isBooking, setIsBooking] = useState(false);
+  const [showVoucherStorageModal, toggleShowVoucherStorageModal] = useModal();
 
   useEffect(() => {
     getYardById(id).then((res) => {
@@ -70,6 +75,33 @@ function Yard() {
       }
     }
   }, [selectedDate, selectedSubYard]);
+
+  useEffect(() => {
+    if (voucherCode) {
+      calculateBookingList(voucherCode, booking).then((res) => {
+        setBooking(
+          res.bookingList.map((item) =>
+            _.pick(item, [
+              "refSubYard",
+              "slotId",
+              "price",
+              "date",
+              "originalPrice",
+            ])
+          )
+        );
+      });
+    } else {
+      setBooking(
+        booking.map((item) => {
+          return {
+            ..._.pick(item, ["refSubYard", "slotId", "price", "date"]),
+            price: item.originalPrice || item.price,
+          };
+        })
+      );
+    }
+  }, [voucherCode]);
 
   const onBooking = () => {
     const credential = localStorage.getItem(encryptKey("credential"));
@@ -105,7 +137,10 @@ function Yard() {
           }
         })
         .catch((error) => {
-          toast.error(error.response.data.message, TOAST_CONFIG);
+          toast.error(
+            error.response.data.message || INTERNAL_SERVER_ERROR,
+            TOAST_CONFIG
+          );
         })
         .finally(() => {
           setIsBooking(false);
@@ -114,7 +149,7 @@ function Yard() {
   };
 
   const onSelectSlot = (slot) => {
-    if (!isAppliedVoucher && !slot.isBooked) {
+    if (!voucherCode && !slot.isBooked) {
       slot.isSelected = !slot.isSelected;
       if (slot.isSelected) {
         const subYard = _.find(yard.subYards, { id: slot.refSubYard });
@@ -137,21 +172,12 @@ function Yard() {
     }
   };
 
-  const handleOnClickVoucher = () => {
-    if (isAppliedVoucher) {
-    } else {
-    }
-    setIsAppliedVoucher(!isAppliedVoucher);
-  };
-
   return (
-    <div className="w-100 yard-container mt-5 container pb-5">
-      <div ref={container}></div>
+    <div className="w-100 yard-container mt-4 container pb-5">
+      <div ref={container}>.</div>
       {!yard && (
         <div className="w-100 d-flex justify-content-center align-items-center loading-height">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
+          <DisableElement />
         </div>
       )}
       {yard && (
@@ -171,7 +197,11 @@ function Yard() {
             <div className="col-4 ps-4 pe-4 pt-5 flex-column">
               <div className="text-center mb-4">
                 <b className="size-2 d-block mb-2">{yard.name}</b>
-                <Rating ratingValue={80} allowHalfIcon={true} readonly={true} />
+                <Rating
+                  ratingValue={yard.score}
+                  allowHalfIcon={true}
+                  readonly={true}
+                />
               </div>
               <div className="row mb-1 yard__details-field">
                 <span className="col-3 fw-bolder">Address:</span>
@@ -206,7 +236,7 @@ function Yard() {
                     }}
                     min={moment(new Date()).format("yyyy-mm-DD")}
                     required
-                    disabled={isAppliedVoucher}
+                    disabled={voucherCode}
                   />
                 </div>
                 <div className="row p-2 col-6 justify-content-end size-1 ps-3">
@@ -223,11 +253,12 @@ function Yard() {
                     onChange={(e) => {
                       setSelectedSubYard(e.target.value);
                     }}
-                    disabled={isAppliedVoucher}
+                    disabled={voucherCode}
                   >
                     <option value="">Select yard</option>
                     {yard.subYards.map((sub) => (
                       <option
+                        key={sub.id}
                         value={sub.id}
                       >{`${sub.name} - (${sub.typeYard})`}</option>
                     ))}
@@ -238,13 +269,11 @@ function Yard() {
                 </div>
               </div>
               <div
-                className={
-                  !isAppliedVoucher ? "row ps-2" : "row ps-2 div-disabled"
-                }
+                className={!voucherCode ? "row ps-2" : "row ps-2 div-disabled"}
               >
                 {slots &&
                   slots.map((slot) => (
-                    <div className="col-3 slot-details-container">
+                    <div key={slot.id} className="col-3 slot-details-container">
                       <div
                         className={
                           slot.isBooked
@@ -268,9 +297,7 @@ function Yard() {
                   ))}
                 {isLoadingSlots && !slots.length && (
                   <div className="w-100 d-flex justify-content-center pt-5">
-                    <div className="spinner-border" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
+                    <DisableElement />
                   </div>
                 )}
                 {(!selectedDate || !selectedSubYard) && !slots.length && (
@@ -314,18 +341,21 @@ function Yard() {
                   type="text"
                   placeholder="Enter voucher code"
                   value={voucherCode}
-                  onChange={(e) => {
-                    setVoucherCode(e.target.value);
-                  }}
-                  disabled={!booking.length}
+                  readOnly
                 />
                 <button
                   id="voucher-btn"
                   className="col-2 lh-44 fg-pw__icon-wrapper"
-                  disabled={!voucherCode}
-                  onClick={handleOnClickVoucher}
+                  onClick={() => {
+                    if (!voucherCode) {
+                      toggleShowVoucherStorageModal();
+                    } else {
+                      setVoucherCode("");
+                    }
+                  }}
+                  disabled={!booking.length}
                 >
-                  {isAppliedVoucher ? "Remove" : "Apply"}
+                  {voucherCode ? "Remove" : "Select"}
                 </button>
               </div>
               <div className="matches-container">
@@ -341,13 +371,18 @@ function Yard() {
                     </p>
                   </div>
                 )}
-                {booking.map((item) => (
-                  <div className="match-container row mb-2">
+                {booking.map((item, index) => (
+                  <div key={index} className="match-container row mb-2">
                     <div className="col-1 basket__img-container d-flex justify-content-center align-items-center ps-3">
                       <p>
                         <i
                           className="far fa-trash-alt trash-icon"
                           title="Remove"
+                          onClick={() => {
+                            setBooking(
+                              booking.filter((b) => b.slotId !== item.slotId)
+                            );
+                          }}
                         ></i>
                       </p>
                     </div>
@@ -393,16 +428,27 @@ function Yard() {
                       <div></div>
                     </div>
                   ) : (
-                    "Booking"
+                    "Book"
                   )}
                 </button>
               </div>
             </div>
           </div>
-          <Reviews />
+          <Reviews yardId={id} />
         </>
       )}
-
+      <Modal
+        isShowing={showVoucherStorageModal}
+        hide={toggleShowVoucherStorageModal}
+      >
+        <VoucherStorageModal
+          toggleModal={toggleShowVoucherStorageModal}
+          ownerId={yard?.ownerId}
+          onSelect={(code) => {
+            setVoucherCode(code);
+          }}
+        />
+      </Modal>
       <ToastContainer />
     </div>
   );

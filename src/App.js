@@ -11,7 +11,6 @@ import ManageYardsWidget from "./components/ManageYardsWidget";
 import MatchManagementWidget from "./components/MatchManagementWidget";
 import ProfileAccount from "./components/ProfileAccount";
 import VoucherManagementWidget from "./components/VoucherManagementWidget";
-import VouchersWidget from "./components/VouchersWidget";
 import WelcomeWidget from "./components/WelcomeWidget";
 import Yard from "./components/Yard";
 import YardDetails from "./components/YardDetails";
@@ -38,7 +37,6 @@ function App() {
               path="/incoming-matches"
               element={<IncomingMatchesWidget />}
             ></Route>
-            <Route path="/vouchers" element={<VouchersWidget />}></Route>
             <Route path="/rating" element={<YardRatingWidget />}></Route>
             <Route
               path="/verification"
@@ -76,6 +74,7 @@ function App() {
               path="/owner/voucher-management"
               element={<VoucherManagementWidget />}
             ></Route>
+            <Route path="/owner/history" element={<HistoryWidget />}></Route>
             <Route
               path="/owner/match-management"
               element={<MatchManagementWidget />}

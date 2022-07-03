@@ -48,12 +48,6 @@ const features = [
     allowedRoles: [OWNER],
     path: "/owner/history",
   },
-  // {
-  //   title: "Vouchers",
-  //   icon: "fas fa-money-bill",
-  //   allowedRoles: [USER],
-  //   path: "/vouchers",
-  // },
   {
     title: "Voucher Management",
     icon: "fas fa-wallet",

@@ -38,9 +38,7 @@ function AccountVerification() {
       })
       .catch((error) => {
         toast.error(
-          error.response.status >= 500
-            ? INTERNAL_SERVER_ERROR
-            : error.response.data.message,
+          error.response.data.message || INTERNAL_SERVER_ERROR,
           TOAST_CONFIG
         );
       });
@@ -55,7 +53,10 @@ function AccountVerification() {
         toast.success("Code has been sent.", TOAST_CONFIG);
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 

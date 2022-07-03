@@ -15,10 +15,36 @@ export const getMyIncomingMatches = async (params) => {
   return response ? response.data : null;
 };
 
-export const getMyBookingHistory = async (params) => {
+export const getBookingHistory = async (params, role) => {
   const credential = localStorage.getItem(encryptKey("credential"));
-  const response = await axios.post(`${SERVICE_URL}/v1/me/history`, params, {
-    headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/${role}/history-booking`,
+    params,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  );
+  return response ? response.data : null;
+};
+
+export const getVotes = async (params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/me/votes`, params, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${decrypt(credential).token}`
+    },
+  });
+  return response ? response.data : null;
+};
+
+export const postVote = async (params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/me/vote`, params, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${decrypt(credential).token}`
+    },
   });
   return response ? response.data : null;
 };

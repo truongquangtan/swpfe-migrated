@@ -17,6 +17,7 @@ import {
 import { sendForgotPassword } from "../../services/auth.service";
 import { verifyForgotPassword } from "../../services/auth.service";
 import { encryptKey } from "../../helpers/crypto.helper";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 
 const validation = yup.object({
   re_email: yup
@@ -49,7 +50,10 @@ function ForgotPassword() {
           navigate("/auth/reset-password");
         })
         .catch((error) => {
-          toast.error(error.response.data.message, TOAST_CONFIG);
+          toast.error(
+            error.response.data.message || INTERNAL_SERVER_ERROR,
+            TOAST_CONFIG
+          );
         });
     },
   });
@@ -66,7 +70,10 @@ function ForgotPassword() {
         toast.success("Code has been sent.", TOAST_CONFIG);
       })
       .catch((error) => {
-        toast.error(error.response.data.message, TOAST_CONFIG);
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
       });
   };
 
@@ -98,12 +105,13 @@ function ForgotPassword() {
               placeholder="Enter your registered mail to receive code"
               required
             />
-            <span
+            <button
               onClick={requestCode}
               className="col-3 lh-44 fg-pw__icon-wrapper"
+              disabled={!formik.values.re_email}
             >
               Resend mail
-            </span>
+            </button>
             <span className="signup__filed--error">
               {formik.touched.re_email && formik.errors.re_email
                 ? formik.errors.re_email
@@ -130,7 +138,6 @@ function ForgotPassword() {
               className="col-11 outline-none p-2 signup__input-border"
               type="text"
               placeholder="Enter 6-digits code"
-              required
             />
             <span className="signup__filed--error">
               {formik.touched.code && formik.errors.code
