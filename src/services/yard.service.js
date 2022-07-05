@@ -183,3 +183,18 @@ export const deleteSubYard = async (yardId) => {
 
   return response ? response.data : null;
 };
+
+export const reportYard = async (yardId, reason) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/me/report/yards/${yardId}`,
+    { "reason": reason},
+    {
+      headers: {
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      }
+    }
+  );
+
+  return response ? response.data : null;
+};
