@@ -117,8 +117,8 @@ function ManageReportsWidget() {
                                     Address
                                 </th>
                                 <th scope="col">Reason</th>
-                                <th scope="col">Owner Email</th>
-                                <th scope="col" style={{ width: "12%" }}>Status</th>
+                                <th scope="col" style={{width: "12%"}}>Owner Email</th>
+                                <th scope="col" style={{ width: "15%" }}>Status</th>
                                 <th scope="col">Created At</th>
                                 <th scope="col">Updated At</th>
                                 <th scope="col" style={{width: "3%"}}></th>
@@ -145,7 +145,7 @@ function ManageReportsWidget() {
                                             {report.status === NOT_HANDLED ? (
                                                 <i
                                                 className="trash-icon fas fa-check-circle col-4"
-                                                title="Active"
+                                                title="Mask as handled"
                                                 onClick={() =>
                                                     onSimpleClick(
                                                         "Enable",
