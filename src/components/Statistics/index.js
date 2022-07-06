@@ -340,7 +340,7 @@ function Statistics() {
               <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column mt-5">
                 <i className="fas fa-hand-pointer size-3"></i>
                 <p className="text-center nodata-text">
-                  Please select date and sub yard
+                  Please select start date and end date
                 </p>
               </div>
             )}

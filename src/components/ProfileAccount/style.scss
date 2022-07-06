@@ -1,5 +1,8 @@
 .profile-wrapper {
-  padding: 70px;
+  width: 1100px;
+  display: flex;
+  height: calc(100vh - 200px);
+  align-items: center;
 }
 
 .profile-avatar-wrapper {

@@ -12,8 +12,6 @@ import { updateProfile } from "../../services/me.service";
 import Modal, { useModal } from "../Modal";
 import { PHONE_PATTERN } from "../../constants/regex";
 
-const _URL = window.URL || window.webkitURL;
-
 function ProfileAccount() {
   const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
   const navigate = useNavigate();
@@ -63,7 +61,6 @@ function ProfileAccount() {
         localStorage.removeItem(encryptKey("credential"));
         navigate("/auth/login");
       } catch (error) {
-        console.log(error.response.data.message);
         toast.error(error.response.data.message, {
           ...TOAST_CONFIG,
           containerId: "toast-profile-account",
@@ -98,7 +95,7 @@ function ProfileAccount() {
   });
 
   return (
-    <div className="profile-wrapper w-100">
+    <div className="container profile-wrapper">
       <Modal
         isShowing={showUpdatePasswordModal}
         hide={setShowUpdatePasswordModal}
@@ -106,7 +103,7 @@ function ProfileAccount() {
         <ProfileUpdatePasswordModal toggleModal={setShowUpdatePasswordModal} />
       </Modal>
       <div className="d-flex">
-        <div className="col-3">
+        <div className="col-4">
           <div className="profile-avatar-wrapper">
             <img
               className="mb-2 profile-avatar__img color-blur rounded-circle"
@@ -114,18 +111,16 @@ function ProfileAccount() {
             />
             <label className="profile-avatar__upload-lable">
               <input
-                className="profile-avatar__upload-input"
+                className="outline-none custom-bg-input p-0 w-100"
                 type="file"
                 onChange={(e) => {
                   handleUploadAvatarOnChange(e.target.files[0]);
                 }}
               />
-              <div className="profile-avatar__upload-button">Upload</div>
             </label>
           </div>
         </div>
-
-        <div className="flex-grow-1">
+        <div className="col-8 p-4">
           <div className="profile-info-wrapper">
             <h4 className="text-center">PROFILE USER</h4>
             <div>
@@ -224,7 +219,7 @@ function ProfileAccount() {
                     >
                       Save
                     </button>
-                    <div className="btn btn-light mx-4 cancel">Cancel</div>
+                    <div className="btn btn-light mx-4">Cancel</div>
                   </div>
                 </div>
               </form>

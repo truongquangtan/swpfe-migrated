@@ -29,10 +29,7 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
   }, []);
 
   const validation = yup.object({
-    password: yup
-      .string(REQUEST_PASSWORD)
-      .required(REQUIRED_PASSWORD)
-      .min(8, "Password should be of minimum 8 characters length"),
+    password: yup.string(REQUEST_PASSWORD).required(REQUIRED_PASSWORD),
   });
 
   const formik = useFormik({
@@ -87,7 +84,7 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
           >
             Confirm
           </button>
-          <div className="btn btn-light mx-4 cancel" onClick={toggleModal}>
+          <div className="btn btn-light mx-4" onClick={toggleModal}>
             Cancel
           </div>
         </div>
