@@ -58,4 +58,28 @@ export const getStatistic = async (params) => {
     },
   });
   return response ? response.data : null;
-}
+};
+
+export const getReports = async (params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/admin/reports`,
+    params,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  );
+  return response ? response.data : null;
+};
+
+export const markReportAsResolved = async (reportId) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.put(
+    `${SERVICE_URL}/v1/admin/reports/${reportId}`,
+    null,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  );
+  return response ? response.data : null;
+};
