@@ -36,7 +36,7 @@ function ProfileAccount() {
       return {
         ...previousAvatar,
         file: file,
-        preview: URL.createObjectURL(file),
+        preview: file ? URL.createObjectURL(file) : "",
       };
     });
   };
@@ -79,7 +79,7 @@ function ProfileAccount() {
 
   return (
     <div className="container profile-wrapper">
-      <div className="d-flex">
+      <div className="d-flex w-100">
         <div className="col-4">
           <div className="profile-avatar-wrapper">
             <img
