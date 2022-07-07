@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -15,8 +15,6 @@ import "./style.scss";
 function Header({ auth }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
-
-
   const popupFeatures = [
     {
       title: "Profile",
@@ -68,6 +66,17 @@ function Header({ auth }) {
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
+  // const hidePopup = (e) => {
+  //   if (showPopup && !document.getElementById('header-popup')?.contains(e.target)) {
+  //     setShowPopup(false);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   window.addEventListener('click', hidePopup);
+  //   return () => window.removeEventListener('click', hidePopup);
+  // }, [])
+
   return (
     <div className="header">
       <Modal
@@ -99,12 +108,15 @@ function Header({ auth }) {
         </div>
       )}
       {showPopup && (
-        <div className="profile-popup">
+        <div id="header-popup" className="profile-popup">
           {popupFeatures.map((feature) => {
             return (
               <div
                 className="profile__popup-feature"
-                onClick={feature.click}
+                onClick={() => {
+                  feature.click();
+                  setShowPopup(false);
+                }}
                 key={feature.title}
               >
                 <i className={feature.icon + " p-2"}></i>
