@@ -1,251 +1,188 @@
+import { useState, useEffect } from "react";
 import "./style.scss";
 
+import Pagination from "../Pagination";
+
 function MatchManagementWidget() {
+  const [maxPage, setMaxPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const onChangePage = () => {};
+
   return (
     <div className="pt-4 w-100">
       <div>
         <div>
-          <h2 className="text-center">Booking Management</h2>
-        </div>
-        <div className="d-flex justify-content-center pt-3">
-          <div className="col-7">
-            <div className="border border-2 rounded">
-              <table class="table align-middle">
-                <thead>
-                  <tr>
-                    <th>Actions</th>
-                    <th>Create By</th>
-                    <th>Location</th>
-                    <th>Date/Time</th>
-                    <th>Slot</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-link btn-rounded btn-sm fw-bold"
-                      >
-                        Cancel
-                      </button>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <img
-                          src="https://sohanews.sohacdn.com/160588918557773824/2020/7/7/photo-1-1594135214879358461455.jpg"
-                          alt=""
-                          style={{ width: 45, height: 45 }}
-                          class="rounded-circle"
-                        />
-                        <div class="ms-2">
-                          <p>John Doe</p>
-                          <p class="text-muted">a@gmail.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <p>Quận 1</p>
-                    </td>
-                    <td>
-                      <p>28/6/2022</p>
-                    </td>
-                    <td>
-                      <p>5 6</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-link btn-rounded btn-sm fw-bold"
-                      >
-                        Cancel
-                      </button>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <img
-                          src="https://sohanews.sohacdn.com/160588918557773824/2020/7/7/photo-1-1594135214879358461455.jpg"
-                          class="rounded-circle"
-                          alt=""
-                          style={{ width: 45, height: 45 }}
-                        />
-                        <div class="ms-2">
-                          <p>Alex Ray</p>
-                          <p class="text-muted">b@gmail.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <p>Quận 1</p>
-                    </td>
-                    <td>
-                      <p>28/6/2022</p>
-                    </td>
-                    <td>
-                      <p>5 6</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-link btn-rounded btn-sm fw-bold"
-                      >
-                        Cancel
-                      </button>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <img
-                          src="https://sohanews.sohacdn.com/160588918557773824/2020/7/7/photo-1-1594135214879358461455.jpg"
-                          class="rounded-circle"
-                          alt=""
-                          style={{ width: 45, height: 45 }}
-                        />
-                        <div class="ms-2">
-                          <p>Kate</p>
-                          <p class="text-muted">c@gmail.com</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <p>Quận 1</p>
-                    </td>
-                    <td>
-                      <p>28/6/2022</p>
-                    </td>
-                    <td>
-                      <p>5 6</p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="pt-3">
-              <div className="border border-2 rounded">
-                <table class="table align-middle">
-                  <thead>
-                    <tr>
-                      <th>Actions</th>
-                      <th>Create By</th>
-                      <th>Location</th>
-                      <th>Date/Time</th>
-                      <th>Slot</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-link btn-rounded btn-sm fw-bold"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="https://sohanews.sohacdn.com/160588918557773824/2020/7/7/photo-1-1594135214879358461455.jpg"
-                            alt=""
-                            style={{ width: 45, height: 45 }}
-                            class="rounded-circle"
-                          />
-                          <div class="ms-2">
-                            <p>John Doe</p>
-                            <p class="text-muted">a@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <p>Quận 1</p>
-                      </td>
-                      <td>
-                        <p>28/6/2022</p>
-                      </td>
-                      <td>
-                        <p>5 6</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-link btn-rounded btn-sm fw-bold"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="https://sohanews.sohacdn.com/160588918557773824/2020/7/7/photo-1-1594135214879358461455.jpg"
-                            class="rounded-circle"
-                            alt=""
-                            style={{ width: 45, height: 45 }}
-                          />
-                          <div class="ms-2">
-                            <p>Alex Ray</p>
-                            <p class="text-muted">b@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <p>Quận 1</p>
-                      </td>
-                      <td>
-                        <p>28/6/2022</p>
-                      </td>
-                      <td>
-                        <p>5 6</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-link btn-rounded btn-sm fw-bold"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="https://sohanews.sohacdn.com/160588918557773824/2020/7/7/photo-1-1594135214879358461455.jpg"
-                            class="rounded-circle"
-                            alt=""
-                            style={{ width: 45, height: 45 }}
-                          />
-                          <div class="ms-2">
-                            <p>Kate</p>
-                            <p class="text-muted">c@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <p>Quận 1</p>
-                      </td>
-                      <td>
-                        <p>28/6/2022</p>
-                      </td>
-                      <td>
-                        <p>5 6</p>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div className="mt-2 ms-5">
+            <h4>Booking Management</h4>
           </div>
+        </div>
+        <div className="pt-3">
+          <div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ width: "5%" }}>
+                    Actions
+                  </th>
+                  <th scope="col" style={{ width: "16%" }}>
+                    Yard
+                  </th>
+                  <th scope="col" style={{ width: "8%" }}>
+                    Sub-yard
+                  </th>
+                  <th scope="col" style={{ width: "8%" }}>
+                    Type
+                  </th>
+                  <th scope="col" style={{ width: "15%" }}>
+                    Address
+                  </th>
+                  <th scope="col" style={{ width: "10%" }}>
+                    Price
+                  </th>
+                  <th scope="col" style={{ width: "8%" }}>
+                    Created By
+                  </th>
+                  <th scope="col" style={{ width: "10%" }}>
+                    Created At
+                  </th>
+                  <th scope="col" style={{ width: "14%" }}>
+                    Note
+                  </th>
+                </tr>
+              </thead>
 
-          <div className="col-5">
-            <h1>S T</h1>
+              <tbody>
+                <tr>
+                  <td title="actions">
+                    <i
+                      className="trash-icon fas fa-trash-alt col-4"
+                      title="Delete"
+                      onClick={() => {}}
+                    ></i>
+                  </td>
+                  <td className="text-truncate" title="yard">
+                    Sân Bóng Rổ Quận 8
+                  </td>
+                  <td title="subYard">Sân 1</td>
+                  <td>5 VS 5</td>
+                  <td className="text-truncate" title="address">
+                    Số 369 Lê Văn Việt
+                  </td>
+                  <td title="price"> 20000 VND</td>
+
+                  <td className="text-truncate" title="createBy">
+                    HungLD
+                  </td>
+                  <td title="createAt">07/07/2022</td>
+                  <td title="Note">N/A</td>
+                </tr>
+
+                <tr>
+                  <td title="actions">
+                    <i
+                      className="trash-icon fas fa-trash-alt col-4"
+                      title="Delete"
+                      onClick={() => {}}
+                    ></i>
+                  </td>
+                  <td className="text-truncate" title="yard">
+                    Sân Bóng Rổ Thủ Đức
+                  </td>
+                  <td title="subYard">Sân 1</td>
+                  <td>5 VS 5</td>
+                  <td className="text-truncate" title="address">
+                    Số 369 Lê Văn Việt
+                  </td>
+                  <td title="price"> 20000 VND</td>
+
+                  <td className="text-truncate" title="createBy">
+                    Quang Tân
+                  </td>
+                  <td title="createAt">07/07/2022</td>
+                  <td title="Note">N/A</td>
+                </tr>
+
+                <tr>
+                  <td title="actions">
+                    <i
+                      className="trash-icon fas fa-trash-alt col-4"
+                      title="Delete"
+                      onClick={() => {}}
+                    ></i>
+                  </td>
+                  <td className="text-truncate" title="yard">
+                    Sân Bóng Rổ Bình Thạnh
+                  </td>
+                  <td title="subYard">Sân 1</td>
+                  <td>5 VS 5</td>
+                  <td className="text-truncate" title="address">
+                    Số 369 Lê Văn Việt
+                  </td>
+                  <td title="price"> 20000 VND</td>
+
+                  <td className="text-truncate" title="createBy">
+                    Bảo Toàn
+                  </td>
+                  <td title="createAt">07/07/2022</td>
+                  <td title="Note">N/A</td>
+                </tr>
+
+                <tr>
+                  <td title="actions">
+                    <i
+                      className="trash-icon fas fa-trash-alt col-4"
+                      title="Delete"
+                      onClick={() => {}}
+                    ></i>
+                  </td>
+                  <td className="text-truncate" title="yard">
+                    Sân Bóng Rổ Quận 2
+                  </td>
+                  <td title="subYard">Sân 1</td>
+                  <td>5 VS 5</td>
+                  <td className="text-truncate" title="address">
+                    Số 369 Lê Văn Việt
+                  </td>
+                  <td title="price"> 20000 VND</td>
+
+                  <td className="text-truncate" title="createBy">
+                    Minh Trung
+                  </td>
+                  <td title="createAt">07/07/2022</td>
+                  <td title="Note">N/A</td>
+                </tr>
+
+                <tr>
+                  <td title="actions">
+                    <i
+                      className="trash-icon fas fa-trash-alt col-4"
+                      title="Delete"
+                      onClick={() => {}}
+                    ></i>
+                  </td>
+                  <td className="text-truncate" title="yard">
+                    Sân Bóng Rổ Quận 1
+                  </td>
+                  <td title="subYard">Sân 1</td>
+                  <td>5 VS 5</td>
+                  <td className="text-truncate" title="address">
+                    Số 369 Lê Văn Việt
+                  </td>
+                  <td title="price"> 20000 VND</td>
+
+                  <td className="text-truncate" title="createBy">
+                    Hà Giang
+                  </td>
+                  <td title="createAt">07/07/2022</td>
+                  <td title="Note">N/A</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+      <Pagination maxPage={maxPage} onChangePage={onChangePage} />
     </div>
   );
 }
