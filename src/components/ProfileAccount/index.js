@@ -29,16 +29,18 @@ function ProfileAccount() {
   }, [currentUser])
 
   const handleUploadAvatarOnChange = (file) => {
-    setAvatarImage((previousAvatar) => {
-      if (previousAvatar.preview) {
-        URL.revokeObjectURL(previousAvatar.preview);
-      }
-      return {
-        ...previousAvatar,
-        file: file,
-        preview: file ? URL.createObjectURL(file) : "",
-      };
-    });
+    if(file){
+      setAvatarImage((previousAvatar) => {
+          if (previousAvatar.preview) {
+            URL.revokeObjectURL(previousAvatar.preview);
+          }
+          return {
+            ...previousAvatar,
+            file: file,
+            preview: file ? URL.createObjectURL(file) : "",
+          };    
+      });
+    }
   };
 
   const handleUpdateProfile = async (values) => {
