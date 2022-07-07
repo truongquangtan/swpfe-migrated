@@ -5,13 +5,17 @@ import { toast, ToastContainer } from "react-toastify";
 import { TOAST_CONFIG } from "../../constants/default";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import ProfileUpdatePasswordModal from "../../modals/ProfileUpdatePasswordModal";
 import { logout } from "../../services/auth.service";
 import DisableScreen from "../DisableScreen";
+import Modal, { useModal } from "../Modal";
 import "./style.scss";
 
 
 function Header({ auth }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
+
 
   const popupFeatures = [
     {
@@ -20,7 +24,7 @@ function Header({ auth }) {
       click: () => {
         const account = decrypt(localStorage.getItem(encryptKey("credential")));
         const role = account?.role;
-        switch(role){
+        switch (role) {
           case 'admin':
             navigate("/admin/me");
             break;
@@ -30,6 +34,13 @@ function Header({ auth }) {
           default:
             navigate("/me")
         }
+      },
+    },
+    {
+      title: "Change Password",
+      icon: "fas fa-lock",
+      click: () => {
+        setShowUpdatePasswordModal()
       },
     },
     {
@@ -59,6 +70,12 @@ function Header({ auth }) {
 
   return (
     <div className="header">
+      <Modal
+        isShowing={showUpdatePasswordModal}
+        hide={setShowUpdatePasswordModal}
+      >
+        <ProfileUpdatePasswordModal toggleModal={setShowUpdatePasswordModal} />
+      </Modal>
       {isLoggingOut && <DisableScreen />}
       <Link to="/" className="d-flex align-content-center nav-brand">
         <span className="p-2 size-2 ps-4 pe-3">
@@ -97,6 +114,7 @@ function Header({ auth }) {
           })}
         </div>
       )}
+
       <ToastContainer />
     </div>
   );

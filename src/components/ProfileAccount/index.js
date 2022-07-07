@@ -2,45 +2,33 @@ import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import "./style.scss";
 
 import { useFormik } from "formik";
-import * as yup from "yup";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import ProfileUpdatePasswordModal from "../../modals/ProfileUpdatePasswordModal";
-import { updateProfile } from "../../services/me.service";
-import Modal, { useModal } from "../Modal";
+import { toast, ToastContainer } from "react-toastify";
+import * as yup from "yup";
 import { PHONE_PATTERN } from "../../constants/regex";
+import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import { updateProfile } from "../../services/me.service";
 
 function ProfileAccount() {
-  const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
   const navigate = useNavigate();
-
   const [currentUser] = useState(() => {
-    const credentials = localStorage.getItem(encryptKey("credential"));
-    if (credentials) {
-      return decrypt(credentials);
-    }
-    return null;
+    return decrypt(localStorage.getItem(encryptKey("credential")));
+  });
+  
+  const [avatarImage, setAvatarImage] = useState({
+    file: null,
+    url: null,
+    preview: null,
   });
 
-  const [avatarImage, setAvatarImage] = useState(() => {
-    const credentials = localStorage.getItem(encryptKey("credential"));
-    if (credentials) {
-      return {
-        file: null,
-        url: decrypt(credentials)?.avatar,
-        preview: null,
-      };
+  useEffect(() => {
+    if(currentUser){
+      setAvatarImage(previousAvatar => ({...previousAvatar, url: currentUser?.avatar}))
     }
-    return {
-      file: null,
-      url: null,
-      preview: null,
-    };
-  });
+  }, [currentUser])
 
-  const handleUploadAvatarOnChange = useCallback((file) => {
+  const handleUploadAvatarOnChange = (file) => {
     setAvatarImage((previousAvatar) => {
       if (previousAvatar.preview) {
         URL.revokeObjectURL(previousAvatar.preview);
@@ -51,24 +39,19 @@ function ProfileAccount() {
         preview: URL.createObjectURL(file),
       };
     });
-  }, []);
+  };
 
-  const handleUpdateProfile = useCallback(
-    async (values) => {
-      try {
-        const data = { phone: values.phone, fullName: values.fullName };
-        await updateProfile(avatarImage.file, JSON.stringify(data));
-        localStorage.removeItem(encryptKey("credential"));
-        navigate("/auth/login");
-      } catch (error) {
-        toast.error(error.response.data.message, {
-          ...TOAST_CONFIG,
-          containerId: "toast-profile-account",
-        });
-      }
-    },
-    [avatarImage]
-  );
+  const handleUpdateProfile = async (values) => {
+    try {
+      const data = { phone: values.phone, fullName: values.fullName };
+      await updateProfile(avatarImage.file, JSON.stringify(data));
+      localStorage.removeItem(encryptKey("credential"));
+      toast.success("Update profile success!")
+      navigate("/auth/login");
+    } catch (error) {
+      toast.error(error.response.data.message, TOAST_CONFIG);
+    }
+  };
 
   const validation = yup.object({
     fullName: yup
@@ -96,12 +79,6 @@ function ProfileAccount() {
 
   return (
     <div className="container profile-wrapper">
-      <Modal
-        isShowing={showUpdatePasswordModal}
-        hide={setShowUpdatePasswordModal}
-      >
-        <ProfileUpdatePasswordModal toggleModal={setShowUpdatePasswordModal} />
-      </Modal>
       <div className="d-flex">
         <div className="col-4">
           <div className="profile-avatar-wrapper">
@@ -199,17 +176,6 @@ function ProfileAccount() {
                       : EMPTY}{" "}
                   </span>
                 </div>
-                <div className="d-flex justify-content-end">
-                  <button
-                    className="rounded-pill border border-2"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowUpdatePasswordModal();
-                    }}
-                  >
-                    Change Password
-                  </button>
-                </div>
                 <div className="mt-3">
                   <div className="d-flex">
                     <button
@@ -227,7 +193,7 @@ function ProfileAccount() {
           </div>
         </div>
       </div>
-      <ToastContainer containerId="toast-profile-account" />
+      <ToastContainer/>
     </div>
   );
 }
