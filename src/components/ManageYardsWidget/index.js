@@ -167,7 +167,7 @@ function ManageYardsWidget() {
                 Open Time
               </th>
               <th scope="col" style={{ width: "12%" }}>
-                Created At
+                Status
               </th>
               <th scope="col" style={{ width: "12%" }}>
                 Created At
