@@ -13,15 +13,23 @@ function MatchManagementWidget() {
               <table class="table align-middle">
                 <thead>
                   <tr>
-                    <th>Account</th>
+                    <th>Actions</th>
+                    <th>Create By</th>
                     <th>Location</th>
                     <th>Date/Time</th>
                     <th>Slot</th>
-                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-link btn-rounded btn-sm fw-bold"
+                      >
+                        Cancel
+                      </button>
+                    </td>
                     <td>
                       <div class="d-flex align-items-center">
                         <img
@@ -45,6 +53,8 @@ function MatchManagementWidget() {
                     <td>
                       <p>5 6</p>
                     </td>
+                  </tr>
+                  <tr>
                     <td>
                       <button
                         type="button"
@@ -53,8 +63,6 @@ function MatchManagementWidget() {
                         Cancel
                       </button>
                     </td>
-                  </tr>
-                  <tr>
                     <td>
                       <div class="d-flex align-items-center">
                         <img
@@ -78,6 +86,8 @@ function MatchManagementWidget() {
                     <td>
                       <p>5 6</p>
                     </td>
+                  </tr>
+                  <tr>
                     <td>
                       <button
                         type="button"
@@ -86,8 +96,6 @@ function MatchManagementWidget() {
                         Cancel
                       </button>
                     </td>
-                  </tr>
-                  <tr>
                     <td>
                       <div class="d-flex align-items-center">
                         <img
@@ -111,14 +119,6 @@ function MatchManagementWidget() {
                     <td>
                       <p>5 6</p>
                     </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-link btn-rounded btn-sm fw-bold"
-                      >
-                        Cancel
-                      </button>
-                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -128,15 +128,23 @@ function MatchManagementWidget() {
                 <table class="table align-middle">
                   <thead>
                     <tr>
-                      <th>Account</th>
+                      <th>Actions</th>
+                      <th>Create By</th>
                       <th>Location</th>
                       <th>Date/Time</th>
                       <th>Slot</th>
-                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-link btn-rounded btn-sm fw-bold"
+                        >
+                          Cancel
+                        </button>
+                      </td>
                       <td>
                         <div class="d-flex align-items-center">
                           <img
@@ -160,6 +168,8 @@ function MatchManagementWidget() {
                       <td>
                         <p>5 6</p>
                       </td>
+                    </tr>
+                    <tr>
                       <td>
                         <button
                           type="button"
@@ -168,8 +178,6 @@ function MatchManagementWidget() {
                           Cancel
                         </button>
                       </td>
-                    </tr>
-                    <tr>
                       <td>
                         <div class="d-flex align-items-center">
                           <img
@@ -193,6 +201,8 @@ function MatchManagementWidget() {
                       <td>
                         <p>5 6</p>
                       </td>
+                    </tr>
+                    <tr>
                       <td>
                         <button
                           type="button"
@@ -201,8 +211,6 @@ function MatchManagementWidget() {
                           Cancel
                         </button>
                       </td>
-                    </tr>
-                    <tr>
                       <td>
                         <div class="d-flex align-items-center">
                           <img
@@ -226,14 +234,6 @@ function MatchManagementWidget() {
                       <td>
                         <p>5 6</p>
                       </td>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-link btn-rounded btn-sm fw-bold"
-                        >
-                          Cancel
-                        </button>
-                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -242,7 +242,7 @@ function MatchManagementWidget() {
           </div>
 
           <div className="col-5">
-            <h1>BBBBBBBB</h1>
+            <h1>S T</h1>
           </div>
         </div>
       </div>
