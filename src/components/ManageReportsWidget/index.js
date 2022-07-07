@@ -102,7 +102,6 @@ function ManageReportsWidget() {
             customUI: ({ onClose }) => {
                 return (
                     <div className="report__details-form">
-                        <h4>Report Detail</h4>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Yard:</span>
                             <span className="col-9">{report.yardName}</span>
@@ -110,55 +109,55 @@ function ManageReportsWidget() {
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Address:</span>
                             <span className="col-9">
-                            {report.yardAddress}
+                                {report.yardAddress}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Owner:</span>
                             <span className="col-9">
-                            {report.ownerName}
+                                {report.ownerName}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Owner Email:</span>
                             <span className="col-9">
-                            {report.ownerEmail}
+                                {report.ownerEmail}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">User Reported:</span>
                             <span className="col-9">
-                            {report.userName}
+                                {report.userName}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">User Email:</span>
                             <span className="col-9">
-                            {report.userEmail}
+                                {report.userEmail}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Reason:</span>
                             <span className="col-9">
-                            {report.reason}
+                                {report.reason}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Status:</span>
                             <span className={"col-9 " + getColor(report.status)}>
-                            {report.status}
+                                {report.status}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Created At:</span>
                             <span className="col-9">
-                            {report.createdAt}
+                                {report.createdAt}
                             </span>
                         </div>
                         <div className="row mb-1 report__details-field">
                             <span className="col-3 fw-bolder">Updated At:</span>
                             <span className="col-9">
-                            {report.updatedAt}
+                                {report.updatedAt}
                             </span>
                         </div>
                         <button onClick={onClose} className="btn btn-primary">
@@ -175,9 +174,10 @@ function ManageReportsWidget() {
     return (
         <>
             <div className="mt-4 w-100">
-                <h3 className="text-center mb-4">
-                    Yard Reports
-                </h3>
+                <h4 className="mb-4 d-inline-block">
+                    <i className="fas fa-exclamation-triangle width-60 pe-3" />
+                    Reports
+                </h4>
                 {isLoading ? (
                     <div
                         className="w-100 d-flex justify-content-center align-items-center"
@@ -198,7 +198,7 @@ function ManageReportsWidget() {
                             <tr>
                                 <th scope="col" style={{ width: "5%", textAlign: "center" }}>Action</th>
                                 <th scope="col">Reference</th>
-                                <th scope="col">Yard Name</th>
+                                <th scope="col">Yard</th>
                                 <th scope="col" style={{ width: "15%" }}>Status</th>
                                 <th scope="col" style={{ width: "10%" }}>
                                     User Reported
@@ -239,7 +239,7 @@ function ManageReportsWidget() {
                                             ) :
                                                 <></>}
                                         </td>
-                                        <td className="trash-icon" onClick={() => onReferenceClick(report)}>{report.reference}</td>
+                                        <td className="trash-icon bold" onClick={() => onReferenceClick(report)}>{report.reference}</td>
                                         <td>{report.yardName}</td>
                                         <td className={getColor(report.status)}>{report.status}</td>
                                         <td>{report.userName}</td>
