@@ -24,6 +24,7 @@ import OwnerPage from "./pages/OwnerPage";
 import AuthPage from "./pages/AuthPage";
 import AccountVerification from "./components/AccountVerification";
 import Statistics from "./components/Statistics";
+import ManageReportsWidget from "./components/ManageReportsWidget";
 
 function App() {
   return (
@@ -93,6 +94,7 @@ function App() {
               element={<IncomingMatchesWidget />}
             ></Route>
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
+            <Route path="/admin/reports" element={<ManageReportsWidget />}></Route>
           </Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>

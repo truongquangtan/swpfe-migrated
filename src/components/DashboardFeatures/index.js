@@ -37,6 +37,12 @@ const features = [
     path: "/admin/users",
   },
   {
+    title: "Reports",
+    icon: "fas fa-exclamation-triangle",
+    allowedRoles: [ADMIN],
+    path: "/admin/reports",
+  },
+  {
     title: "Booking Management",
     icon: "fas fa-basketball-ball",
     allowedRoles: [OWNER],

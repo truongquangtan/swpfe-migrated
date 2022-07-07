@@ -26,6 +26,8 @@ import VoucherStorageModal from "../../modals/VoucherStorageModal";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { calculateBookingList } from "../../services/voucher.service";
 
+import ReportYardModal from "../../modals/ReportYardModal";
+
 function Yard() {
   const { id } = useParams();
   const container = useRef(null);
@@ -44,6 +46,7 @@ function Yard() {
   const [voucherCode, setVoucherCode] = useState(EMPTY);
   const [isBooking, setIsBooking] = useState(false);
   const [showVoucherStorageModal, toggleShowVoucherStorageModal] = useModal();
+  const [showReportYardModal, toggleShowReportYardModal] = useModal();
 
   useEffect(() => {
     getYardById(id).then((res) => {
@@ -200,7 +203,7 @@ function Yard() {
                 ))}
               </Slide>
             </div>
-            <div className="col-4 ps-4 pe-4 pt-5 flex-column">
+            <div className="col-4 ps-4 pe-4 pt-5 flex-column position-relative">
               <div className="text-center mb-4">
                 <b className="size-2 d-block mb-2">{yard.name}</b>
                 <Rating
@@ -218,6 +221,15 @@ function Yard() {
                 <span className="col-9">
                   {yard.openAt} - {yard.closeAt}
                 </span>
+              </div>
+              <div className="report-ic-box">
+                  <i
+                    className="fas fa-exclamation-circle report-icon"
+                    title="Report this yard"
+                    onClick={() => {
+                      toggleShowReportYardModal();
+                    }}
+                  ></i>
               </div>
             </div>
           </div>
@@ -285,8 +297,8 @@ function Yard() {
                           slot.isBooked
                             ? "slot-details flex-column booked-slot"
                             : slot.isSelected
-                            ? "slot-details-clicked flex-column"
-                            : "slot-details flex-column"
+                              ? "slot-details-clicked flex-column"
+                              : "slot-details flex-column"
                         }
                         onClick={() => onSelectSlot(slot)}
                       >
@@ -470,6 +482,18 @@ function Yard() {
           ownerId={yard?.ownerId}
           onSelect={(code) => {
             setVoucherCode(code);
+          }}
+        />
+      </Modal>
+      <Modal
+        isShowing={showReportYardModal}
+        hide={toggleShowReportYardModal}
+      >
+        <ReportYardModal
+          toggleModal={toggleShowReportYardModal}
+          yardId={yard?.id}
+          onSave={() => {
+            //do nothing
           }}
         />
       </Modal>
