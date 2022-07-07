@@ -75,7 +75,19 @@ export const getReports = async (params) => {
 export const markReportAsResolved = async (reportId) => {
   const credential = localStorage.getItem(encryptKey("credential"));
   const response = await axios.put(
-    `${SERVICE_URL}/v1/admin/reports/${reportId}`,
+    `${SERVICE_URL}/v1/admin/reports/${reportId}/handle`,
+    null,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  );
+  return response ? response.data : null;
+};
+
+export const rejectReport = async (reportId) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.put(
+    `${SERVICE_URL}/v1/admin/reports/${reportId}/reject`,
     null,
     {
       headers: { Authorization: `Bearer ${decrypt(credential).token}` },
