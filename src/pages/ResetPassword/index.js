@@ -75,7 +75,7 @@ function ResetPassword() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Re-password
+              New Password
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
@@ -88,7 +88,7 @@ function ResetPassword() {
               onBlur={formik.handleBlur}
               className="col-11 outline-none p-2 signup__input-border"
               type="password"
-              placeholder="Password"
+              placeholder="Enter new password"
               required
             />
             <span className="signup__filed--error">
@@ -103,7 +103,7 @@ function ResetPassword() {
               className="text-start"
               style={{ paddingLeft: 0 }}
             >
-              Confirm Re-Password
+              Confirm New Password
             </label>
             <span className="col-1 lh-44 signup__icon-wrapper">
               <i className="fas fa-lock"></i>
@@ -116,7 +116,7 @@ function ResetPassword() {
               onBlur={formik.handleBlur}
               className="col-11 outline-none p-2 signup__input-border"
               type="password"
-              placeholder="Input password again"
+              placeholder="Confirm new password"
               required
             />
             <span className="signup__filed--error">

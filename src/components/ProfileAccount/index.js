@@ -180,7 +180,7 @@ function ProfileAccount() {
                 </div>
                 <div className="row mt-4 p-1">
                   <button
-                    className="btn btn-primary w-25"
+                    className="btn btn-primary w-25 mt-2"
                     disabled={!formik.isValid || formik.isSubmitting}
                     type="submit"
                     style={{height: 46}}
