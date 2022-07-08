@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import * as yup from "yup";
 import { PHONE_PATTERN } from "../../constants/regex";
-import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
 import { updateProfile } from "../../services/me.service";
 
 const validation = yup.object({
@@ -57,9 +57,10 @@ function ProfileAccount() {
   const handleUpdateProfile = async (values) => {
     try {
       const data = { phone: values.phone, fullName: values.fullName };
-      const res = await updateProfile(avatarImage.file, JSON.stringify(data));
-      console.log(res);
-      toast.success("Update profile success!", TOAST_CONFIG);
+      const response = await updateProfile(avatarImage.file, JSON.stringify(data));
+      toast.success("Update profile success!", TOAST_CONFIG)
+      localStorage.removeItem(encryptKey("credential"));
+      localStorage.setItem(encryptKey("credential"), encrypt(response));
     } catch (error) {
       toast.error(error.response.data.message, TOAST_CONFIG);
     }
@@ -85,6 +86,7 @@ function ProfileAccount() {
             <img
               className="mb-2 profile-avatar__img color-blur rounded-circle"
               src={avatarImage.preview || avatarImage.url}
+              alt="Your avatar"
             />
             <div className="profile-avatar__upload-lable">
               <input
