@@ -3,15 +3,13 @@ import "./style.scss";
 
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import * as yup from "yup";
 import { PHONE_PATTERN } from "../../constants/regex";
-import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
 import { updateProfile } from "../../services/me.service";
 
 function ProfileAccount() {
-  const navigate = useNavigate();
   const [currentUser] = useState(() => {
     return decrypt(localStorage.getItem(encryptKey("credential")));
   });
@@ -46,10 +44,11 @@ function ProfileAccount() {
   const handleUpdateProfile = async (values) => {
     try {
       const data = { phone: values.phone, fullName: values.fullName };
-      await updateProfile(avatarImage.file, JSON.stringify(data));
-      localStorage.removeItem(encryptKey("credential"));
+      const response = await updateProfile(avatarImage.file, JSON.stringify(data));
       toast.success("Update profile success!")
-      navigate("/auth/login");
+      localStorage.removeItem(encryptKey("credential"));
+      localStorage.setItem(encryptKey("credential"), encrypt(response));
+      
     } catch (error) {
       toast.error(error.response.data.message, TOAST_CONFIG);
     }
@@ -87,6 +86,7 @@ function ProfileAccount() {
             <img
               className="mb-2 profile-avatar__img color-blur rounded-circle"
               src={avatarImage.preview || avatarImage.url}
+              alt="Your avatar"
             />
             <label className="profile-avatar__upload-lable">
               <input
