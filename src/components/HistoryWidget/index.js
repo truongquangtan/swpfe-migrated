@@ -1,7 +1,5 @@
 import React from "react";
-import { confirmAlert } from "react-confirm-alert";
 import { useState, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import empty from "../../assets/images/empty.png";
 
 import "./style.scss";
@@ -10,9 +8,8 @@ import transaction from "../../assets/images/transaction.png";
 import { getBookingHistory } from "../../services/me.service";
 import Pagination from "../Pagination";
 import { SUCCESS, FAILED, CANCELED } from "../../constants/bookingStatus";
-import { EMPTY } from "../../constants/default";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import { OWNER, USER } from "../../constants/roles";
+import { USER } from "../../constants/roles";
 import DisableElement from "../DisableElement";
 import SearchBar from "../SearchBar";
 
@@ -150,7 +147,6 @@ function HistoryWidget() {
         </>
       )}
       <Pagination maxPage={maxPage} onChangePage={onChangePage} />
-      <ToastContainer />
     </div>
   );
 }

@@ -3,19 +3,27 @@ import "./style.scss";
 
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import * as yup from "yup";
 import { PHONE_PATTERN } from "../../constants/regex";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import { updateProfile } from "../../services/me.service";
 
+const validation = yup.object({
+  fullName: yup
+    .string("Enter your full name")
+    .required("Full name is required")
+    .strict(true),
+  phone: yup
+    .string("Enter your phone")
+    .matches(PHONE_PATTERN, "Phone number is not valid"),
+});
+
 function ProfileAccount() {
-  const navigate = useNavigate();
   const [currentUser] = useState(() => {
     return decrypt(localStorage.getItem(encryptKey("credential")));
   });
-  
+
   const [avatarImage, setAvatarImage] = useState({
     file: null,
     url: null,
@@ -23,22 +31,25 @@ function ProfileAccount() {
   });
 
   useEffect(() => {
-    if(currentUser){
-      setAvatarImage(previousAvatar => ({...previousAvatar, url: currentUser?.avatar}))
+    if (currentUser) {
+      setAvatarImage((previousAvatar) => ({
+        ...previousAvatar,
+        url: currentUser?.avatar,
+      }));
     }
-  }, [currentUser])
+  }, [currentUser]);
 
   const handleUploadAvatarOnChange = (file) => {
-    if(file){
+    if (file) {
       setAvatarImage((previousAvatar) => {
-          if (previousAvatar.preview) {
-            URL.revokeObjectURL(previousAvatar.preview);
-          }
-          return {
-            ...previousAvatar,
-            file: file,
-            preview: file ? URL.createObjectURL(file) : "",
-          };    
+        if (previousAvatar.preview) {
+          URL.revokeObjectURL(previousAvatar.preview);
+        }
+        return {
+          ...previousAvatar,
+          file: file,
+          preview: file ? URL.createObjectURL(file) : "",
+        };
       });
     }
   };
@@ -46,26 +57,13 @@ function ProfileAccount() {
   const handleUpdateProfile = async (values) => {
     try {
       const data = { phone: values.phone, fullName: values.fullName };
-      await updateProfile(avatarImage.file, JSON.stringify(data));
-      localStorage.removeItem(encryptKey("credential"));
-      toast.success("Update profile success!")
-      navigate("/auth/login");
+      const res = await updateProfile(avatarImage.file, JSON.stringify(data));
+      console.log(res);
+      toast.success("Update profile success!", TOAST_CONFIG);
     } catch (error) {
       toast.error(error.response.data.message, TOAST_CONFIG);
     }
   };
-
-  const validation = yup.object({
-    fullName: yup
-      .string("Enter your full name")
-      .required("Full name is required")
-      .trim("Full name cannot include leading and trailing spaces")
-      .strict(true),
-    phone: yup
-      .string("Enter your phone")
-      .required("Phone is required")
-      .matches(PHONE_PATTERN, "Phone number is not valid"),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -88,7 +86,7 @@ function ProfileAccount() {
               className="mb-2 profile-avatar__img color-blur rounded-circle"
               src={avatarImage.preview || avatarImage.url}
             />
-            <label className="profile-avatar__upload-lable">
+            <div className="profile-avatar__upload-lable">
               <input
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
@@ -96,10 +94,10 @@ function ProfileAccount() {
                   handleUploadAvatarOnChange(e.target.files[0]);
                 }}
               />
-            </label>
+            </div>
           </div>
         </div>
-        <div className="col-8 p-4">
+        <div className="col-8 p-4 ps-5">
           <div className="profile-info-wrapper">
             <h4 className="text-center">PROFILE USER</h4>
             <div>
@@ -178,24 +176,22 @@ function ProfileAccount() {
                       : EMPTY}{" "}
                   </span>
                 </div>
-                <div className="mt-3">
-                  <div className="d-flex">
-                    <button
-                      disabled={!formik.isValid || formik.isSubmitting}
-                      type="submit"
-                      className="btn btn-primary px-4"
-                    >
-                      Save
-                    </button>
-                    <div className="btn btn-light mx-4">Cancel</div>
-                  </div>
+                <div className="row mt-4 p-1">
+                  <button
+                    className="btn btn-primary w-25"
+                    disabled={!formik.isValid || formik.isSubmitting}
+                    type="submit"
+                    style={{height: 46}}
+                  >
+                    Save
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }

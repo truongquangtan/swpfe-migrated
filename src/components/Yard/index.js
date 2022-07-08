@@ -165,6 +165,7 @@ function Yard() {
           yardName: subYard.name,
           yardType: subYard.typeYard,
           slotId: slot.id,
+          originalPrice: slot.price,
         };
         setBooking([newBooking, ...booking]);
         setTotal(total + slot.price);
@@ -410,7 +411,7 @@ function Yard() {
                       <p>
                         <b>{item.price} VND</b>
                         <br />
-                        {!!item.originalPrice && (
+                        {!!item.originalPrice && voucherCode && (
                           <span
                             className="original-price"
                             style={{ fontSize: "0.9rem" }}
@@ -428,7 +429,7 @@ function Yard() {
                 <div className="col-9 text-end">
                   <b>{total} VND</b>
                   <br />
-                  {!!originalTotal && (
+                  {!!originalTotal && voucherCode && (
                     <span
                       className="original-price"
                       style={{ fontSize: "0.9rem" }}

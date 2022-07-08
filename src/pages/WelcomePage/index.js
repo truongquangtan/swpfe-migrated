@@ -6,7 +6,7 @@ import { ADMIN, OWNER } from "../../constants/roles";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
 import "./style.scss";
 
-const privatePaths = ["/incoming-matches", "/rating", "/history"];
+const privatePaths = ["/incoming-matches", "/rating", "/history", "/me"];
 
 function WelcomePage() {
   const [auth, setAuth] = useState(false);

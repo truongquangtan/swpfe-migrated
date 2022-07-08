@@ -11,7 +11,6 @@ import DisableScreen from "../DisableScreen";
 import Modal, { useModal } from "../Modal";
 import "./style.scss";
 
-
 function Header({ auth }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
@@ -23,14 +22,14 @@ function Header({ auth }) {
         const account = decrypt(localStorage.getItem(encryptKey("credential")));
         const role = account?.role;
         switch (role) {
-          case 'admin':
+          case "admin":
             navigate("/admin/me");
             break;
-          case 'owner':
+          case "owner":
             navigate("/owner/me");
             break;
           default:
-            navigate("/me")
+            navigate("/me");
         }
       },
     },
@@ -38,7 +37,7 @@ function Header({ auth }) {
       title: "Change Password",
       icon: "fas fa-lock",
       click: () => {
-        setShowUpdatePasswordModal()
+        setShowUpdatePasswordModal();
       },
     },
     {
@@ -66,16 +65,19 @@ function Header({ auth }) {
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
-  // const hidePopup = (e) => {
-  //   if (showPopup && !document.getElementById('header-popup')?.contains(e.target)) {
-  //     setShowPopup(false);
-  //   }
-  // }
+  const hidePopup = (e) => {
+    if (
+      !document.getElementById("header-popup")?.contains(e.target) &&
+      !document.getElementById("header-avatar")?.contains(e.target)
+    ) {
+      setShowPopup(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   window.addEventListener('click', hidePopup);
-  //   return () => window.removeEventListener('click', hidePopup);
-  // }, [])
+  useEffect(() => {
+    window.addEventListener("click", hidePopup);
+    return () => window.removeEventListener("click", hidePopup);
+  }, []);
 
   return (
     <div className="header">
@@ -94,6 +96,7 @@ function Header({ auth }) {
       </Link>
       {auth ? (
         <div
+          id="header-avatar"
           className="size-2 position-fixed top-1 right-1 profile-icon"
           onClick={() => setShowPopup(() => !showPopup)}
         >

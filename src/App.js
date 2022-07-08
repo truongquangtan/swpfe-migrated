@@ -44,7 +44,6 @@ function App() {
               element={<AccountVerification />}
             ></Route>
             <Route path="/history" element={<HistoryWidget />}></Route>
-
             <Route path="/me" element={<ProfileAccount />}></Route>
           </Route>
 
