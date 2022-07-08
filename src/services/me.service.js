@@ -51,22 +51,45 @@ export const postVote = async (params) => {
 
 export const getStatistic = async (params) => {
   const credential = localStorage.getItem(encryptKey("credential"));
-  const response = await axios.post(`${SERVICE_URL}/v1/owners/me/dashboard`, params, {
-    headers: {
-      "Content-Type" : "application/json",
-      Authorization: `Bearer ${decrypt(credential).token}`
-    },
-  });
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/owners/me/dashboard`,
+    params,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      },
+    }
+  );
   return response ? response.data : null;
 };
 
 export const getReports = async (params) => {
   const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(`${SERVICE_URL}/v1/admin/reports`, params, {
+    headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+  });
+  return response ? response.data : null;
+};
+
+export const updateProfile = async (file, values) => {
+  const form = new FormData();
+
+  form.append("avatar", file);
+  form.append("account", values);
+
+  const credential = localStorage.getItem(encryptKey("credential"));
+  if (!credential) {
+    throw new Error("No token provided!");
+  }
   const response = await axios.post(
-    `${SERVICE_URL}/v1/admin/reports`,
-    params,
+    `${SERVICE_URL}/v1/me/update-profile`,
+    form,
     {
-      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${decrypt(credential).token}`,
+      },
     }
   );
   return response ? response.data : null;
@@ -76,7 +99,16 @@ export const markReportAsResolved = async (reportId) => {
   const credential = localStorage.getItem(encryptKey("credential"));
   const response = await axios.put(
     `${SERVICE_URL}/v1/admin/reports/${reportId}`,
-    null,
+    null
+  );
+  return response ? response.data : null;
+};
+
+export const changePasswordRequest = async (values) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/me/verify-password`,
+    values,
     {
       headers: { Authorization: `Bearer ${decrypt(credential).token}` },
     }
