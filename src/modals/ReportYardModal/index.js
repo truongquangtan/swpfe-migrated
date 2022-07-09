@@ -12,7 +12,7 @@ const validation = yup.object({
     .required("The reason is required"),
 });
 
-const ReportYardModal = ({ toggleModal, yardId, onSave }) => {
+const ReportYardModal = ({ toggleModal, yardId }) => {
   const formik = useFormik({
     initialValues: {
       reason: EMPTY,
@@ -27,7 +27,6 @@ const ReportYardModal = ({ toggleModal, yardId, onSave }) => {
     .then((res) => {
         toast.success("Report yard successfully", TOAST_CONFIG);
         toggleModal();
-        onSave();
     })
     .catch((error) => {
         toast.error(

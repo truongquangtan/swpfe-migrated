@@ -239,7 +239,7 @@ function VoucherManagementWidget() {
   const handleDeleteClick = () => {};
 
   return (
-    <div className="pt-5 mt-5 w-100">
+    <div className="pt-4 mt-5 w-100">
       <h4 className="mb-4 d-inline-block">
         <img src={coupon} alt="Yard" className="width-60 pe-3" />
         Voucher Management

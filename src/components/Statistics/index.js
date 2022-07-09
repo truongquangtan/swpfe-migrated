@@ -53,7 +53,7 @@ function Statistics() {
   };
 
   return (
-    <div className="pt-4 w-100">
+    <div className="pt-4 w-100 mt-5">
       <div className="d-flex justify-content-around">
         <div className="page-title">
           <h3>Statistics</h3>

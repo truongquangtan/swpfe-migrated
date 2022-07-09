@@ -173,9 +173,9 @@ function ManageReportsWidget() {
 
     return (
         <>
-            <div className="mt-4 w-100">
+            <div className="mt-5 pt-4 w-100">
                 <h4 className="mb-4 d-inline-block">
-                    <i className="fas fa-exclamation-triangle width-60 pe-3" />
+                    <i className="fas fa-exclamation-triangle me-3" />
                     Reports
                 </h4>
                 {isLoading ? (
@@ -193,15 +193,15 @@ function ManageReportsWidget() {
                         </p>
                     </div>
                 ) : (
-                    <table className="table">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{ width: "5%", textAlign: "center" }}>Action</th>
-                                <th scope="col">Reference</th>
+                                <th scope="col" style={{ width: "10%", textAlign: "center" }}>Action</th>
+                                <th scope="col" style={{ width: "10%" }}>Reference</th>
                                 <th scope="col">Yard</th>
-                                <th scope="col" style={{ width: "15%" }}>Status</th>
-                                <th scope="col" style={{ width: "10%" }}>
-                                    User Reported
+                                <th scope="col" style={{ width: "10%" }}>Status</th>
+                                <th scope="col">
+                                    Created By
                                 </th>
                                 <th scope="col">Created At</th>
                             </tr>
@@ -239,7 +239,9 @@ function ManageReportsWidget() {
                                             ) :
                                                 <></>}
                                         </td>
-                                        <td className="trash-icon bold" onClick={() => onReferenceClick(report)}>{report.reference}</td>
+                                        <td className="trash-icon" onClick={() => onReferenceClick(report)}>
+                                            <b>{report.reference}</b>
+                                        </td>
                                         <td>{report.yardName}</td>
                                         <td className={getColor(report.status)}>{report.status}</td>
                                         <td>{report.userName}</td>
