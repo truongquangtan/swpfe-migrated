@@ -82,7 +82,7 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
                   <img src={voucherImg} alt="basketball yard" />
                   <div className="yard-details p-3">
                     <b className="d-block mb-2">
-                      Discount {voucher.amountDiscount} VND
+                      Discount {voucher.discount} VND
                     </b>
                     <p
                       className="row mb-1"
@@ -150,7 +150,7 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
                   <img src={voucherImg} alt="basketball yard" />
                   <div className="yard-details p-3">
                     <b className="d-block mb-2">
-                      Discount {voucher.percentDiscount}%
+                      Discount {voucher.discount}%
                     </b>
                     <p
                       className="row mb-1"
