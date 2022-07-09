@@ -55,7 +55,7 @@ function HistoryWidget() {
   };
 
   return (
-    <div className="pt-5 mt-5 w-100 px-5">
+    <div className="pt-4 mt-5 w-100 px-5">
       <h4 className="mb-4 d-inline-block">
         <img src={transaction} alt="Transaction" className="width-60 pe-3" />
         Booking History

@@ -61,7 +61,7 @@ function YardRatingWidget() {
           handleSubmitPostSuccess={handleSubmitPostSuccess}
         />
       </Modal>
-      <div className="w-75 ps-4 pe-4 flex-column pt-5 mt-5 overflow-x-hidden m-auto">
+      <div className="w-75 ps-4 pe-4 flex-column pt-4 mt-5 overflow-x-hidden m-auto">
         <h4 className="text-center mb-5">
           <img src={ratingImg} alt="basketball" className="width-60 pe-3" />
           Rating

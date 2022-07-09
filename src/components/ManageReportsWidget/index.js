@@ -9,7 +9,8 @@ import empty from "../../assets/images/empty.png";
 import Pagination from "../Pagination";
 import DisableElement from "../DisableElement";
 import { getReports, markReportAsResolved } from "../../services/me.service";
-import { HANDLED, NOT_HANDLED } from "../../constants/reportStatus";
+import { HANDLED, PENDING, REJECTED } from "../../constants/reportStatus";
+import { rejectReport } from "../../services/me.service";
 
 function ManageReportsWidget() {
     const ITEMS_PER_PAGE = 10;
@@ -45,7 +46,8 @@ function ManageReportsWidget() {
 
     const getColor = (status) => {
         if (status === HANDLED) return "green bold";
-        else if (status === NOT_HANDLED) return "red bold";
+        else if (status === PENDING) return "yellow bold";
+        else if (status === REJECTED) return "red bold";
     };
 
     const maskAsResolved = (report) => {
@@ -58,39 +60,124 @@ function ManageReportsWidget() {
         });
     };
 
+    const rejectReportRequest = (report) => {
+        rejectReport(report.reportId).then(() => {
+            toast.success(
+                `Reject successfully.`,
+                TOAST_CONFIG
+            );
+            getAllReports(currentPage);
+        });
+    };
+
     const onSimpleClick = (title, question, callback) => {
         confirmAlert({
-          customUI: ({ onClose }) => {
-            return (
-              <div className="custom-confirm">
-                <h4>{title}</h4>
-                <p className="mb-3">{question}</p>
-                <button
-                  className="btn btn-primary me-3"
-                  onClick={() => {
-                    callback();
-                    onClose();
-                  }}
-                >
-                  Confirm
-                </button>
-                <button onClick={onClose} className="btn btn-light">
-                  Cancel
-                </button>
-              </div>
-            );
-          },
-          closeOnEscape: true,
-          closeOnClickOutside: true,
+            customUI: ({ onClose }) => {
+                return (
+                    <div className="custom-confirm">
+                        <h4>{title}</h4>
+                        <p className="mb-3">{question}</p>
+                        <button
+                            className="btn btn-primary me-3"
+                            onClick={() => {
+                                callback();
+                                onClose();
+                            }}
+                        >
+                            Confirm
+                        </button>
+                        <button onClick={onClose} className="btn btn-primary">
+                            Cancel
+                        </button>
+                    </div>
+                );
+            },
+            closeOnEscape: true,
+            closeOnClickOutside: true,
         });
-      };
+    };
+
+    const onReferenceClick = (report) => {
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className="report__details-form">
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Yard:</span>
+                            <span className="col-9">{report.yardName}</span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Address:</span>
+                            <span className="col-9">
+                                {report.yardAddress}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Owner:</span>
+                            <span className="col-9">
+                                {report.ownerName}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Owner Email:</span>
+                            <span className="col-9">
+                                {report.ownerEmail}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">User Reported:</span>
+                            <span className="col-9">
+                                {report.userName}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">User Email:</span>
+                            <span className="col-9">
+                                {report.userEmail}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Reason:</span>
+                            <span className="col-9">
+                                {report.reason}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Status:</span>
+                            <span className={"col-9 " + getColor(report.status)}>
+                                {report.status}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Created At:</span>
+                            <span className="col-9">
+                                {report.createdAt}
+                            </span>
+                        </div>
+                        <div className="row mb-1 report__details-field">
+                            <span className="col-3 fw-bolder">Updated At:</span>
+                            <span className="col-9">
+                                {report.updatedAt}
+                            </span>
+                        </div>
+                        <button onClick={onClose} className="btn btn-primary">
+                            Cancel
+                        </button>
+                    </div>
+                );
+            },
+            closeOnEscape: true,
+            closeOnClickOutside: true,
+        });
+    };
 
     return (
         <>
-            <div className="mt-4 w-100">
-                <h3 className="text-center mb-4">
-                    Yard Reports
-                </h3>
+            <div className="mt-5 pt-4 w-100">
+                <h4 className="mb-4 d-inline-block">
+                    <i className="fas fa-exclamation-triangle me-3" />
+                    Reports
+                </h4>
                 {isLoading ? (
                     <div
                         className="w-100 d-flex justify-content-center align-items-center"
@@ -98,7 +185,7 @@ function ManageReportsWidget() {
                     >
                         <DisableElement />
                     </div>
-                ) : !reports.length ? (
+                ) : (!reports || !reports.length) ? (
                     <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column h-300">
                         <img src={empty} style={{ width: 80 }} />
                         <p className="text-center nodata-text" style={{ fontSize: "0.9rem" }}>
@@ -106,56 +193,59 @@ function ManageReportsWidget() {
                         </p>
                     </div>
                 ) : (
-                    <table className="table">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{ width: "10%" }}>
-                                    User Reported
+                                <th scope="col" style={{ width: "10%", textAlign: "center" }}>Action</th>
+                                <th scope="col" style={{ width: "10%" }}>Reference</th>
+                                <th scope="col">Yard</th>
+                                <th scope="col" style={{ width: "10%" }}>Status</th>
+                                <th scope="col">
+                                    Created By
                                 </th>
-                                <th scope="col">Yard Name</th>
-                                <th scope="col" style={{ width: "10%" }}>
-                                    Address
-                                </th>
-                                <th scope="col">Reason</th>
-                                <th scope="col" style={{width: "12%"}}>Owner Email</th>
-                                <th scope="col" style={{ width: "15%" }}>Status</th>
                                 <th scope="col">Created At</th>
-                                <th scope="col">Updated At</th>
-                                <th scope="col" style={{width: "3%"}}></th>
                             </tr>
                         </thead>
                         <tbody>
                             {reports.map((report) => {
                                 return (
                                     <tr key={report.reportId}>
-                                        <td>{report.userName}</td>
-                                        <td>{report.yardName}</td>
-                                        <td
-                                            className="text-truncate"
-                                            title={report.yardAddress}
-                                        >
-                                            {report.yardAddress}
-                                        </td>
-                                        <td>{report.reason}</td>
-                                        <td>{report.ownerEmail}</td>
-                                        <td className={getColor(report.status)}>{report.status}</td>
-                                        <td>{report.createdAt}</td>
-                                        <td>{report.updatedAt}</td>
-                                        <td>
-                                            {report.status === NOT_HANDLED ? (
+                                        <td style={{ textAlign: "center" }}>
+                                            {report.status === PENDING ? (<>
                                                 <i
-                                                className="trash-icon fas fa-check-circle col-4"
-                                                title="Mask as handled"
-                                                onClick={() =>
-                                                    onSimpleClick(
-                                                        "Enable",
-                                                        `Are you sure to mask the report as resolved?`,
-                                                        () => maskAsResolved(report)
-                                                    )
-                                                }
-                                            ></i>
-                                            ) : <></>}
+                                                    className="trash-icon fas fa-check-circle col-4"
+                                                    title="Mask as handled"
+                                                    onClick={() =>
+                                                        onSimpleClick(
+                                                            "Enable",
+                                                            `Are you sure to mask the report as resolved?`,
+                                                            () => maskAsResolved(report)
+                                                        )
+                                                    }
+                                                ></i>
+                                                <span> </span>
+                                                <i
+                                                    className="fas fa-times trash-icon col-4"
+                                                    title="Reject"
+                                                    onClick={() =>
+                                                        onSimpleClick(
+                                                            "Enable",
+                                                            `Are you sure to reject the report`,
+                                                            () => rejectReportRequest(report)
+                                                        )
+                                                    }
+                                                ></i>
+                                            </>
+                                            ) :
+                                                <></>}
                                         </td>
+                                        <td className="trash-icon" onClick={() => onReferenceClick(report)}>
+                                            <b>{report.reference}</b>
+                                        </td>
+                                        <td>{report.yardName}</td>
+                                        <td className={getColor(report.status)}>{report.status}</td>
+                                        <td>{report.userName}</td>
+                                        <td>{report.createdAt}</td>
                                     </tr>
                                 );
                             })}

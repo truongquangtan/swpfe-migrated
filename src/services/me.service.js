@@ -98,8 +98,11 @@ export const updateProfile = async (file, values) => {
 export const markReportAsResolved = async (reportId) => {
   const credential = localStorage.getItem(encryptKey("credential"));
   const response = await axios.put(
-    `${SERVICE_URL}/v1/admin/reports/${reportId}`,
-    null
+    `${SERVICE_URL}/v1/admin/reports/${reportId}/handle`,
+    null,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
   );
   return response ? response.data : null;
 };
@@ -108,7 +111,16 @@ export const changePasswordRequest = async (values) => {
   const credential = localStorage.getItem(encryptKey("credential"));
   const response = await axios.post(
     `${SERVICE_URL}/v1/me/verify-password`,
-    values,
+    values
+  );
+  return response ? response.data : null;
+};
+
+export const rejectReport = async (reportId) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.put(
+    `${SERVICE_URL}/v1/admin/reports/${reportId}/reject`,
+    null,
     {
       headers: { Authorization: `Bearer ${decrypt(credential).token}` },
     }

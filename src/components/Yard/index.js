@@ -47,6 +47,7 @@ function Yard() {
   const [isBooking, setIsBooking] = useState(false);
   const [showVoucherStorageModal, toggleShowVoucherStorageModal] = useModal();
   const [showReportYardModal, toggleShowReportYardModal] = useModal();
+  const credential = localStorage.getItem(encryptKey("credential"));
 
   useEffect(() => {
     getYardById(id).then((res) => {
@@ -111,7 +112,6 @@ function Yard() {
   }, [voucherCode]);
 
   const onBooking = () => {
-    const credential = localStorage.getItem(encryptKey("credential"));
     if (!credential) {
       toast.error("Login to continue booking!", TOAST_CONFIG);
       localStorage.setItem(encryptKey("returnUrl"), location.pathname);
@@ -223,7 +223,8 @@ function Yard() {
                   {yard.openAt} - {yard.closeAt}
                 </span>
               </div>
-              <div className="report-ic-box">
+              {!!credential && (
+                <div className="report-ic-box">
                   <i
                     className="fas fa-exclamation-circle report-icon"
                     title="Report this yard"
@@ -231,7 +232,8 @@ function Yard() {
                       toggleShowReportYardModal();
                     }}
                   ></i>
-              </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="row justify-content-center my-5">
@@ -298,8 +300,8 @@ function Yard() {
                           slot.isBooked
                             ? "slot-details flex-column booked-slot"
                             : slot.isSelected
-                              ? "slot-details-clicked flex-column"
-                              : "slot-details flex-column"
+                            ? "slot-details-clicked flex-column"
+                            : "slot-details flex-column"
                         }
                         onClick={() => onSelectSlot(slot)}
                       >
@@ -486,16 +488,10 @@ function Yard() {
           }}
         />
       </Modal>
-      <Modal
-        isShowing={showReportYardModal}
-        hide={toggleShowReportYardModal}
-      >
+      <Modal isShowing={showReportYardModal} hide={toggleShowReportYardModal}>
         <ReportYardModal
           toggleModal={toggleShowReportYardModal}
           yardId={yard?.id}
-          onSave={() => {
-            //do nothing
-          }}
         />
       </Modal>
       <ToastContainer />

@@ -1,7 +1,9 @@
 const HANDLED = "HANDLED";
-const NOT_HANDLED = "NOT HANDLED YET";
+const PENDING = "PENDING";
+const REJECTED = "REJECTED";
 
 module.exports = {
     HANDLED,
-    NOT_HANDLED
+    PENDING,
+    REJECTED
 }

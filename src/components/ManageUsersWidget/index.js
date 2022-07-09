@@ -113,7 +113,7 @@ function ManageUsersWidget() {
           onSave={onSave}
         />
       </Modal>
-      <div className="pt-5 w-100 mt-5">
+      <div className="pt-4 w-100 mt-5">
         <div>
           <h4 className="mb-4 d-inline-block">
             <img src={userGroup} alt="User" className="width-60 pe-3" />
