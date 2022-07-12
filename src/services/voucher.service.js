@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SERVICE_URL } from "../constants/default";
+import { decrypt, encryptKey } from "../helpers/crypto.helper";
 
 export const searchVouchers = async (params, ownerId) => {
   const response = await axios.post(
@@ -16,3 +17,27 @@ export const calculateBookingList = async (voucherCode, bookingList) => {
   );
   return response ? response.data : null;
 };
+
+export const getAllVouchers = async (params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/owners/me/vouchers`,
+    params,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  )
+  return response ? response.data : null;
+} 
+
+export const createVoucher = async(params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.post(
+    `${SERVICE_URL}/v1/owners/me/vouchers/create`,
+    params,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  )
+  return response ? response.data : null;
+} 
