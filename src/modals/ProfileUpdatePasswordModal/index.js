@@ -17,9 +17,8 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
   const handleChangePasswordRequest = useCallback(async (values) => {
     try {
       const response = await changePasswordRequest(values);
-      localStorage.removeItem(encryptKey("credential"));
       localStorage.setItem(encryptKey("temporaryToken"), response.token);
-      navigate("/auth/reset-password");
+      navigate("reset-password");
     } catch (error) {
       toast.error(error?.response?.data?.message, {
         ...TOAST_CONFIG,
@@ -56,7 +55,7 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
             className="text-start"
             style={{ paddingLeft: 0 }}
           >
-            Your Password
+            Current Password
           </label>
           <span className="col-1 lh-44 signup__icon-wrapper">
             <i className="fas fa-user-lock"></i>
@@ -64,7 +63,7 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
           <input
             className="col-11 outline-none p-2 signup__input-border"
             type="password"
-            placeholder="Enter your password..."
+            placeholder="Enter current password"
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
@@ -76,15 +75,15 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
               : EMPTY}{" "}
           </span>
         </div>
-        <div className="mt-3 d-flex justify-content-center">
+        <div className="mt-3 row p-1">
           <button
             disabled={!formik.isValid | formik.isSubmitting}
             type="submit"
-            className="btn btn-primary px-4"
+            className="btn btn-primary me-3 col-3"
           >
             Confirm
           </button>
-          <div className="btn btn-light mx-4" onClick={toggleModal}>
+          <div className="btn btn-light col-3" onClick={toggleModal}>
             Cancel
           </div>
         </div>

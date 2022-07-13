@@ -137,7 +137,7 @@ function VoucherManagementWidget() {
    };
 
   return (
-    <div className="pt-5 mt-5 w-100">
+    <div className="pt-4 mt-5 w-100">
       <h4 className="mb-4 d-inline-block">
         <img src={coupon} alt="Yard" className="width-60 pe-3" />
         Voucher Management
@@ -164,7 +164,7 @@ function VoucherManagementWidget() {
         <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
         <b>Voucher $</b>
       </button>
-      <SearchBar />
+      {/* <SearchBar /> */}
       <table className="table table-striped">
         <thead>
           <tr>

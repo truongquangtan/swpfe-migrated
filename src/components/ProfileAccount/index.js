@@ -2,85 +2,69 @@ import { EMPTY, TOAST_CONFIG } from "../../constants/default";
 import "./style.scss";
 
 import { useFormik } from "formik";
+import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import * as yup from "yup";
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import ProfileUpdatePasswordModal from "../../modals/ProfileUpdatePasswordModal";
-import { updateProfile } from "../../services/me.service";
-import Modal, { useModal } from "../Modal";
 import { PHONE_PATTERN } from "../../constants/regex";
+import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
+import { updateProfile } from "../../services/me.service";
+
+const validation = yup.object({
+  fullName: yup
+    .string("Enter your full name")
+    .required("Full name is required")
+    .strict(true),
+  phone: yup
+    .string("Enter your phone")
+    .matches(PHONE_PATTERN, "Phone number is not valid"),
+});
 
 function ProfileAccount() {
-  const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
-  const navigate = useNavigate();
-
   const [currentUser] = useState(() => {
-    const credentials = localStorage.getItem(encryptKey("credential"));
-    if (credentials) {
-      return decrypt(credentials);
-    }
-    return null;
+    return decrypt(localStorage.getItem(encryptKey("credential")));
   });
 
-  const [avatarImage, setAvatarImage] = useState(() => {
-    const credentials = localStorage.getItem(encryptKey("credential"));
-    if (credentials) {
-      return {
-        file: null,
-        url: decrypt(credentials)?.avatar,
-        preview: null,
-      };
-    }
-    return {
-      file: null,
-      url: null,
-      preview: null,
-    };
+  const [avatarImage, setAvatarImage] = useState({
+    file: null,
+    url: null,
+    preview: null,
   });
 
-  const handleUploadAvatarOnChange = useCallback((file) => {
-    setAvatarImage((previousAvatar) => {
-      if (previousAvatar.preview) {
-        URL.revokeObjectURL(previousAvatar.preview);
-      }
-      return {
+  useEffect(() => {
+    if (currentUser) {
+      setAvatarImage((previousAvatar) => ({
         ...previousAvatar,
-        file: file,
-        preview: URL.createObjectURL(file),
-      };
-    });
-  }, []);
+        url: currentUser?.avatar,
+      }));
+    }
+  }, [currentUser]);
 
-  const handleUpdateProfile = useCallback(
-    async (values) => {
-      try {
-        const data = { phone: values.phone, fullName: values.fullName };
-        await updateProfile(avatarImage.file, JSON.stringify(data));
-        localStorage.removeItem(encryptKey("credential"));
-        navigate("/auth/login");
-      } catch (error) {
-        toast.error(error.response.data.message, {
-          ...TOAST_CONFIG,
-          containerId: "toast-profile-account",
-        });
-      }
-    },
-    [avatarImage]
-  );
+  const handleUploadAvatarOnChange = (file) => {
+    if (file) {
+      setAvatarImage((previousAvatar) => {
+        if (previousAvatar.preview) {
+          URL.revokeObjectURL(previousAvatar.preview);
+        }
+        return {
+          ...previousAvatar,
+          file: file,
+          preview: file ? URL.createObjectURL(file) : "",
+        };
+      });
+    }
+  };
 
-  const validation = yup.object({
-    fullName: yup
-      .string("Enter your full name")
-      .required("Full name is required")
-      .trim("Full name cannot include leading and trailing spaces")
-      .strict(true),
-    phone: yup
-      .string("Enter your phone")
-      .required("Phone is required")
-      .matches(PHONE_PATTERN, "Phone number is not valid"),
-  });
+  const handleUpdateProfile = async (values) => {
+    try {
+      const data = { phone: values.phone, fullName: values.fullName };
+      const response = await updateProfile(avatarImage.file, JSON.stringify(data));
+      toast.success("Update profile success!", TOAST_CONFIG)
+      localStorage.removeItem(encryptKey("credential"));
+      localStorage.setItem(encryptKey("credential"), encrypt(response));
+    } catch (error) {
+      toast.error(error.response.data.message, TOAST_CONFIG);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -96,20 +80,15 @@ function ProfileAccount() {
 
   return (
     <div className="container profile-wrapper">
-      <Modal
-        isShowing={showUpdatePasswordModal}
-        hide={setShowUpdatePasswordModal}
-      >
-        <ProfileUpdatePasswordModal toggleModal={setShowUpdatePasswordModal} />
-      </Modal>
-      <div className="d-flex">
+      <div className="d-flex w-100">
         <div className="col-4">
           <div className="profile-avatar-wrapper">
             <img
               className="mb-2 profile-avatar__img color-blur rounded-circle"
               src={avatarImage.preview || avatarImage.url}
+              alt="Your avatar"
             />
-            <label className="profile-avatar__upload-lable">
+            <div className="profile-avatar__upload-lable">
               <input
                 className="outline-none custom-bg-input p-0 w-100"
                 type="file"
@@ -117,10 +96,10 @@ function ProfileAccount() {
                   handleUploadAvatarOnChange(e.target.files[0]);
                 }}
               />
-            </label>
+            </div>
           </div>
         </div>
-        <div className="col-8 p-4">
+        <div className="col-8 p-4 ps-5">
           <div className="profile-info-wrapper">
             <h4 className="text-center">PROFILE USER</h4>
             <div>
@@ -199,35 +178,22 @@ function ProfileAccount() {
                       : EMPTY}{" "}
                   </span>
                 </div>
-                <div className="d-flex justify-content-end">
+                <div className="row mt-4 p-1">
                   <button
-                    className="rounded-pill border border-2"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowUpdatePasswordModal();
-                    }}
+                    className="btn btn-primary w-25 mt-2"
+                    disabled={!formik.isValid || formik.isSubmitting}
+                    type="submit"
+                    style={{height: 46}}
                   >
-                    Change Password
+                    Save
                   </button>
-                </div>
-                <div className="mt-3">
-                  <div className="d-flex">
-                    <button
-                      disabled={!formik.isValid || formik.isSubmitting}
-                      type="submit"
-                      className="btn btn-primary px-4"
-                    >
-                      Save
-                    </button>
-                    <div className="btn btn-light mx-4">Cancel</div>
-                  </div>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-      <ToastContainer containerId="toast-profile-account" />
+      <ToastContainer />
     </div>
   );
 }

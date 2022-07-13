@@ -1,7 +1,5 @@
 import React from "react";
-import { confirmAlert } from "react-confirm-alert";
 import { useState, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import empty from "../../assets/images/empty.png";
 
 import "./style.scss";
@@ -10,11 +8,30 @@ import transaction from "../../assets/images/transaction.png";
 import { getBookingHistory } from "../../services/me.service";
 import Pagination from "../Pagination";
 import { SUCCESS, FAILED, CANCELED } from "../../constants/bookingStatus";
-import { EMPTY } from "../../constants/default";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import { OWNER, USER } from "../../constants/roles";
+import { USER } from "../../constants/roles";
 import DisableElement from "../DisableElement";
 import SearchBar from "../SearchBar";
+
+const sortableFields = [
+  { value: "bigYardName", label: "Yard" },
+  { value: "price", label: "Price" },
+  { value: "createdAt", label: "Created Time" },
+];
+
+const filterableFields = [
+  {
+    label: "Status",
+    options: [
+      { value: "SUCCESS", label: "Success" },
+      { value: "FAILED", label: "Failed" },
+      { value: "CANCELED", label: "Canceled" },
+    ],
+    field: "bookingStatus",
+  },
+];
+
+const messageKey = "MANAGE_HISTORY_LIST";
 
 function HistoryWidget() {
   const ITEMS_PER_PAGE = 10;
@@ -22,17 +39,25 @@ function HistoryWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [maxPage, setMaxPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [criteria, setCriteria] = useState({});
 
   useEffect(() => {
     getHistoryBooking();
   }, []);
 
-  const getHistoryBooking = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
+  const getHistoryBooking = (
+    page = 1,
+    itemsPerPage = ITEMS_PER_PAGE,
+    criteria = {}
+  ) => {
     setIsLoading(true);
     const credential = localStorage.getItem(encryptKey("credential"));
     if (credential) {
       const role = decrypt(credential).role;
-      getBookingHistory({ page, itemsPerPage }, role === USER ? "me" : "owners")
+      getBookingHistory(
+        { page, itemsPerPage, ...criteria },
+        role === USER ? "me" : "owners/me"
+      )
         .then((res) => {
           setHistoryBookingModels(res.data);
           setMaxPage(
@@ -47,7 +72,7 @@ function HistoryWidget() {
     }
   };
   const onChangePage = (page) => {
-    getHistoryBooking(page);
+    getHistoryBooking(page, ITEMS_PER_PAGE, criteria);
     setCurrentPage(page);
   };
 
@@ -57,13 +82,23 @@ function HistoryWidget() {
     else if (status === CANCELED) return "yellow bold";
   };
 
+  const handleSearchBar = (criteria) => {
+    getHistoryBooking(1, ITEMS_PER_PAGE, criteria);
+    setCriteria(criteria || {});
+  };
+
   return (
-    <div className="pt-5 mt-5 w-100 px-5">
+    <div className="pt-4 mt-5 w-100 px-5">
       <h4 className="mb-4 d-inline-block">
         <img src={transaction} alt="Transaction" className="width-60 pe-3" />
         Booking History
       </h4>
-      <SearchBar />
+      <SearchBar
+          sortableFields={sortableFields}
+          filterableFields={filterableFields}
+          onSearch={handleSearchBar}
+          messageKey={messageKey}
+        />
       {isLoading ? (
         <div
           className="w-100 d-flex justify-content-center align-items-center"
@@ -149,8 +184,7 @@ function HistoryWidget() {
           </table>
         </>
       )}
-      <Pagination maxPage={maxPage} onChangePage={onChangePage} />
-      <ToastContainer />
+      <Pagination maxPage={maxPage} onChangePage={onChangePage} messageKey={messageKey}/>
     </div>
   );
 }

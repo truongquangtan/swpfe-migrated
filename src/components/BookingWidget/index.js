@@ -16,7 +16,6 @@ import { searchYard } from "../../services/yard.service";
 import yard1 from "../../assets/images/yard-1.jpg";
 import Pagination from "../Pagination";
 import DisableElement from "../DisableElement";
-import { getLatitudeLongitude } from "../../helpers/geocode.helper";
 
 function BookingWidget() {
   const ITEMS_PER_PAGE = 8;

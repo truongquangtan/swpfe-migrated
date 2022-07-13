@@ -2,6 +2,7 @@ import { confirmAlert } from "react-confirm-alert";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import * as _ from "lodash";
+import * as moment from "moment";
 
 import userGroup from "../../assets/images/user-group.png";
 import AddOwnerModal from "../../modals/AddOwnerModal";
@@ -14,6 +15,35 @@ import Pagination from "../Pagination";
 import DisableElement from "../DisableElement";
 import SearchBar from "../SearchBar";
 
+const sortableFields = [
+  { value: "email", label: "Email" },
+  { value: "phone", label: "Phone" },
+  { value: "fullName", label: "Display Name" },
+  { value: "isActive", label: "Status" },
+  { value: "createAt", label: "Created Time" },
+];
+
+const filterableFields = [
+  {
+    label: "Role",
+    options: [
+      { value: "owner", label: "Owner" },
+      { value: "user", label: "User" },
+    ],
+    field: "role",
+  },
+  {
+    label: "Status",
+    options: [
+      { value: true, label: "Active" },
+      { value: false, label: "Inactive" },
+    ],
+    field: "isActive",
+  },
+];
+
+const messageKey = "MANAGE_USER_LIST";
+
 function ManageUsersWidget() {
   const ITEMS_PER_PAGE = 10;
   const [showAddOwnerModal, toggleShowAddOwnerModal] = useModal();
@@ -22,6 +52,7 @@ function ManageUsersWidget() {
   const [maxPage, setMaxPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [account, setAccount] = useState(null);
+  const [criteria, setCriteria] = useState({});
 
   const onSimpleClick = (title, question, callback) => {
     confirmAlert({
@@ -75,9 +106,9 @@ function ManageUsersWidget() {
     toggleShowAddOwnerModal();
   };
 
-  const searchUsers = (page, itemsPerPage = ITEMS_PER_PAGE) => {
+  const searchUsers = (page, itemsPerPage = ITEMS_PER_PAGE, criteria = {}) => {
     setIsLoading(true);
-    searchAllUsers({ page, itemsPerPage })
+    searchAllUsers({ page, itemsPerPage, ...criteria })
       .then((res) => {
         setAccounts(res.accounts);
         setMaxPage(
@@ -86,6 +117,10 @@ function ManageUsersWidget() {
             : Math.floor(res.maxResult / ITEMS_PER_PAGE) + 1
         );
       })
+      .catch((error) => {
+        setAccounts([]);
+        setMaxPage(1);
+      })
       .finally(() => {
         setIsLoading(false);
       });
@@ -93,7 +128,7 @@ function ManageUsersWidget() {
 
   const onChangePage = (page) => {
     setCurrentPage(page);
-    searchUsers(page);
+    searchUsers(page, ITEMS_PER_PAGE, criteria);
   };
 
   useEffect(() => {
@@ -102,6 +137,11 @@ function ManageUsersWidget() {
 
   const onSave = () => {
     searchUsers(currentPage);
+  };
+
+  const handleSearchBar = (criteria) => {
+    searchUsers(1, ITEMS_PER_PAGE, criteria);
+    setCriteria(criteria || {});
   };
 
   return (
@@ -113,13 +153,12 @@ function ManageUsersWidget() {
           onSave={onSave}
         />
       </Modal>
-      <div className="pt-5 w-100 mt-5">
+      <div className="pt-4 w-100 mt-5">
         <div>
           <h4 className="mb-4 d-inline-block">
             <img src={userGroup} alt="User" className="width-60 pe-3" />
             Users
           </h4>
-          <SearchBar />
           <button
             className="btn btn-primary px-4 ms-5"
             onClick={() => onInviteClick(null)}
@@ -131,6 +170,12 @@ function ManageUsersWidget() {
             <b>Add Owner</b>
           </button>
         </div>
+        <SearchBar
+          sortableFields={sortableFields}
+          filterableFields={filterableFields}
+          onSearch={handleSearchBar}
+          messageKey={messageKey}
+        />
         {isLoading && (
           <div className="w-100 d-flex justify-content-center pt-5">
             <DisableElement />
@@ -211,14 +256,20 @@ function ManageUsersWidget() {
                     >
                       {account.isActive ? "ACTIVE" : "INACTIVE"}
                     </td>
-                    <td>{account.createAt}</td>
+                    <td>
+                      {moment(account.createAt).format("DD/MM/yyyy HH:mm")}
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
         )}
-        <Pagination maxPage={maxPage} onChangePage={onChangePage} />
+        <Pagination
+          maxPage={maxPage}
+          onChangePage={onChangePage}
+          messageKey={messageKey}
+        />
       </div>
       <ToastContainer />
     </>

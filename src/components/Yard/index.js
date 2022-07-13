@@ -26,6 +26,8 @@ import VoucherStorageModal from "../../modals/VoucherStorageModal";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { calculateBookingList } from "../../services/voucher.service";
 
+import ReportYardModal from "../../modals/ReportYardModal";
+
 function Yard() {
   const { id } = useParams();
   const container = useRef(null);
@@ -36,7 +38,7 @@ function Yard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [slideImages, setSlideImages] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSubYard, setSelectedSubYard] = useState(null);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [slots, setSlots] = useState([]);
@@ -44,6 +46,8 @@ function Yard() {
   const [voucherCode, setVoucherCode] = useState(EMPTY);
   const [isBooking, setIsBooking] = useState(false);
   const [showVoucherStorageModal, toggleShowVoucherStorageModal] = useModal();
+  const [showReportYardModal, toggleShowReportYardModal] = useModal();
+  const credential = localStorage.getItem(encryptKey("credential"));
 
   useEffect(() => {
     getYardById(id).then((res) => {
@@ -108,7 +112,6 @@ function Yard() {
   }, [voucherCode]);
 
   const onBooking = () => {
-    const credential = localStorage.getItem(encryptKey("credential"));
     if (!credential) {
       toast.error("Login to continue booking!", TOAST_CONFIG);
       localStorage.setItem(encryptKey("returnUrl"), location.pathname);
@@ -165,6 +168,7 @@ function Yard() {
           yardName: subYard.name,
           yardType: subYard.typeYard,
           slotId: slot.id,
+          originalPrice: slot.price,
         };
         setBooking([newBooking, ...booking]);
         setTotal(total + slot.price);
@@ -200,7 +204,7 @@ function Yard() {
                 ))}
               </Slide>
             </div>
-            <div className="col-4 ps-4 pe-4 pt-5 flex-column">
+            <div className="col-4 ps-4 pe-4 pt-5 flex-column position-relative">
               <div className="text-center mb-4">
                 <b className="size-2 d-block mb-2">{yard.name}</b>
                 <Rating
@@ -219,6 +223,17 @@ function Yard() {
                   {yard.openAt} - {yard.closeAt}
                 </span>
               </div>
+              {!!credential && (
+                <div className="report-ic-box">
+                  <i
+                    className="fas fa-exclamation-circle report-icon"
+                    title="Report this yard"
+                    onClick={() => {
+                      toggleShowReportYardModal();
+                    }}
+                  ></i>
+                </div>
+              )}
             </div>
           </div>
           <div className="row justify-content-center my-5">
@@ -261,7 +276,9 @@ function Yard() {
                     }}
                     disabled={voucherCode}
                   >
-                    <option value="">Select yard</option>
+                    <option value="" disabled selected>
+                      Select yard
+                    </option>
                     {yard.subYards.map((sub) => (
                       <option
                         key={sub.id}
@@ -410,7 +427,7 @@ function Yard() {
                       <p>
                         <b>{item.price} VND</b>
                         <br />
-                        {!!item.originalPrice && (
+                        {!!item.originalPrice && voucherCode && (
                           <span
                             className="original-price"
                             style={{ fontSize: "0.9rem" }}
@@ -428,7 +445,7 @@ function Yard() {
                 <div className="col-9 text-end">
                   <b>{total} VND</b>
                   <br />
-                  {!!originalTotal && (
+                  {!!originalTotal && voucherCode && (
                     <span
                       className="original-price"
                       style={{ fontSize: "0.9rem" }}
@@ -471,6 +488,12 @@ function Yard() {
           onSelect={(code) => {
             setVoucherCode(code);
           }}
+        />
+      </Modal>
+      <Modal isShowing={showReportYardModal} hide={toggleShowReportYardModal}>
+        <ReportYardModal
+          toggleModal={toggleShowReportYardModal}
+          yardId={yard?.id}
         />
       </Modal>
       <ToastContainer />

@@ -25,6 +25,7 @@ import ResetPassword from "./pages/ResetPassword";
 import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
 import Statistics from "./components/Statistics";
+import ManageReportsWidget from "./components/ManageReportsWidget";
 
 function App() {
   return (
@@ -44,8 +45,12 @@ function App() {
               element={<AccountVerification />}
             ></Route>
             <Route path="/history" element={<HistoryWidget />}></Route>
-
             <Route path="/me" element={<ProfileAccount />}></Route>
+            <Route
+              exact
+              path="reset-password"
+              element={<ResetPassword />}
+            ></Route>
           </Route>
 
           <Route exact path="/auth" element={<AuthPage />}>
@@ -77,12 +82,17 @@ function App() {
             ></Route>
             <Route path="/owner/history" element={<HistoryWidget />}></Route>
             <Route
-              path="/owner/match-management"
+              path="/owner/booking-management"
               element={<MatchManagementWidget />}
             ></Route>
 
             <Route path="/owner/statistics" element={<Statistics />}></Route>
             <Route path="/owner/me" element={<ProfileAccount />}></Route>
+            <Route
+              exact
+              path="reset-password"
+              element={<ResetPassword />}
+            ></Route>
           </Route>
 
           <Route exact path="/admin" element={<HomePage />}>
@@ -97,7 +107,16 @@ function App() {
               element={<IncomingMatchesWidget />}
             ></Route>
             <Route path="/admin/users" element={<ManageUsersWidget />}></Route>
+            <Route
+              path="/admin/reports"
+              element={<ManageReportsWidget />}
+            ></Route>
             <Route path="/admin/me" element={<ProfileAccount />}></Route>
+            <Route
+              exact
+              path="reset-password"
+              element={<ResetPassword />}
+            ></Route>
           </Route>
           <Route path="*" element={<NotFoundPage />}></Route>
         </Routes>
