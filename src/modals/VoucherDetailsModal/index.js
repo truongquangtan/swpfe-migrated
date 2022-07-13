@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import { TOAST_CONFIG } from '../../constants/default';
-import { createVoucher } from '../../services/voucher.service';
+import { EMPTY, TOAST_CONFIG } from '../../constants/default';
+import { VOUCHER_TYPE } from '../../constants/voucher';
+import { createVoucher, saveVoucherChanges } from '../../services/voucher.service';
 
-const VoucherPercentDetaillModal = ({ voucher, toggleModal, voucherTypeCreate, reloadListVoucherState }) => {
-
+const VoucherDetailsModal = ({voucher, toggleModal, voucherTypeCreate, reloadListVoucherState }) => {
 	const [currentVoucher, setCurrentVoucher] = useState({})
-
 	useEffect(() => {
 		const initVoucherValue = {
+			"id": voucher ? voucher.id : "",
+			"reference": voucher ? voucher.reference : "",
+			"voucherCode": voucher ? voucher.voucherCode : "",
+			"createdAt": voucher ? voucher.createdAt : "",
+			"usages": voucher ? voucher.usages : 0,
+			"description": voucher ? voucher.description : "",
 			"type": voucher ? voucher.type : voucherTypeCreate,
-			"title":  voucher ? voucher.title : "",
+			"title":  voucher ? voucher.title : EMPTY,
 			"description": voucher ? voucher.description : "",
 			"discount":  voucher ? voucher.discount : 1,
 			"maxQuantity":  voucher ? voucher.maxQuantity : 1,
-			"startDate":  voucher ? voucher.startDate : null,
-			"endDate":  voucher ? voucher.endDate : null,
+			"status": voucher ? voucher.status : "",
+			"startDate":  voucher ? new Date(voucher?.startDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
+			"endDate":  voucher ?  new Date(voucher?.endDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
+			"isActive": true,
+			"createdByAccountId": voucher ? voucher.createdByAccountId : null,
 		}
 		setCurrentVoucher(initVoucherValue)
-	}, [])
+	}, [voucher, voucherTypeCreate])
 
 	const handleVoucherOnChange = (event) => {
 		const { name, value } = event.target;
@@ -28,21 +36,27 @@ const VoucherPercentDetaillModal = ({ voucher, toggleModal, voucherTypeCreate, r
 		}))
 	}
 
-	const handleCreateVoucher = async () => {
+	const handleSubmitVoucher = async () => {
 		const startDate = convertFormatDate(currentVoucher.startDate);
 		const endDate = convertFormatDate(currentVoucher.endDate);
-		const voucher = {
+		const voucherValues = {
 			...currentVoucher,
 			startDate,
 			endDate
 		}
-		if(!voucher.startDate || !voucher.endDate){
+		if(!voucherValues.startDate || !voucherValues.endDate){
 			toast.warn("Start and end date did not empty!", TOAST_CONFIG);
 		}
 
 		try{
-			const response = await createVoucher(voucher);
-			toast.success(response.message, TOAST_CONFIG);
+			if(voucher){
+				const response = await saveVoucherChanges(voucherValues);
+				console.log(response);
+				toast.success(response.message, TOAST_CONFIG);
+			}else{
+				const response = await createVoucher(voucherValues);
+				toast.success(response.message, TOAST_CONFIG);
+			}
 			reloadListVoucherState()
 			toggleModal()
 		}catch(error){
@@ -56,12 +70,12 @@ const VoucherPercentDetaillModal = ({ voucher, toggleModal, voucherTypeCreate, r
 		<div className="custom-confirm" style={{ width: "600px" }}>
 			<h4>{voucher ? "Voucher Details" : "Create Voucher"}</h4>
 			<div>
-				<form className="my-3" onSubmit={(e) => {e.preventDefault(); handleCreateVoucher()}}>
+				<form className="my-3" onSubmit={(e) => {e.preventDefault(); handleSubmitVoucher()}}>
 					<div className="row p-2">
 						<span
 							className="col-1 lh-44 signup__icon-wrapper"
 						>
-							<i class="fas fa-heading"></i>
+							<i className="fas fa-heading"></i>
 						</span>
 						<input
 							className="col-11 outline-none p-2 signup__input-border"
@@ -73,24 +87,27 @@ const VoucherPercentDetaillModal = ({ voucher, toggleModal, voucherTypeCreate, r
 							required
 						/>
 					</div>
+
 					<div className="row p-2">
 						<span
 							className="col-1 lh-44 signup__icon-wrapper"
 							title="Code"
 						>
-							<b>%</b>
+							{(currentVoucher.type === VOUCHER_TYPE.PERCENT) && <b>%</b>}
+							{(currentVoucher.type === VOUCHER_TYPE.CASH) && <i className="fas fa-money-bill-wave"></i>}
 						</span>
 						<input
 							className="col-11 outline-none p-2 signup__input-border"
 							type="number"
-							placeholder="Discount percent (%)"
+							placeholder={(voucherTypeCreate === VOUCHER_TYPE.PERCENT) ? "Discount percent (%) :" : "Amount discount ...VND"}
 							name='discount'
 							value={currentVoucher.discount}
 							onChange={(e) => handleVoucherOnChange(e)}
 							min="1"
-							max="100"
+							max={(voucherTypeCreate === VOUCHER_TYPE.PERCENT) ? 100 : Number.MAX_SAFE_INTEGER}
 						/>
 					</div>
+
 					<div className="row p-2">
 						<span
 							className="col-1 lh-44 signup__icon-wrapper"
@@ -120,7 +137,6 @@ const VoucherPercentDetaillModal = ({ voucher, toggleModal, voucherTypeCreate, r
 							type="date"
 							placeholder="Start date ..."
 							required
-
 							value={currentVoucher.startDate}
 							name='startDate'
 							onChange={(e) => handleVoucherOnChange(e)}
@@ -159,4 +175,4 @@ const VoucherPercentDetaillModal = ({ voucher, toggleModal, voucherTypeCreate, r
 	)
 }
 
-export default VoucherPercentDetaillModal
+export default VoucherDetailsModal

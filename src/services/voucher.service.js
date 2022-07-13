@@ -41,3 +41,16 @@ export const createVoucher = async(params) => {
   )
   return response ? response.data : null;
 } 
+
+export const saveVoucherChanges = async(params) => {
+  const credential = localStorage.getItem(encryptKey("credential"));
+  const response = await axios.put(
+    `${SERVICE_URL}/v1/owners/me/vouchers/update`,
+    params,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
+  )
+  return response ? response.data : null;
+} 
+

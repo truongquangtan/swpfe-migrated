@@ -4,17 +4,20 @@ import { confirmAlert } from "react-confirm-alert";
 import "./style.scss";
 import coupon from "../../assets/images/coupon.png";
 import SearchBar from "../SearchBar";
-import { getAllVouchers } from "../../services/voucher.service";
+import { getAllVouchers, saveVoucherChanges } from "../../services/voucher.service";
 import Modal, { useModal } from "../Modal";
-import VoucherDetaillModal from "../../modals/VoucherPercentDetailsModal/VoucherDetaillModal";
-import VoucherPercentDetaillModal from "../../modals/VoucherPercentDetailsModal/VoucherDetaillModal";
-import VOUCHER_TYPE from "../../constants/voucher";
+import { VOUCHER_STATUS, VOUCHER_TYPE } from "../../constants/voucher";
+import VoucherDetailsModal from "../../modals/VoucherDetailsModal";
+import { toast } from "react-toastify";
+import { TOAST_CONFIG } from "../../constants/default";
 
 function VoucherManagementWidget() {
   const [vouchers, setVouchers] = useState([]);
-  const [toggleCreateVoucherModal, setToggleCreateVoucherModal] = useModal(false);
+  const [voucherSelected, setVoucherSelected] = useState();
   const [voucherTypeCreate, setVoucherTypeCreate] = useState();
+  const [toggleCreateVoucherModal, setToggleCreateVoucherModal] = useModal(false);
   const [reloadListVoucher, setReloadListVoucher] = useState(false);
+  
   const handleToggleVoucherModal = () => {
     setToggleCreateVoucherModal(state => !state);
   }
@@ -26,7 +29,7 @@ function VoucherManagementWidget() {
         const { vouchers } = response;
         setVouchers(vouchers);
       } catch (error) {
-        console.log(error);
+        toast.error("Server internal error!", TOAST_CONFIG)
       }
     }
     fetchVouchers();
@@ -40,7 +43,7 @@ function VoucherManagementWidget() {
           const { vouchers } = response;
           setVouchers(vouchers);
         } catch (error) {
-          console.log(error);
+          toast.error("Server internal error!", TOAST_CONFIG)
         }
       }
       fetchVouchers();
@@ -52,7 +55,7 @@ function VoucherManagementWidget() {
     setReloadListVoucher(true)
   }
 
-  const onSimpleClick = (title, question, callback) => {
+  const onSimpleClick = (title, question, voucher, callback) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
@@ -61,8 +64,8 @@ function VoucherManagementWidget() {
             <p className="mb-3">{question}</p>
             <button
               className="btn btn-primary me-3"
-              onClick={() => {
-                callback();
+              onClick={async () => {
+                await callback(voucher);
                 onClose();
               }}
             >
@@ -79,211 +82,59 @@ function VoucherManagementWidget() {
     });
   };
 
-  const onUpdatePercentClick = (voucher) => {
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className="custom-confirm" style={{ width: "600px" }}>
-            <h4>{voucher ? "Voucher Details" : "Create Voucher"}</h4>
-            <div>
-              <form className="my-3">
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Code"
-                  >
-                    <i className="fas fa-address-card"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="text"
-                    placeholder="Code"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Code"
-                  >
-                    <b>%</b>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="number"
-                    placeholder="Amount(%)"
-                    min="1"
-                    max="100"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Code"
-                  >
-                    <i className="fas fa-tags"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="number"
-                    placeholder="Quantity"
-                    min="1"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Start Date"
-                  >
-                    <i className="far fa-clock"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="date"
-                    placeholder="Date"
-                    required
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="End Date"
-                  >
-                    <i className="far fa-clock"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="date"
-                    placeholder="Date"
-                    required
-                  />
-                </div>
-              </form>
-            </div>
-            <button
-              className="btn btn-primary me-3 px-4"
-              onClick={() => {
-                this.handleClickDelete();
-                onClose();
-              }}
-            >
-              {voucher ? "Save" : "Create"}
-            </button>
-            <button onClick={onClose} className="btn btn-light">
-              Cancel
-            </button>
-          </div>
-        );
-      },
-      closeOnEscape: true,
-      closeOnClickOutside: true,
-    });
+  const showVoucherDetailsModal = (voucher) => {
+    setVoucherTypeCreate(undefined)
+    setVoucherSelected(voucher)
+    handleToggleVoucherModal()
+  }
+
+  const handleDisableVoucher = async (voucher) => {
+    const voucherValues = {
+      ...voucher,
+      "isActive": false,
+      "status": VOUCHER_STATUS.INACTIVE
+    }
+
+    try{
+      const response = await saveVoucherChanges(voucherValues);
+      toast.success(response.message, TOAST_CONFIG)
+      setReloadListVoucher(true)
+    }catch(error){
+      toast.error("Disable voucher failed!", TOAST_CONFIG)
+    }
   };
 
-  const onUpdateCashClick = (voucher) => {
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className="custom-confirm" style={{ width: "600px" }}>
-            <h4>{voucher ? "Voucher Details" : "Create Voucher"}</h4>
-            <div>
-              <form className="my-3">
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Code"
-                  >
-                    <i className="fas fa-address-card"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="text"
-                    placeholder="Code"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Code"
-                  >
-                    <b>$</b>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="number"
-                    placeholder="Amount($)"
-                    min="0"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Code"
-                  >
-                    <i className="fas fa-tags"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="number"
-                    placeholder="Quantity"
-                    min="1"
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="Start Date"
-                  >
-                    <i className="far fa-clock"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="date"
-                    placeholder="Date"
-                    required
-                  />
-                </div>
-                <div className="row p-2">
-                  <span
-                    className="col-1 lh-44 signup__icon-wrapper"
-                    title="End Date"
-                  >
-                    <i className="far fa-clock"></i>
-                  </span>
-                  <input
-                    className="col-11 outline-none p-2 signup__input-border"
-                    type="date"
-                    placeholder="Date"
-                    required
-                  />
-                </div>
-              </form>
-            </div>
-            <button
-              className="btn btn-primary me-3 px-4"
-              onClick={() => {
-                this.handleClickDelete();
-                onClose();
-              }}
-            >
-              {voucher ? "Save" : "Create"}
-            </button>
-            <button onClick={onClose} className="btn btn-light">
-              Cancel
-            </button>
-          </div>
-        );
-      },
-      closeOnEscape: true,
-      closeOnClickOutside: true,
-    });
-  };
+  const handleEnableVoucher = async (voucher) => {
+    const voucherValues = {
+      ...voucher,
+      "isActive": true,
+      "status": VOUCHER_STATUS.ACTIVE
+    }
 
-  const handleDisableYard = () => { };
+    try{
+      const response = await saveVoucherChanges(voucherValues);
+      toast.success(response.message, TOAST_CONFIG)
+      setReloadListVoucher(true)
+    }catch(error){
+      toast.error("Enable voucher failed!", TOAST_CONFIG)
+    }
+   };
 
-  const handleEnableYard = () => { };
+  const handleDeleteVoucher = async (voucher) => {
+    const voucherValues = {
+      ...voucher,
+      "isActive": false,
+      "status": VOUCHER_STATUS.DELETED
+    }
 
-  const handleDeleteClick = () => { };
-  console.log(toggleCreateVoucherModal);
+    try{
+      const response = await saveVoucherChanges(voucherValues);
+      toast.success(response.message, TOAST_CONFIG)
+      setReloadListVoucher(true)
+    }catch(error){
+      toast.error("Deleted voucher failed!", TOAST_CONFIG)
+    }
+   };
 
   return (
     <div className="pt-5 mt-5 w-100">
@@ -295,6 +146,7 @@ function VoucherManagementWidget() {
         className="btn btn-primary px-4 ms-5"
         onClick={() => {
           setVoucherTypeCreate(VOUCHER_TYPE.PERCENT)
+          setVoucherSelected(undefined);
           handleToggleVoucherModal();
         }}
       >
@@ -303,6 +155,11 @@ function VoucherManagementWidget() {
       </button>
       <button
         className="btn btn-primary px-4 ms-3"
+        onClick={() => {
+          setVoucherTypeCreate(VOUCHER_TYPE.CASH)
+          setVoucherSelected(undefined);
+          handleToggleVoucherModal();
+        }}
       >
         <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
         <b>Voucher $</b>
@@ -336,7 +193,8 @@ function VoucherManagementWidget() {
                     onSimpleClick(
                       "Delete",
                       "Are you sure to delete this voucher permanently?",
-                      handleDeleteClick
+                      voucher,
+                      handleDeleteVoucher
                     )
                   }
                 ></i>
@@ -347,7 +205,8 @@ function VoucherManagementWidget() {
                     onSimpleClick(
                       "Disable",
                       "Are you sure to disable this voucher?",
-                      handleDisableYard
+                      voucher,
+                      handleDisableVoucher
                     )
                   }
                 ></i>
@@ -358,17 +217,18 @@ function VoucherManagementWidget() {
                     onSimpleClick(
                       "Enable",
                       "Are you sure to activate this voucher?",
-                      handleEnableYard
+                      voucher,
+                      handleEnableVoucher
                     )
                   }
                 ></i>
               </td>
 
               <td>
-                <b className="trash-icon" onClick={onUpdatePercentClick}>{voucher.reference}</b>
+                <b className="trash-icon" onClick={() => showVoucherDetailsModal(voucher)}>{voucher.reference}</b>
               </td>
               <td>
-                <p onClick={onUpdatePercentClick}>{voucher.title}</p>
+                <p onClick={() => showVoucherDetailsModal(voucher)}>{voucher.title}</p>
               </td>
               <td className="text-truncate">{voucher.voucherCode}</td>
               <td>
@@ -400,7 +260,12 @@ function VoucherManagementWidget() {
         </div>
       </div>
       <Modal isShowing={toggleCreateVoucherModal} hide={handleToggleVoucherModal}>
-        {(voucherTypeCreate && voucherTypeCreate === VOUCHER_TYPE.PERCENT) && <VoucherPercentDetaillModal reloadListVoucherState={reloadListVoucherState} voucherTypeCreate={voucherTypeCreate} toggleModal={handleToggleVoucherModal} />}
+        <VoucherDetailsModal
+         reloadListVoucherState={reloadListVoucherState} 
+         voucherTypeCreate={voucherTypeCreate} 
+         toggleModal={handleToggleVoucherModal} 
+         voucher={voucherSelected}
+        />
       </Modal>
     </div>
   );
