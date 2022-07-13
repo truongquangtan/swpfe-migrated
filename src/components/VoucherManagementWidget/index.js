@@ -4,23 +4,60 @@ import { confirmAlert } from "react-confirm-alert";
 import "./style.scss";
 import coupon from "../../assets/images/coupon.png";
 import SearchBar from "../SearchBar";
-import { getAllVouchers, saveVoucherChanges } from "../../services/voucher.service";
+import {
+  getAllVouchers,
+  saveVoucherChanges,
+} from "../../services/voucher.service";
 import Modal, { useModal } from "../Modal";
 import { VOUCHER_STATUS, VOUCHER_TYPE } from "../../constants/voucher";
 import VoucherDetailsModal from "../../modals/VoucherDetailsModal";
 import { toast } from "react-toastify";
 import { TOAST_CONFIG } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+
+const sortableFields = [
+  { value: "voucherCode", label: "Voucher Code" },
+  { value: "reference", label: "Reference" },
+  { value: "type", label: "Type" },
+  { value: "startDate", label: "Start Date" },
+  { value: "endDate", label: "End Date" },
+  { value: "maxQuantity", label: "Quantity" },
+];
+
+const filterableFields = [
+  {
+    label: "Status",
+    options: [
+      { value: "expired", label: "Expired" },
+      { value: "active", label: "Active" },
+      { value: "inactive", label: "Inactive" },
+    ],
+    field: "status",
+  },
+  {
+    label: "Type",
+    options: [
+      { value: "percent", label: "Percent (%)" },
+      { value: "cash", label: "Cash (VND)" },
+    ],
+    field: "type",
+  },
+];
+
+const messageKey = "MANAGE_VOUCHER_LIST";
 
 function VoucherManagementWidget() {
   const [vouchers, setVouchers] = useState([]);
   const [voucherSelected, setVoucherSelected] = useState();
   const [voucherTypeCreate, setVoucherTypeCreate] = useState();
-  const [toggleCreateVoucherModal, setToggleCreateVoucherModal] = useModal(false);
+  const [toggleCreateVoucherModal, setToggleCreateVoucherModal] =
+    useModal(false);
   const [reloadListVoucher, setReloadListVoucher] = useState(false);
-  
+  const [criteria, setCriteria] = useState({});
+
   const handleToggleVoucherModal = () => {
-    setToggleCreateVoucherModal(state => !state);
-  }
+    setToggleCreateVoucherModal((state) => !state);
+  };
 
   useEffect(() => {
     const fetchVouchers = async () => {
@@ -29,11 +66,11 @@ function VoucherManagementWidget() {
         const { vouchers } = response;
         setVouchers(vouchers);
       } catch (error) {
-        toast.error("Server internal error!", TOAST_CONFIG)
+        toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG);
       }
-    }
+    };
     fetchVouchers();
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (reloadListVoucher) {
@@ -43,17 +80,17 @@ function VoucherManagementWidget() {
           const { vouchers } = response;
           setVouchers(vouchers);
         } catch (error) {
-          toast.error("Server internal error!", TOAST_CONFIG)
+          toast.error("Server internal error!", TOAST_CONFIG);
         }
-      }
+      };
       fetchVouchers();
-      setReloadListVoucher(false)
+      setReloadListVoucher(false);
     }
-  }, [reloadListVoucher])
+  }, [reloadListVoucher]);
 
   const reloadListVoucherState = () => {
-    setReloadListVoucher(true)
-  }
+    setReloadListVoucher(true);
+  };
 
   const onSimpleClick = (title, question, voucher, callback) => {
     confirmAlert({
@@ -83,58 +120,58 @@ function VoucherManagementWidget() {
   };
 
   const showVoucherDetailsModal = (voucher) => {
-    setVoucherTypeCreate(undefined)
-    setVoucherSelected(voucher)
-    handleToggleVoucherModal()
-  }
+    setVoucherTypeCreate(undefined);
+    setVoucherSelected(voucher);
+    handleToggleVoucherModal();
+  };
 
   const handleDisableVoucher = async (voucher) => {
     const voucherValues = {
       ...voucher,
-      "isActive": false,
-      "status": VOUCHER_STATUS.INACTIVE
-    }
+      isActive: false,
+      status: VOUCHER_STATUS.INACTIVE,
+    };
 
-    try{
+    try {
       const response = await saveVoucherChanges(voucherValues);
-      toast.success(response.message, TOAST_CONFIG)
-      setReloadListVoucher(true)
-    }catch(error){
-      toast.error("Disable voucher failed!", TOAST_CONFIG)
+      toast.success(response.message, TOAST_CONFIG);
+      setReloadListVoucher(true);
+    } catch (error) {
+      toast.error("Disable voucher failed!", TOAST_CONFIG);
     }
   };
 
   const handleEnableVoucher = async (voucher) => {
     const voucherValues = {
       ...voucher,
-      "isActive": true,
-      "status": VOUCHER_STATUS.ACTIVE
-    }
+      isActive: true,
+      status: VOUCHER_STATUS.ACTIVE,
+    };
 
-    try{
+    try {
       const response = await saveVoucherChanges(voucherValues);
-      toast.success(response.message, TOAST_CONFIG)
-      setReloadListVoucher(true)
-    }catch(error){
-      toast.error("Enable voucher failed!", TOAST_CONFIG)
+      toast.success(response.message, TOAST_CONFIG);
+      setReloadListVoucher(true);
+    } catch (error) {
+      toast.error("Enable voucher failed!", TOAST_CONFIG);
     }
-   };
+  };
 
   const handleDeleteVoucher = async (voucher) => {
     const voucherValues = {
       ...voucher,
-      "isActive": false,
-      "status": VOUCHER_STATUS.DELETED
-    }
+      isActive: false,
+      status: VOUCHER_STATUS.DELETED,
+    };
 
-    try{
+    try {
       const response = await saveVoucherChanges(voucherValues);
-      toast.success(response.message, TOAST_CONFIG)
-      setReloadListVoucher(true)
-    }catch(error){
-      toast.error("Deleted voucher failed!", TOAST_CONFIG)
+      toast.success(response.message, TOAST_CONFIG);
+      setReloadListVoucher(true);
+    } catch (error) {
+      toast.error("Deleted voucher failed!", TOAST_CONFIG);
     }
-   };
+  };
 
   return (
     <div className="pt-4 mt-5 w-100">
@@ -145,7 +182,7 @@ function VoucherManagementWidget() {
       <button
         className="btn btn-primary px-4 ms-5"
         onClick={() => {
-          setVoucherTypeCreate(VOUCHER_TYPE.PERCENT)
+          setVoucherTypeCreate(VOUCHER_TYPE.PERCENT);
           setVoucherSelected(undefined);
           handleToggleVoucherModal();
         }}
@@ -156,7 +193,7 @@ function VoucherManagementWidget() {
       <button
         className="btn btn-primary px-4 ms-3"
         onClick={() => {
-          setVoucherTypeCreate(VOUCHER_TYPE.CASH)
+          setVoucherTypeCreate(VOUCHER_TYPE.CASH);
           setVoucherSelected(undefined);
           handleToggleVoucherModal();
         }}
@@ -164,26 +201,33 @@ function VoucherManagementWidget() {
         <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
         <b>Voucher $</b>
       </button>
-      {/* <SearchBar /> */}
       <table className="table table-striped">
         <thead>
           <tr>
-            <th scope="col" style={{ width: "10%" }}>
+            <th scope="col" style={{ width: "8%" }}>
               Actions
             </th>
-            <th scope="col" style={{ width: "10%" }}>Reference</th>
+            <th scope="col" style={{ width: "10%" }}>
+              Reference
+            </th>
             <th scope="col">Title</th>
             <th scope="col">Code</th>
-            <th scope="col" style={{ width: "8%" }}>Amount</th>
-            <th scope="col" style={{ width: "6%" }}>Quantity</th>
+            <th scope="col" style={{ width: "8%" }}>
+              Amount
+            </th>
+            <th scope="col" style={{ width: "6%" }}>
+              Quantity
+            </th>
             <th scope="col" style={{ width: "22%" }}>
               Effective Date
             </th>
-            <th scope="col" style={{ width: "6%" }}>Status</th>
+            <th scope="col" style={{ width: "8%" }}>
+              Status
+            </th>
           </tr>
         </thead>
         <tbody>
-          {vouchers.map(voucher => (
+          {vouchers.map((voucher) => (
             <tr key={voucher.id}>
               <td>
                 <i
@@ -198,50 +242,69 @@ function VoucherManagementWidget() {
                     )
                   }
                 ></i>
-                <i
-                  className="trash-icon fas fa-ban col-4"
-                  title="Deactive"
-                  onClick={() =>
-                    onSimpleClick(
-                      "Disable",
-                      "Are you sure to disable this voucher?",
-                      voucher,
-                      handleDisableVoucher
-                    )
-                  }
-                ></i>
-                <i
-                  className="trash-icon fas fa-check-circle col-4"
-                  title="Active"
-                  onClick={() =>
-                    onSimpleClick(
-                      "Enable",
-                      "Are you sure to activate this voucher?",
-                      voucher,
-                      handleEnableVoucher
-                    )
-                  }
-                ></i>
+                {voucher.status === "active" && (
+                  <i
+                    className="trash-icon fas fa-ban col-4"
+                    title="Deactive"
+                    onClick={() =>
+                      onSimpleClick(
+                        "Disable",
+                        "Are you sure to disable this voucher?",
+                        voucher,
+                        handleDisableVoucher
+                      )
+                    }
+                  ></i>
+                )}
+                {voucher.status === "inactive" && (
+                  <i
+                    className="trash-icon fas fa-check-circle col-4"
+                    title="Active"
+                    onClick={() =>
+                      onSimpleClick(
+                        "Enable",
+                        "Are you sure to activate this voucher?",
+                        voucher,
+                        handleEnableVoucher
+                      )
+                    }
+                  ></i>
+                )}
               </td>
-
               <td>
-                <b className="trash-icon" onClick={() => showVoucherDetailsModal(voucher)}>{voucher.reference}</b>
+                <b
+                  className="trash-icon"
+                  onClick={() => showVoucherDetailsModal(voucher)}
+                >
+                  {voucher.reference}
+                </b>
               </td>
               <td>
-                <p onClick={() => showVoucherDetailsModal(voucher)}>{voucher.title}</p>
+                <p onClick={() => showVoucherDetailsModal(voucher)}>
+                  {voucher.title}
+                </p>
               </td>
               <td className="text-truncate">{voucher.voucherCode}</td>
               <td>
-                <span>{`${voucher.discount}${voucher.type === VOUCHER_TYPE.CASH ? " VND" : "%"}`}</span>
+                <span>{`${voucher.discount}${
+                  voucher.type === VOUCHER_TYPE.CASH ? " VND" : "%"
+                }`}</span>
               </td>
               <td>{voucher.maxQuantity}</td>
-              <td
-                className="text-truncate"
-
-              >
+              <td className="text-truncate">
                 {`${voucher.startDate} - ${voucher.endDate}`}
               </td>
-              <td className={`bold text-uppercase ${voucher.status === 'active' ? "green" : voucher.status === 'inactive' ? "red" : "yellow"}`}>{voucher.status}</td>
+              <td
+                className={`bold text-uppercase ${
+                  voucher.status === "active"
+                    ? "green"
+                    : voucher.status === "inactive"
+                    ? "red"
+                    : "yellow"
+                }`}
+              >
+                {voucher.status}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -259,12 +322,15 @@ function VoucherManagementWidget() {
           </span>
         </div>
       </div>
-      <Modal isShowing={toggleCreateVoucherModal} hide={handleToggleVoucherModal}>
+      <Modal
+        isShowing={toggleCreateVoucherModal}
+        hide={handleToggleVoucherModal}
+      >
         <VoucherDetailsModal
-         reloadListVoucherState={reloadListVoucherState} 
-         voucherTypeCreate={voucherTypeCreate} 
-         toggleModal={handleToggleVoucherModal} 
-         voucher={voucherSelected}
+          reloadListVoucherState={reloadListVoucherState}
+          voucherTypeCreate={voucherTypeCreate}
+          toggleModal={handleToggleVoucherModal}
+          voucher={voucherSelected}
         />
       </Modal>
     </div>

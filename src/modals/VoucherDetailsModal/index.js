@@ -123,6 +123,7 @@ const VoucherDetailsModal = ({voucher, toggleModal, voucherTypeCreate, reloadLis
 							value={currentVoucher.maxQuantity}
 							onChange={(e) => handleVoucherOnChange(e)}
 							min="1"
+							readOnly={!!voucher}
 						/>
 					</div>
 					<div className="row p-2">
