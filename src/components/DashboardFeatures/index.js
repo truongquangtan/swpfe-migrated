@@ -46,7 +46,7 @@ const features = [
     title: "Booking Management",
     icon: "fas fa-basketball-ball",
     allowedRoles: [OWNER],
-    path: "/owner/match-management",
+    path: "/owner/booking-management",
   },
   {
     title: "History",

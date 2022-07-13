@@ -38,7 +38,7 @@ function Yard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [slideImages, setSlideImages] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSubYard, setSelectedSubYard] = useState(null);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [slots, setSlots] = useState([]);
@@ -276,7 +276,9 @@ function Yard() {
                     }}
                     disabled={voucherCode}
                   >
-                    <option value="">Select yard</option>
+                    <option value="" disabled selected>
+                      Select yard
+                    </option>
                     {yard.subYards.map((sub) => (
                       <option
                         key={sub.id}

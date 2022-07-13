@@ -17,9 +17,8 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
   const handleChangePasswordRequest = useCallback(async (values) => {
     try {
       const response = await changePasswordRequest(values);
-      localStorage.removeItem(encryptKey("credential"));
       localStorage.setItem(encryptKey("temporaryToken"), response.token);
-      navigate("/auth/reset-password");
+      navigate("reset-password");
     } catch (error) {
       toast.error(error?.response?.data?.message, {
         ...TOAST_CONFIG,

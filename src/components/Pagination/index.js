@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function Pagination({ maxPage, onChangePage }) {
+import { messageService } from "../../services/message.service";
+
+function Pagination({ maxPage, onChangePage, messageKey = "DEFAULT" }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const acceptableChange = (page) => {
@@ -36,6 +38,18 @@ function Pagination({ maxPage, onChangePage }) {
       acceptableChange(value);
     }
   };
+
+  useEffect(() => {
+    const subscription = messageService.getMessage(messageKey).subscribe((value) => {
+      if (value?.page) {
+        setCurrentPage(value.page);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="yard-pagination mt-4">

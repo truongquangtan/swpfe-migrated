@@ -27,6 +27,7 @@ const validation = yup.object({
 
 function ResetPassword() {
   const temporaryToken = localStorage.getItem(encryptKey("temporaryToken"));
+  const credential = localStorage.getItem(encryptKey("credential"));
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -64,9 +65,9 @@ function ResetPassword() {
   }
 
   return (
-    <div className="row align-items-center justify-content-center text-center">
-      <div className="col-4 pt-5">
-        <h3 className=" bold size-4 pt-5">Reset Password</h3>
+    <div className="row align-items-center justify-content-center text-center w-100">
+      <div className={`col-4 ${!credential && "pt-5"}`}>
+        <h3 className={`bold size-4 ${!credential && "pt-5"}`}>Reset Password</h3>
         <i className="fas fa-lock size-5 mt-4"></i>
         <form className="mt-5" onSubmit={formik.handleSubmit}>
           <div className="row p-2">
@@ -128,12 +129,14 @@ function ResetPassword() {
           </div>
           <div className="pl-3 pr-3 mt-3">
             <p className="link">
-              <Link to="/auth/login">
-                <i className="fas fa-long-arrow-alt-left"></i> Back to login
-              </Link>
+              {!credential && (
+                <Link to="/auth/login">
+                  <i className="fas fa-long-arrow-alt-left"></i> Back to login
+                </Link>
+              )}
             </p>
           </div>
-          <div className="pt-3 pb-3">
+          <div className="pt-3 pb-3 row p-2">
             <button
               disabled={
                 formik.isSubmitting ||

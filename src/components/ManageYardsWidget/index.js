@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
 import * as moment from "moment";
+import * as _ from "lodash";
 
 import "./style.scss";
 import playground from "../../assets/images/playground.png";
+import empty from "../../assets/images/empty.png";
 import { Link } from "react-router-dom";
 import {
   activateYard,
@@ -19,12 +21,36 @@ import { TOAST_CONFIG } from "../../constants/default";
 import DisableElement from "../DisableElement";
 import SearchBar from "../SearchBar";
 
+const sortableFields = [
+  { value: "reference", label: "Reference" },
+  { value: "createdAt", label: "Created Time" },
+  { value: "name", label: "Name" },
+  { value: "address", label: "Address" },
+  { value: "openAt", label: "Open Time" },
+  { value: "closeAt", label: "Close Time" },
+  { value: "isActive", label: "Status" },
+];
+
+const filterableFields = [
+  {
+    label: "Status",
+    options: [
+      { value: true, label: "Active" },
+      { value: false, label: "Inactive" },
+    ],
+    field: "isActive",
+  },
+];
+
+const messageKey = "MANAGE_YARD_LIST";
+
 function ManageYardsWidget() {
   const ITEMS_PER_PAGE = 10;
   const [yards, setYards] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [criteria, setCriteria] = useState({});
 
   const onSimpleClick = (title, question, callback) => {
     confirmAlert({
@@ -103,12 +129,12 @@ function ManageYardsWidget() {
 
   const onChangePage = (page) => {
     setCurrentPage(page);
-    getYards(page);
+    getYards(page, ITEMS_PER_PAGE, criteria);
   };
 
-  const getYards = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
+  const getYards = (page = 1, itemsPerPage = ITEMS_PER_PAGE, criteria = {}) => {
     setIsLoading(true);
-    searchOwnerYard({ page, itemsPerPage })
+    searchOwnerYard({ page, itemsPerPage, ...criteria })
       .then((res) => {
         setYards(res.listYard);
         setMaxPage(
@@ -123,6 +149,11 @@ function ManageYardsWidget() {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const handleSearchBar = (criteria) => {
+    getYards(1, ITEMS_PER_PAGE, criteria);
+    setCriteria(criteria || {});
   };
 
   useEffect(() => {
@@ -142,7 +173,12 @@ function ManageYardsWidget() {
             <b>Add</b>
           </button>
         </Link>
-        <SearchBar />
+        <SearchBar
+          sortableFields={sortableFields}
+          filterableFields={filterableFields}
+          onSearch={handleSearchBar}
+          messageKey={messageKey}
+        />
       </div>
       {isLoading && (
         <div className="w-100 d-flex justify-content-center pt-5 h-300 align-items-center">
@@ -176,7 +212,7 @@ function ManageYardsWidget() {
           </thead>
           <tbody>
             {yards.map((yard) => (
-              <tr>
+              <tr key={yard.id}>
                 <td>
                   <i
                     className="trash-icon fas fa-trash-alt col-4"
@@ -238,8 +274,19 @@ function ManageYardsWidget() {
           </tbody>
         </table>
       )}
-
-      <Pagination maxPage={maxPage} onChangePage={onChangePage} />
+      {!isLoading && !yards.length && (
+        <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
+          <img src={empty} style={{ width: 80 }} />
+          <p className="text-center nodata-text" style={{ fontSize: "0.9rem" }}>
+            No yard available
+          </p>
+        </div>
+      )}
+      <Pagination
+        maxPage={maxPage}
+        onChangePage={onChangePage}
+        messageKey={messageKey}
+      />
     </div>
   );
 }

@@ -111,7 +111,10 @@ export const changePasswordRequest = async (values) => {
   const credential = localStorage.getItem(encryptKey("credential"));
   const response = await axios.post(
     `${SERVICE_URL}/v1/me/verify-password`,
-    values
+    values,
+    {
+      headers: { Authorization: `Bearer ${decrypt(credential).token}` },
+    }
   );
   return response ? response.data : null;
 };

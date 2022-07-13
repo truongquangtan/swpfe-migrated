@@ -258,7 +258,7 @@ function VoucherManagementWidget() {
         <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
         <b>Voucher $</b>
       </button>
-      <SearchBar />
+      {/* <SearchBar /> */}
       <table className="table table-striped">
         <thead>
           <tr>
