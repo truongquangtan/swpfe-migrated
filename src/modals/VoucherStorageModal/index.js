@@ -9,7 +9,7 @@ import voucher1 from "../../assets/images/voucher-1.png";
 import { useState } from "react";
 import { searchVouchers } from "../../services/voucher.service";
 import { useEffect } from "react";
-import VOUCHER_TYPE from "../../constants/voucher";
+import {VOUCHER_TYPE} from "../../constants/voucher";
 import DisableElement from "../../components/DisableElement";
 import empty from "../../assets/images/empty.png";
 
