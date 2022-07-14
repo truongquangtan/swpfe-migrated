@@ -1,25 +1,24 @@
+import * as moment from "moment";
 import { useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import * as moment from "moment";
-import * as _ from "lodash";
 
-import "./style.scss";
-import playground from "../../assets/images/playground.png";
-import empty from "../../assets/images/empty.png";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import empty from "../../assets/images/empty.png";
+import playground from "../../assets/images/playground.png";
+import { TOAST_CONFIG } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import {
   activateYard,
   deactivateYard,
   deleteYard,
-  searchOwnerYard,
+  searchOwnerYard
 } from "../../services/yard.service";
-import { useState } from "react";
-import Pagination from "../Pagination";
-import { toast } from "react-toastify";
-import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
-import { TOAST_CONFIG } from "../../constants/default";
 import DisableElement from "../DisableElement";
+import Pagination from "../Pagination";
 import SearchBar from "../SearchBar";
+import "./style.scss";
 
 const sortableFields = [
   { value: "reference", label: "Reference" },
@@ -27,8 +26,7 @@ const sortableFields = [
   { value: "name", label: "Name" },
   { value: "address", label: "Address" },
   { value: "openAt", label: "Open Time" },
-  { value: "closeAt", label: "Close Time" },
-  { value: "isActive", label: "Status" },
+  { value: "closeAt", label: "Close Time" }
 ];
 
 const filterableFields = [
@@ -276,7 +274,7 @@ function ManageYardsWidget() {
       )}
       {!isLoading && !yards.length && (
         <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
-          <img src={empty} style={{ width: 80 }} />
+          <img src={empty} alt="No result" style={{ width: 80 }} />
           <p className="text-center nodata-text" style={{ fontSize: "0.9rem" }}>
             No yard available
           </p>
