@@ -91,8 +91,7 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
                     >
                       <i className="fas fa-clock col-1 pt-1"></i>
                       <span className="ps-2 color-blur col-10">
-                        {moment(voucher.startDate).format("DD/MM/yyyy")} -{" "}
-                        {moment(voucher.endDate).format("DD/MM/yyyy")}
+                        {voucher.startDate} - {voucher.endDate}
                       </span>
                     </p>
                     <p className="row mb-1">
@@ -159,8 +158,7 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
                     >
                       <i className="fas fa-clock col-1 pt-1"></i>
                       <span className="ps-2 color-blur col-10">
-                        {moment(voucher.startDate).format("DD/MM/yyyy")} -{" "}
-                        {moment(voucher.endDate).format("DD/MM/yyyy")}
+                        {voucher.startDate} - {voucher.endDate}
                       </span>
                     </p>
                     <p className="row mb-1">
