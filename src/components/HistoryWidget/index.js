@@ -71,6 +71,7 @@ function HistoryWidget() {
         });
     }
   };
+
   const onChangePage = (page) => {
     getHistoryBooking(page, ITEMS_PER_PAGE, criteria);
     setCurrentPage(page);
@@ -94,11 +95,11 @@ function HistoryWidget() {
         Booking History
       </h4>
       <SearchBar
-          sortableFields={sortableFields}
-          filterableFields={filterableFields}
-          onSearch={handleSearchBar}
-          messageKey={messageKey}
-        />
+        sortableFields={sortableFields}
+        filterableFields={filterableFields}
+        onSearch={handleSearchBar}
+        messageKey={messageKey}
+      />
       {isLoading ? (
         <div
           className="w-100 d-flex justify-content-center align-items-center"
@@ -184,7 +185,7 @@ function HistoryWidget() {
           </table>
         </>
       )}
-      <Pagination maxPage={maxPage} onChangePage={onChangePage} messageKey={messageKey}/>
+      <Pagination maxPage={maxPage} onChangePage={onChangePage} messageKey={messageKey} />
     </div>
   );
 }

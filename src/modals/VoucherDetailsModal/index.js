@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { EMPTY, TOAST_CONFIG } from '../../constants/default';
+import { INTERNAL_SERVER_ERROR } from '../../constants/error-message';
 import { VOUCHER_TYPE } from '../../constants/voucher';
 import { createVoucher, saveVoucherChanges } from '../../services/voucher.service';
 
-const VoucherDetailsModal = ({voucher, toggleModal, voucherTypeCreate, reloadListVoucherState }) => {
+const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVouchers }) => {
 	const [currentVoucher, setCurrentVoucher] = useState({})
 	useEffect(() => {
 		const initVoucherValue = {
@@ -15,13 +16,12 @@ const VoucherDetailsModal = ({voucher, toggleModal, voucherTypeCreate, reloadLis
 			"usages": voucher ? voucher.usages : 0,
 			"description": voucher ? voucher.description : "",
 			"type": voucher ? voucher.type : voucherTypeCreate,
-			"title":  voucher ? voucher.title : EMPTY,
-			"description": voucher ? voucher.description : "",
-			"discount":  voucher ? voucher.discount : 1,
-			"maxQuantity":  voucher ? voucher.maxQuantity : 1,
+			"title": voucher ? voucher.title : EMPTY,
+			"discount": voucher ? voucher.discount : 1,
+			"maxQuantity": voucher ? voucher.maxQuantity : 1,
 			"status": voucher ? voucher.status : "",
-			"startDate":  voucher ? new Date(voucher?.startDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
-			"endDate":  voucher ?  new Date(voucher?.endDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
+			"startDate": voucher ? new Date(voucher?.startDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
+			"endDate": voucher ? new Date(voucher?.endDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
 			"isActive": true,
 			"createdByAccountId": voucher ? voucher.createdByAccountId : null,
 		}
@@ -44,23 +44,23 @@ const VoucherDetailsModal = ({voucher, toggleModal, voucherTypeCreate, reloadLis
 			startDate,
 			endDate
 		}
-		if(!voucherValues.startDate || !voucherValues.endDate){
+		if (!voucherValues.startDate || !voucherValues.endDate) {
 			toast.warn("Start and end date did not empty!", TOAST_CONFIG);
+			return;
 		}
 
-		try{
-			if(voucher){
+		try {
+			if (voucher) {
 				const response = await saveVoucherChanges(voucherValues);
-				console.log(response);
 				toast.success(response.message, TOAST_CONFIG);
-			}else{
+			} else {
 				const response = await createVoucher(voucherValues);
 				toast.success(response.message, TOAST_CONFIG);
 			}
-			reloadListVoucherState()
+			fetchVouchers()
 			toggleModal()
-		}catch(error){
-			console.log(error);
+		} catch (error) {
+			toast.error(INTERNAL_SERVER_ERROR, TOAST_CONFIG)
 		}
 	}
 
@@ -70,7 +70,7 @@ const VoucherDetailsModal = ({voucher, toggleModal, voucherTypeCreate, reloadLis
 		<div className="custom-confirm" style={{ width: "600px" }}>
 			<h4>{voucher ? "Voucher Details" : "Create Voucher"}</h4>
 			<div>
-				<form className="my-3" onSubmit={(e) => {e.preventDefault(); handleSubmitVoucher()}}>
+				<form className="my-3" onSubmit={(e) => { e.preventDefault(); handleSubmitVoucher() }}>
 					<div className="row p-2">
 						<span
 							className="col-1 lh-44 signup__icon-wrapper"
@@ -166,7 +166,7 @@ const VoucherDetailsModal = ({voucher, toggleModal, voucherTypeCreate, reloadLis
 						>
 							{voucher ? "Save" : "Create"}
 						</button>
-						<button className="btn btn-light" onClick={(e) => {e.preventDefault(); toggleModal()}}>
+						<button className="btn btn-light" onClick={(e) => { e.preventDefault(); toggleModal() }}>
 							Cancel
 						</button>
 					</div>
