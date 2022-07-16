@@ -17,8 +17,8 @@ import SearchBar from "../SearchBar";
 const sortableFields = [
     { value: "yardName", label: "Yard Name" },
     { value: "reference", label: "Reference" },
-    { value: "username", label: "User Name" },
-    { value: "createdAt", label: "Created Time"},
+    { value: "username", label: "Created By" },
+    { value: "createdAt", label: "Created At"},
 ];
 
 const filterableFields = [
