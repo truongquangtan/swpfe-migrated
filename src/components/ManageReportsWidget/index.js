@@ -12,20 +12,44 @@ import { getReports, markReportAsResolved } from "../../services/me.service";
 import { HANDLED, PENDING, REJECTED } from "../../constants/reportStatus";
 import { rejectReport } from "../../services/me.service";
 
+import SearchBar from "../SearchBar";
+
+const sortableFields = [
+    { value: "yardName", label: "Yard Name" },
+    { value: "reference", label: "Reference" },
+    { value: "username", label: "User Name" },
+    { value: "createdAt", label: "Created Time"},
+];
+
+const filterableFields = [
+    {
+        label: "Status",
+        options: [
+            { value: "PENDING", label: "Pending" },
+            { value: "HANDLED", label: "Handled" },
+            { value: "REJECTED", label: "Rejected" },
+        ],
+        field: "status",
+    },
+];
+
+const messageKey = "MANAGE_REPORT_LIST";
+
 function ManageReportsWidget() {
     const ITEMS_PER_PAGE = 10;
     const [reports, setReports] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [maxPage, setMaxPage] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [criteria, setCriteria] = useState({});
 
     useEffect(() => {
         getAllReports();
     }, []);
 
-    const getAllReports = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
+    const getAllReports = (page = 1, itemsPerPage = ITEMS_PER_PAGE, criteria = {}) => {
         setIsLoading(true);
-        getReports({ page, itemsPerPage })
+        getReports({ page, itemsPerPage, ...criteria })
             .then((res) => {
                 setReports(res.yardReportModels)
                 setMaxPage(
@@ -40,7 +64,7 @@ function ManageReportsWidget() {
     };
 
     const onChangePage = (page) => {
-        getAllReports(page);
+        getAllReports(page, criteria);
         setCurrentPage(page);
     };
 
@@ -69,6 +93,11 @@ function ManageReportsWidget() {
             getAllReports(currentPage);
         });
     };
+
+    const handleSearchBar = (criteria) => {
+        getAllReports(1, ITEMS_PER_PAGE, criteria);
+        setCriteria(criteria || {});
+      };
 
     const onSimpleClick = (title, question, callback) => {
         confirmAlert({
@@ -178,6 +207,12 @@ function ManageReportsWidget() {
                     <i className="fas fa-exclamation-triangle me-3" />
                     Reports
                 </h4>
+                <SearchBar
+                    sortableFields={sortableFields}
+                    filterableFields={filterableFields}
+                    onSearch={handleSearchBar}
+                    messageKey={messageKey}
+                />
                 {isLoading ? (
                     <div
                         className="w-100 d-flex justify-content-center align-items-center"

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { EMPTY } from "rxjs";
 
+import Modal, { useModal } from "../Modal";
+
 import {
   getOwnerSlots,
   getSimpleYardDetails,
@@ -11,6 +13,7 @@ import "./style.scss";
 import empty from "../../assets/images/empty.png";
 import { toast } from "react-toastify";
 import { TOAST_CONFIG } from "../../constants/default";
+import CancelBookingModal from "../../modals/CancelBookingModal";
 
 function MatchManagementWidget() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -22,6 +25,8 @@ function MatchManagementWidget() {
   const [yards, setYards] = useState([]);
   const [subYards, setSubYards] = useState([]);
   const [data, setData] = useState(null);
+  const [showCancelBookingModal, toggleShowCancelBookingModal] = useModal();
+  const [bookingId, setBookingId] = useState(EMPTY);
 
   useEffect(() => {
     getSimpleYardDetails().then((res) => {
@@ -64,6 +69,19 @@ function MatchManagementWidget() {
     }
   }, [selectedDate, selectedSubYard]);
 
+  const getSlots = () => {
+    setIsLoadingSlots(true);
+    getOwnerSlots(selectedSubYard, selectedDate)
+      .then((res) => {
+        if (res) {
+          setSlots(res.data);
+        }
+      })
+      .finally(() => {
+        setIsLoadingSlots(false);
+      });
+  }
+
   const onSelectSlot = (slot) => {
     setIsLoadingInfo(true);
     getSlotDetails(selectedSubYard, slot.id, selectedDate)
@@ -79,7 +97,17 @@ function MatchManagementWidget() {
   };
 
   return (
-    <div className="pt-4 mt-5 w-100 row justify-content-center">
+    <div className="pt-4 mt-2 w-100 row justify-content-center">
+      <Modal
+        isShowing={showCancelBookingModal}
+        hide={toggleShowCancelBookingModal}
+      >
+        <CancelBookingModal
+          toggleModal={toggleShowCancelBookingModal}
+          bookingId={bookingId}
+          onSave={() => getSlots()}
+        />
+      </Modal>
       <div className="col-7">
         <div className="text-center mb-4 row">
           <div className="row p-2 col-4 justify-content-end size-1 ps-3">
@@ -251,6 +279,12 @@ function MatchManagementWidget() {
             <div className="row mb-1 yard__details-field">
               <span className="col-3 fw-bolder">Booked At:</span>
               <span className="col-9">{data.bookedTime}</span>
+            </div>
+            <div className="row mb-1">
+              <button type="button" className="btn btn-danger" onClick={() => {
+                setBookingId(data.bookingId);
+                toggleShowCancelBookingModal();
+              }}>Cancel this booking</button>
             </div>
           </div>
         )}
