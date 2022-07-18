@@ -1,6 +1,6 @@
 import axios from "axios";
-import { SERVICE_URL } from "../constants/default";
 import * as moment from "moment";
+import { SERVICE_URL } from "../constants/default";
 import { decrypt, encryptKey } from "../helpers/crypto.helper";
 
 export const searchYard = async (params) => {
@@ -79,7 +79,7 @@ export const searchOwnerYard = async (payload) => {
   return response ? response.data : null;
 };
 
-export const getAllRatingOfYard = async (yardId) => {
-  const response = await axios.get(`${SERVICE_URL}/v1/vote/yard/${yardId}`)
+export const getAllRatingOfYard = async (yardId, payload) => {
+  const response = await axios.post(`${SERVICE_URL}/v1/vote/yard/${yardId}`, payload)
   return response ?  response.data : [];
 }
