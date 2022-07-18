@@ -80,6 +80,6 @@ export const searchOwnerYard = async (payload) => {
 };
 
 export const getAllRatingOfYard = async (yardId, payload) => {
-  const response = await axios.post(`${SERVICE_URL}/v1/vote/yard/${yardId}`, payload)
+  const response = await axios.post(`${SERVICE_URL}/v1/vote/yards/${yardId}`, payload)
   return response ?  response.data : [];
 }
