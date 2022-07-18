@@ -320,6 +320,7 @@ function VoucherManagementWidget() {
           voucherTypeCreate={voucherTypeCreate}
           toggleModal={handleToggleVoucherModal}
           voucher={voucherSelected}
+          fetchVouchers={fetchVouchers}
         />
       </Modal>
     </div>
