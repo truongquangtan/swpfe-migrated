@@ -89,7 +89,7 @@ function Yard() {
         setBooking(
           res.bookingList.map((item) => {
             newTotal += item.price;
-            const found = _.find(booking, { refSubYard: item.refSubYard });
+            const found = _.find(booking, { slotId: item.slotId });
             return { ...found, ..._.pick(item, ["price", "originalPrice"]) };
           })
         );
@@ -99,7 +99,7 @@ function Yard() {
       setTotal(originalTotal);
       setBooking(
         booking.map((item) => {
-          const found = _.find(booking, { refSubYard: item.refSubYard });
+          const found = _.find(booking, { slotId: item.slotId });
           return {
             ...found,
             price: item.originalPrice || item.price,
