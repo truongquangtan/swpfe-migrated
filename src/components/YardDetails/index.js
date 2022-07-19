@@ -67,7 +67,7 @@ function YardDetails() {
   useEffect(() => {
     if (isNaN(defaultPrice)) {
       setDefaultPrice(0);
-    } else if (defaultPrice - 1 < 0) {
+    } else {
       setDefaultPrice(defaultPrice * 1);
     }
   }, [defaultPrice]);
