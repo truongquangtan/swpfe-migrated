@@ -131,65 +131,66 @@ function ManageReportsWidget() {
             customUI: ({ onClose }) => {
                 return (
                     <div className="report__details-form">
-                        <div className="row mb-1 report__details-field">
+                        <h3 className="row" style={{fontWeight: 700}}>{report.reference}</h3>
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Yard:</span>
                             <span className="col-9">{report.yardName}</span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Address:</span>
                             <span className="col-9">
                                 {report.yardAddress}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Owner:</span>
                             <span className="col-9">
                                 {report.ownerName}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Owner Email:</span>
                             <span className="col-9">
                                 {report.ownerEmail}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">User Reported:</span>
                             <span className="col-9">
                                 {report.userName}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">User Email:</span>
                             <span className="col-9">
                                 {report.userEmail}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Reason:</span>
                             <span className="col-9">
                                 {report.reason}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Status:</span>
                             <span className={"col-9 " + getColor(report.status)}>
                                 {report.status}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Created At:</span>
                             <span className="col-9">
                                 {report.createdAt}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Updated At:</span>
                             <span className="col-9">
                                 {report.updatedAt}
                             </span>
                         </div>
-                        <button onClick={onClose} className="btn btn-primary">
+                        <button onClick={onClose} className="row btn btn-primary mt-3">
                             Cancel
                         </button>
                     </div>
@@ -231,14 +232,14 @@ function ManageReportsWidget() {
                     <table className="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{ width: "10%", textAlign: "center" }}>Action</th>
+                                <th scope="col" style={{ width: "8%", textAlign: "center" }}>Action</th>
                                 <th scope="col" style={{ width: "10%" }}>Reference</th>
                                 <th scope="col">Yard</th>
                                 <th scope="col" style={{ width: "10%" }}>Status</th>
                                 <th scope="col">
                                     Created By
                                 </th>
-                                <th scope="col">Created At</th>
+                                <th scope="col" style={{ width: "15%" }}>Created At</th>
                             </tr>
                         </thead>
                         <tbody>

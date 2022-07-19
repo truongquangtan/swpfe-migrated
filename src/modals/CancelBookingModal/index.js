@@ -37,7 +37,7 @@ const CancelBookingModal = ({ toggleModal, bookingId, onSave }) => {
   };
 
   return (
-    <div className="custom-confirm">
+    <div className="custom-confirm" style={{width: 550}}>
       <h4>Cancel Booking</h4>
       <p className="mb-3">Give us your reason why you cancel this booking</p>
       <textarea

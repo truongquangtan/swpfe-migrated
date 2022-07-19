@@ -184,7 +184,7 @@ function Yard() {
 
   return (
     <div className="w-100 yard-container mt-4 container pb-5">
-      <div ref={container}>.</div>
+      <div className="mb-5" style={{color: 'white'}} ref={container}>.</div>
       {!yard && (
         <div className="w-100 d-flex justify-content-center align-items-center loading-height">
           <DisableElement />

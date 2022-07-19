@@ -97,7 +97,7 @@ function MatchManagementWidget() {
   };
 
   return (
-    <div className="pt-4 mt-2 w-100 row justify-content-center">
+    <div className="pt-4 mt-5 w-100 row justify-content-center">
       <Modal
         isShowing={showCancelBookingModal}
         hide={toggleShowCancelBookingModal}
@@ -281,10 +281,10 @@ function MatchManagementWidget() {
               <span className="col-9">{data.bookedTime}</span>
             </div>
             <div className="row mb-1">
-              <button type="button" className="btn btn-danger" onClick={() => {
+              <button type="button" className="btn btn-danger py-2 mt-2" style={{borderRadius: 10}} onClick={() => {
                 setBookingId(data.bookingId);
                 toggleShowCancelBookingModal();
-              }}>Cancel this booking</button>
+              }}>Cancel Booking</button>
             </div>
           </div>
         )}
