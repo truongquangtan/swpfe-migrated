@@ -1,6 +1,6 @@
 import { Rating } from "react-simple-star-rating";
-
 import { memo, useEffect, useState } from "react";
+
 import reviewer from "../../assets/images/reviewer.jpg";
 import { getAllRatingOfYard } from "../../services/yard.service";
 import Pagination from "../Pagination";
@@ -38,9 +38,8 @@ function Reviews({ yardId }) {
   }
 
   return (
-
     <div>
-      <h2 className="mb-3">Reviews</h2>
+      {!!ratings.length && <h2 className="mb-3">Reviews</h2>}
       {
         loadingRatings && (
           <div className="w-100 d-flex justify-content-center pt-5 h-300 align-items-center">

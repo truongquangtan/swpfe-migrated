@@ -1,22 +1,55 @@
+import * as moment from "moment";
 import { useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import * as moment from "moment";
 
-import "./style.scss";
-import playground from "../../assets/images/playground.png";
-import { Link } from "react-router-dom";
-import { searchOwnerYard } from "../../services/yard.service";
 import { useState } from "react";
-import Pagination from "../Pagination";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import empty from "../../assets/images/empty.png";
+import playground from "../../assets/images/playground.png";
 import { TOAST_CONFIG } from "../../constants/default";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import {
+  activateYard,
+  deactivateYard,
+  deleteYard,
+  searchOwnerYard
+} from "../../services/yard.service";
+import DisableElement from "../DisableElement";
+import Pagination from "../Pagination";
+import SearchBar from "../SearchBar";
+import "./style.scss";
+
+const sortableFields = [
+  { value: "reference", label: "Reference" },
+  { value: "createdAt", label: "Created Time" },
+  { value: "name", label: "Name" },
+  { value: "address", label: "Address" },
+  { value: "openAt", label: "Open Time" },
+  { value: "closeAt", label: "Close Time" }
+];
+
+const filterableFields = [
+  {
+    label: "Status",
+    options: [
+      { value: true, label: "Active" },
+      { value: false, label: "Inactive" },
+    ],
+    field: "isActive",
+  },
+];
+
+const messageKey = "MANAGE_YARD_LIST";
 
 function ManageYardsWidget() {
   const ITEMS_PER_PAGE = 10;
   const [yards, setYards] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [criteria, setCriteria] = useState({});
+
   const onSimpleClick = (title, question, callback) => {
     confirmAlert({
       customUI: ({ onClose }) => {
@@ -44,19 +77,62 @@ function ManageYardsWidget() {
     });
   };
 
-  const handleDisableYard = () => {};
-
-  const handleEnableYard = () => {};
-
-  const handleDeleteClick = () => {};
-
-  const onChangePage = (page) => {
-    getYards(page);
+  const handleDisableYard = (yard) => {
+    deactivateYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Deactivate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        getYards(currentPage);
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
   };
 
-  const getYards = (page, itemsPerPage = ITEMS_PER_PAGE) => {
+  const handleEnableYard = (yard) => {
+    activateYard(yard.id)
+      .then(() => {
+        toast.success(
+          `Activate yard "${yard.name}" successfully.`,
+          TOAST_CONFIG
+        );
+        getYards(currentPage);
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
+
+  const handleDeleteClick = (yard) => {
+    deleteYard(yard.id)
+      .then(() => {
+        toast.success(`Delete yard ${yard.name} successfully.`, TOAST_CONFIG);
+        getYards(currentPage);
+      })
+      .catch((error) => {
+        toast.error(
+          error.response.data.message || INTERNAL_SERVER_ERROR,
+          TOAST_CONFIG
+        );
+      });
+  };
+
+  const onChangePage = (page) => {
+    setCurrentPage(page);
+    getYards(page, ITEMS_PER_PAGE, criteria);
+  };
+
+  const getYards = (page = 1, itemsPerPage = ITEMS_PER_PAGE, criteria = {}) => {
     setIsLoading(true);
-    searchOwnerYard({ page, itemsPerPage })
+    searchOwnerYard({ page, itemsPerPage, ...criteria })
       .then((res) => {
         setYards(res.listYard);
         setMaxPage(
@@ -73,27 +149,38 @@ function ManageYardsWidget() {
       });
   };
 
+  const handleSearchBar = (criteria) => {
+    getYards(1, ITEMS_PER_PAGE, criteria);
+    setCriteria(criteria || {});
+  };
+
   useEffect(() => {
     getYards(1, ITEMS_PER_PAGE);
   }, []);
 
   return (
-    <div className="pt-5 mt-5 w-100">
-      <h4 className="mb-4 d-inline-block">
-        <img src={playground} alt="Yard" className="width-60 pe-3" />
-        Yard Management
-      </h4>
-      <Link to="/owner/yards/draft">
-        <button className="btn btn-primary px-4 ms-5">
-          <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
-          <b>Add</b>
-        </button>
-      </Link>
+    <div className="pt-4 mt-5 w-100">
+      <div>
+        <h4 className="mb-4 d-inline-block">
+          <img src={playground} alt="Yard" className="width-60 pe-3" />
+          Yard Management
+        </h4>
+        <Link to="/owner/yards/draft">
+          <button className="btn btn-primary px-4 ms-5">
+            <i className="fas fa-plus me-2" style={{ fontSize: "0.8rem" }}></i>
+            <b>Add</b>
+          </button>
+        </Link>
+        <SearchBar
+          sortableFields={sortableFields}
+          filterableFields={filterableFields}
+          onSearch={handleSearchBar}
+          messageKey={messageKey}
+        />
+      </div>
       {isLoading && (
         <div className="w-100 d-flex justify-content-center pt-5 h-300 align-items-center">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
+          <DisableElement />
         </div>
       )}
       {!isLoading && !!yards.length && (
@@ -114,7 +201,7 @@ function ManageYardsWidget() {
                 Open Time
               </th>
               <th scope="col" style={{ width: "12%" }}>
-                Created At
+                Status
               </th>
               <th scope="col" style={{ width: "12%" }}>
                 Created At
@@ -123,7 +210,7 @@ function ManageYardsWidget() {
           </thead>
           <tbody>
             {yards.map((yard) => (
-              <tr>
+              <tr key={yard.id}>
                 <td>
                   <i
                     className="trash-icon fas fa-trash-alt col-4"
@@ -132,7 +219,7 @@ function ManageYardsWidget() {
                       onSimpleClick(
                         "Delete",
                         "Are you sure to delete this yard permanently?",
-                        handleDeleteClick
+                        () => handleDeleteClick(yard)
                       )
                     }
                   ></i>
@@ -144,7 +231,7 @@ function ManageYardsWidget() {
                         onSimpleClick(
                           "Disable",
                           "Are you sure to disable this yard?",
-                          handleDisableYard
+                          () => handleDisableYard(yard)
                         )
                       }
                     ></i>
@@ -156,7 +243,7 @@ function ManageYardsWidget() {
                         onSimpleClick(
                           "Enable",
                           "Are you sure to activate this yard?",
-                          handleEnableYard
+                          () => handleEnableYard(yard)
                         )
                       }
                     ></i>
@@ -185,8 +272,19 @@ function ManageYardsWidget() {
           </tbody>
         </table>
       )}
-
-      <Pagination maxPage={maxPage} onChangePage={onChangePage} />
+      {!isLoading && !yards.length && (
+        <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
+          <img src={empty} alt="No result" style={{ width: 80 }} />
+          <p className="text-center nodata-text" style={{ fontSize: "0.9rem" }}>
+            No yard available
+          </p>
+        </div>
+      )}
+      <Pagination
+        maxPage={maxPage}
+        onChangePage={onChangePage}
+        messageKey={messageKey}
+      />
     </div>
   );
 }

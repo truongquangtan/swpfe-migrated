@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
-import "./style.scss";
 import Header from "../../components/Header";
+import { ADMIN, OWNER } from "../../constants/roles";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
-import { OWNER, ADMIN } from "../../constants/roles";
+import "./style.scss";
+
+const privatePaths = ["/incoming-matches", "/rating", "/history", "/me"];
 
 function WelcomePage() {
   const [auth, setAuth] = useState(false);
@@ -21,12 +23,16 @@ function WelcomePage() {
     } else if (role === OWNER) {
       return <Navigate to="/owner" />;
     }
+  } else if (privatePaths.includes(window.location.pathname)) {
+    return <Navigate to="/auth/login" />;
   }
 
   return (
     <div className="welcome__page-container overflow-x-hidden">
       <Header auth={auth} />
-      <Outlet />
+      <div className="pt-5">
+        <Outlet />
+      </div>
     </div>
   );
 }

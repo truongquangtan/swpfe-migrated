@@ -10,7 +10,6 @@
 
   .reviewer-img {
     width: 100px;
-    padding-right: 1rem;
 
     > img {
       display: block;
@@ -30,12 +29,12 @@
     }
 
     .review-time {
-        font-size: 0.8rem;
-        margin-bottom: 1rem;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
     }
   }
 }
 
 .review:not(:last-child) {
-    border-bottom: 1px solid rgb(207, 207, 207);
+  border-bottom: 1px solid rgb(207, 207, 207);
 }

@@ -1,21 +1,44 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-import "./style.scss";
-import { logout } from "../../services/auth.service";
-import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { TOAST_CONFIG } from "../../constants/default";
-import { encryptKey } from "../../helpers/crypto.helper";
+import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
+import { decrypt, encryptKey } from "../../helpers/crypto.helper";
+import ProfileUpdatePasswordModal from "../../modals/ProfileUpdatePasswordModal";
+import { logout } from "../../services/auth.service";
 import DisableScreen from "../DisableScreen";
+import Modal, { useModal } from "../Modal";
+import "./style.scss";
 
 function Header({ auth }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useModal(false);
   const popupFeatures = [
     {
       title: "Profile",
       icon: "fas fa-info-circle",
-      click: () => {},
+      click: () => {
+        const account = decrypt(localStorage.getItem(encryptKey("credential")));
+        const role = account?.role;
+        switch (role) {
+          case "admin":
+            navigate("/admin/me");
+            break;
+          case "owner":
+            navigate("/owner/me");
+            break;
+          default:
+            navigate("/me");
+        }
+      },
+    },
+    {
+      title: "Change Password",
+      icon: "fas fa-lock",
+      click: () => {
+        setShowUpdatePasswordModal();
+      },
     },
     {
       title: "Log Out",
@@ -42,8 +65,28 @@ function Header({ auth }) {
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
+  const hidePopup = (e) => {
+    if (
+      !document.getElementById("header-popup")?.contains(e.target) &&
+      !document.getElementById("header-avatar")?.contains(e.target)
+    ) {
+      setShowPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", hidePopup);
+    return () => window.removeEventListener("click", hidePopup);
+  }, []);
+
   return (
     <div className="header">
+      <Modal
+        isShowing={showUpdatePasswordModal}
+        hide={setShowUpdatePasswordModal}
+      >
+        <ProfileUpdatePasswordModal toggleModal={setShowUpdatePasswordModal} />
+      </Modal>
       {isLoggingOut && <DisableScreen />}
       <Link to="/" className="d-flex align-content-center nav-brand">
         <span className="p-2 size-2 ps-4 pe-3">
@@ -53,6 +96,7 @@ function Header({ auth }) {
       </Link>
       {auth ? (
         <div
+          id="header-avatar"
           className="size-2 position-fixed top-1 right-1 profile-icon"
           onClick={() => setShowPopup(() => !showPopup)}
         >
@@ -67,12 +111,15 @@ function Header({ auth }) {
         </div>
       )}
       {showPopup && (
-        <div className="profile-popup">
+        <div id="header-popup" className="profile-popup">
           {popupFeatures.map((feature) => {
             return (
               <div
                 className="profile__popup-feature"
-                onClick={feature.click}
+                onClick={() => {
+                  feature.click();
+                  setShowPopup(false);
+                }}
                 key={feature.title}
               >
                 <i className={feature.icon + " p-2"}></i>
@@ -82,6 +129,7 @@ function Header({ auth }) {
           })}
         </div>
       )}
+
       <ToastContainer />
     </div>
   );

@@ -20,7 +20,7 @@ function HomePage() {
   return (
     <div className="home">
       <Header auth={true} />
-      <div className="container d-flex justify-content-center features mt-5">
+      <div className="px-5 d-flex justify-content-center features mt-5">
         <Outlet />
       </div>
     </div>
