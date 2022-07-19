@@ -9,7 +9,7 @@ import voucher1 from "../../assets/images/voucher-1.png";
 import { useState } from "react";
 import { searchVouchers } from "../../services/voucher.service";
 import { useEffect } from "react";
-import {VOUCHER_TYPE} from "../../constants/voucher";
+import { VOUCHER_TYPE } from "../../constants/voucher";
 import DisableElement from "../../components/DisableElement";
 import empty from "../../assets/images/empty.png";
 
@@ -148,9 +148,7 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
                 >
                   <img src={voucherImg} alt="basketball yard" />
                   <div className="yard-details p-3">
-                    <b className="d-block mb-2">
-                      Discount {voucher.discount}%
-                    </b>
+                    <b className="d-block mb-2">Discount {voucher.discount}%</b>
                     <p
                       className="row mb-1"
                       title="Effective date"
@@ -203,16 +201,9 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
         {!isLoading &&
           ITEMS_PER_PAGE - vouchers.length > 0 &&
           !!vouchers.length &&
-          vouchers.map((voucher, index) => {
-            if (index < ITEMS_PER_PAGE - vouchers.length) {
-              return (
-                <div
-                  className="voucher-wrapper col-4 p-3 pe-2"
-                  key={index}
-                ></div>
-              );
-            }
-          })}
+          [...Array(ITEMS_PER_PAGE - vouchers.length).keys()].map((item) => (
+            <div className="voucher-wrapper col-4 p-3 pe-2" key={item}></div>
+          ))}
         {!isLoading && !vouchers.length && (
           <div className="w-100 d-flex justify-content-center align-items-center flex-column">
             <img src={empty} style={{ width: 80 }} />

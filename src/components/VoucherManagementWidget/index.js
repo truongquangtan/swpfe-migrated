@@ -232,7 +232,7 @@ function VoucherManagementWidget() {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col" style={{ width: "10%" }}>
+              <th scope="col" style={{ width: "8%" }}>
                 Actions
               </th>
               <th scope="col" style={{ width: "10%" }}>Reference</th>
@@ -243,7 +243,7 @@ function VoucherManagementWidget() {
               <th scope="col" style={{ width: "22%" }}>
                 Effective Date
               </th>
-              <th scope="col" style={{ width: "6%" }}>Status</th>
+              <th scope="col" style={{ width: "8%" }}>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -263,7 +263,7 @@ function VoucherManagementWidget() {
                         )
                       }
                     ></i>
-                    <i
+                    {voucher.status === 'active' && <i
                       className="trash-icon fas fa-ban col-4"
                       title="Deactive"
                       onClick={() =>
@@ -274,8 +274,8 @@ function VoucherManagementWidget() {
                           handleDisableVoucher
                         )
                       }
-                    ></i>
-                    <i
+                    ></i>}
+                    {voucher.status === 'inactive' && <i
                       className="trash-icon fas fa-check-circle col-4"
                       title="Active"
                       onClick={() =>
@@ -286,7 +286,7 @@ function VoucherManagementWidget() {
                           handleEnableVoucher
                         )
                       }
-                    ></i>
+                    ></i>}
                   </td>
 
                   <td>
@@ -300,10 +300,7 @@ function VoucherManagementWidget() {
                     <span>{`${voucher.discount}${voucher.type === VOUCHER_TYPE.CASH ? " VND" : "%"}`}</span>
                   </td>
                   <td>{voucher.maxQuantity}</td>
-                  <td
-                    className="text-truncate"
-
-                  >
+                  <td className="text-truncate">
                     {`${voucher.startDate} - ${voucher.endDate}`}
                   </td>
                   <td className={`bold text-uppercase ${voucher.status === 'active' ? "green" : voucher.status === 'inactive' ? "red" : "yellow"}`}>{voucher.status}</td>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import * as moment from "moment";
+
 import { EMPTY, TOAST_CONFIG } from '../../constants/default';
 import { INTERNAL_SERVER_ERROR } from '../../constants/error-message';
 import { VOUCHER_TYPE } from '../../constants/voucher';
@@ -20,8 +22,8 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 			"discount": voucher ? voucher.discount : 1,
 			"maxQuantity": voucher ? voucher.maxQuantity : 1,
 			"status": voucher ? voucher.status : "",
-			"startDate": voucher ? new Date(voucher?.startDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
-			"endDate": voucher ? new Date(voucher?.endDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : new Date().toISOString().substring(0, 10),
+			"startDate": voucher ? new Date(voucher?.startDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : null,
+			"endDate": voucher ? new Date(voucher?.endDate?.split("/").reverse().join("/")).toISOString().substring(0, 10) : null,
 			"isActive": true,
 			"createdByAccountId": voucher ? voucher.createdByAccountId : null,
 		}
@@ -139,6 +141,8 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 							placeholder="Start date ..."
 							required
 							value={currentVoucher.startDate}
+							min={moment(new Date()).format("yyyy-mm-DD")}
+							max={currentVoucher.endDate}
 							name='startDate'
 							onChange={(e) => handleVoucherOnChange(e)}
 						/>
@@ -153,6 +157,7 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 						<input
 							className="col-11 outline-none p-2 signup__input-border"
 							type="date"
+							min={currentVoucher.startDate || moment(new Date()).format("yyyy-mm-DD")}
 							placeholder="End date ..."
 							value={currentVoucher.endDate}
 							required

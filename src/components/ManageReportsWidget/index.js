@@ -12,20 +12,44 @@ import { getReports, markReportAsResolved } from "../../services/me.service";
 import { HANDLED, PENDING, REJECTED } from "../../constants/reportStatus";
 import { rejectReport } from "../../services/me.service";
 
+import SearchBar from "../SearchBar";
+
+const sortableFields = [
+    { value: "yardName", label: "Yard Name" },
+    { value: "reference", label: "Reference" },
+    { value: "username", label: "Created By" },
+    { value: "createdAt", label: "Created At"},
+];
+
+const filterableFields = [
+    {
+        label: "Status",
+        options: [
+            { value: "PENDING", label: "Pending" },
+            { value: "HANDLED", label: "Handled" },
+            { value: "REJECTED", label: "Rejected" },
+        ],
+        field: "status",
+    },
+];
+
+const messageKey = "MANAGE_REPORT_LIST";
+
 function ManageReportsWidget() {
     const ITEMS_PER_PAGE = 10;
     const [reports, setReports] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [maxPage, setMaxPage] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [criteria, setCriteria] = useState({});
 
     useEffect(() => {
         getAllReports();
     }, []);
 
-    const getAllReports = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
+    const getAllReports = (page = 1, itemsPerPage = ITEMS_PER_PAGE, criteria = {}) => {
         setIsLoading(true);
-        getReports({ page, itemsPerPage })
+        getReports({ page, itemsPerPage, ...criteria })
             .then((res) => {
                 setReports(res.yardReportModels)
                 setMaxPage(
@@ -40,7 +64,7 @@ function ManageReportsWidget() {
     };
 
     const onChangePage = (page) => {
-        getAllReports(page);
+        getAllReports(page, criteria);
         setCurrentPage(page);
     };
 
@@ -69,6 +93,11 @@ function ManageReportsWidget() {
             getAllReports(currentPage);
         });
     };
+
+    const handleSearchBar = (criteria) => {
+        getAllReports(1, ITEMS_PER_PAGE, criteria);
+        setCriteria(criteria || {});
+      };
 
     const onSimpleClick = (title, question, callback) => {
         confirmAlert({
@@ -102,65 +131,66 @@ function ManageReportsWidget() {
             customUI: ({ onClose }) => {
                 return (
                     <div className="report__details-form">
-                        <div className="row mb-1 report__details-field">
+                        <h3 className="row" style={{fontWeight: 700}}>{report.reference}</h3>
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Yard:</span>
                             <span className="col-9">{report.yardName}</span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Address:</span>
                             <span className="col-9">
                                 {report.yardAddress}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Owner:</span>
                             <span className="col-9">
                                 {report.ownerName}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Owner Email:</span>
                             <span className="col-9">
                                 {report.ownerEmail}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">User Reported:</span>
                             <span className="col-9">
                                 {report.userName}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">User Email:</span>
                             <span className="col-9">
                                 {report.userEmail}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Reason:</span>
                             <span className="col-9">
                                 {report.reason}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Status:</span>
                             <span className={"col-9 " + getColor(report.status)}>
                                 {report.status}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Created At:</span>
                             <span className="col-9">
                                 {report.createdAt}
                             </span>
                         </div>
-                        <div className="row mb-1 report__details-field">
+                        <div className="row mb-1 report__details-field py-3">
                             <span className="col-3 fw-bolder">Updated At:</span>
                             <span className="col-9">
                                 {report.updatedAt}
                             </span>
                         </div>
-                        <button onClick={onClose} className="btn btn-primary">
+                        <button onClick={onClose} className="row btn btn-primary mt-3">
                             Cancel
                         </button>
                     </div>
@@ -178,6 +208,12 @@ function ManageReportsWidget() {
                     <i className="fas fa-exclamation-triangle me-3" />
                     Reports
                 </h4>
+                <SearchBar
+                    sortableFields={sortableFields}
+                    filterableFields={filterableFields}
+                    onSearch={handleSearchBar}
+                    messageKey={messageKey}
+                />
                 {isLoading ? (
                     <div
                         className="w-100 d-flex justify-content-center align-items-center"
@@ -196,14 +232,14 @@ function ManageReportsWidget() {
                     <table className="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{ width: "10%", textAlign: "center" }}>Action</th>
+                                <th scope="col" style={{ width: "8%", textAlign: "center" }}>Action</th>
                                 <th scope="col" style={{ width: "10%" }}>Reference</th>
                                 <th scope="col">Yard</th>
                                 <th scope="col" style={{ width: "10%" }}>Status</th>
                                 <th scope="col">
                                     Created By
                                 </th>
-                                <th scope="col">Created At</th>
+                                <th scope="col" style={{ width: "15%" }}>Created At</th>
                             </tr>
                         </thead>
                         <tbody>
