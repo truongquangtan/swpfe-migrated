@@ -1,10 +1,10 @@
+import * as moment from "moment";
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import * as moment from "moment";
 
 import { EMPTY, TOAST_CONFIG } from '../../constants/default';
 import { INTERNAL_SERVER_ERROR } from '../../constants/error-message';
-import { VOUCHER_TYPE } from '../../constants/voucher';
+import { VOUCHER_STATUS, VOUCHER_TYPE } from '../../constants/voucher';
 import { createVoucher, saveVoucherChanges } from '../../services/voucher.service';
 
 const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVouchers }) => {
@@ -84,9 +84,8 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 							type="text"
 							placeholder="Title voucher ..."
 							name='title'
-							value={currentVoucher.title}
+							value={currentVoucher.title || ''}
 							onChange={(e) => handleVoucherOnChange(e)}
-							required
 						/>
 					</div>
 
@@ -103,7 +102,7 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 							type="number"
 							placeholder={(voucherTypeCreate === VOUCHER_TYPE.PERCENT) ? "Discount percent (%) :" : "Amount discount ...VND"}
 							name='discount'
-							value={currentVoucher.discount}
+							value={currentVoucher.discount || ''}
 							onChange={(e) => handleVoucherOnChange(e)}
 							min="1"
 							max={(voucherTypeCreate === VOUCHER_TYPE.PERCENT) ? 100 : Number.MAX_SAFE_INTEGER}
@@ -122,12 +121,12 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 							type="number"
 							placeholder="Quantity"
 							name='maxQuantity'
-							value={currentVoucher.maxQuantity}
+							value={currentVoucher.maxQuantity || ''}
 							onChange={(e) => handleVoucherOnChange(e)}
-							min="1"
-							readOnly={!!voucher}
+							min={currentVoucher.usages}
 						/>
 					</div>
+					
 					<div className="row p-2">
 						<span
 							className="col-1 lh-44 signup__icon-wrapper"
@@ -139,14 +138,14 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 							className="col-11 outline-none p-2 signup__input-border"
 							type="date"
 							placeholder="Start date ..."
-							required
-							value={currentVoucher.startDate}
+							readOnly
+							value={currentVoucher.startDate || ''}
 							min={moment(new Date()).format("yyyy-mm-DD")}
-							max={currentVoucher.endDate}
 							name='startDate'
 							onChange={(e) => handleVoucherOnChange(e)}
 						/>
 					</div>
+
 					<div className="row p-2">
 						<span
 							className="col-1 lh-44 signup__icon-wrapper"
@@ -159,19 +158,22 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 							type="date"
 							min={currentVoucher.startDate || moment(new Date()).format("yyyy-mm-DD")}
 							placeholder="End date ..."
-							value={currentVoucher.endDate}
+							value={currentVoucher.endDate || ''}
 							required
 							name='endDate'
 							onChange={(e) => handleVoucherOnChange(e)}
 						/>
 					</div>
+					
 					<div className="py-2">
-						<button
-							className="btn btn-primary me-3 px-4"
-						>
-							{voucher ? "Save" : "Create"}
-						</button>
-						<button className="btn btn-light" onClick={(e) => { e.preventDefault(); toggleModal() }}>
+						{voucher.status !== VOUCHER_STATUS.INACTIVE && (
+							<button
+								className="btn btn-primary me-3 px-4"
+							>
+								{voucher ? "Save" : "Create"}
+							</button>)
+						}
+						<button className="btn btn-secondary" onClick={(e) => { e.preventDefault(); toggleModal() }}>
 							Cancel
 						</button>
 					</div>

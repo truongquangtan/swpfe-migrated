@@ -8,6 +8,7 @@ const VOUCHER_STATUS = {
   DELETED: "deleted",
   EXPIRED: "expired",
   INACTIVE: "inactive",
+  FULL: "full"
 };
 
 module.exports = {
