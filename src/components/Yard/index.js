@@ -6,9 +6,7 @@ import { Rating } from "react-simple-star-rating";
 import * as _ from "lodash";
 
 import "./style.scss";
-import yard1 from "../../assets/images/yard-1.jpg";
-import yard2 from "../../assets/images/yard-2.jpg";
-import yard3 from "../../assets/images/yard-3.jpg";
+import yard from "../../assets/images/nodata.jpeg";
 import noData from "../../assets/images/no-data.jpg";
 import { toast, ToastContainer } from "react-toastify";
 import { decrypt, encryptKey } from "../../helpers/crypto.helper";
@@ -52,9 +50,17 @@ function Yard() {
   useEffect(() => {
     getYardById(id).then((res) => {
       setYard(res.data);
-      setSlideImages(
-        res.data.images.length ? res.data.images : [yard1, yard2, yard3]
-      );
+
+      let images;
+      if (res.data.images.length === 3) {
+        setSlideImages(res.data.images);
+      } else {
+        images = _.cloneDeep(res.data.images) ?? [];
+        while (images.length !== 3) {
+          images.push(yard);
+        }
+        setSlideImages(images);
+      }
     });
     container.current.scrollIntoView({ block: "start" });
   }, []);
@@ -146,14 +152,30 @@ function Yard() {
           }
         })
         .catch((error) => {
-          toast.error(
-            error.response.data.message || INTERNAL_SERVER_ERROR,
-            TOAST_CONFIG
-          );
+          if (error.response.status === 409) {
+            toast.error("Some of your booking slots are conflicted.", TOAST_CONFIG);
+            navigate("/history");
+          } else {
+            toast.error(
+              error.response.data.message || INTERNAL_SERVER_ERROR,
+              TOAST_CONFIG
+            );
+          }
         })
         .finally(() => {
           setIsBooking(false);
         });
+    }
+  };
+
+  const onRemoveBooking = (item) => {
+    if (!voucherCode) {
+      const slot = _.find(slots, { id: item.slotId });
+      slot.isSelected = false;
+      setBooking(booking.filter((b) => b.slotId !== item.slotId));
+      setTotal(total - item.price);
+    } else {
+      toast.info("Remove voucher to change booking list!", TOAST_CONFIG);
     }
   };
 
@@ -179,6 +201,8 @@ function Yard() {
         setBooking(newBookingList);
         setTotal(total - slot.price);
       }
+    } else if (voucherCode) {
+      toast.info("Remove voucher to change booking list!", TOAST_CONFIG);
     }
   };
 
@@ -289,8 +313,26 @@ function Yard() {
                     ))}
                   </select>
                 </div>
-                <div className="col-12 d-flex align-items-center justify-content-center size-2">
-                  Slots
+                <div className="row d-flex align-items-center mt-1">
+                  <div className="col-3 size-2">Slots</div>
+                  <div className="col-3 map-color">
+                    <div className="color"></div>
+                    <span>Available</span>
+                  </div>
+                  <div className="col-3 map-color">
+                    <div
+                      className="color"
+                      style={{ backgroundColor: "#444444" }}
+                    ></div>
+                    <span>Booked</span>
+                  </div>
+                  <div className="col-3 map-color">
+                    <div
+                      className="color"
+                      style={{ backgroundColor: "#3E9834" }}
+                    ></div>
+                    <span>Selecting</span>
+                  </div>
                 </div>
               </div>
               <div
@@ -404,9 +446,7 @@ function Yard() {
                           className="far fa-trash-alt trash-icon"
                           title="Remove"
                           onClick={() => {
-                            setBooking(
-                              booking.filter((b) => b.slotId !== item.slotId)
-                            );
+                            onRemoveBooking(item);
                           }}
                         ></i>
                       </p>

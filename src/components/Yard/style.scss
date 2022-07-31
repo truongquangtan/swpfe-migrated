@@ -136,3 +136,16 @@
         color: #999;
     }
 }
+
+.map-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.color {
+    display: inline-block;
+    width: 2rem;
+    border: 1px solid black;
+    height: 1rem;
+    margin-right: 0.8rem;
+}

@@ -13,7 +13,7 @@ import {
 } from "../../services/location.service";
 import { INTERNAL_SERVER_ERROR } from "../../constants/error-message";
 import { searchYard } from "../../services/yard.service";
-import yard1 from "../../assets/images/yard-1.jpg";
+import yard1 from "../../assets/images/nodata.jpeg";
 import Pagination from "../Pagination";
 import DisableElement from "../DisableElement";
 

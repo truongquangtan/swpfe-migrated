@@ -80,7 +80,7 @@ function MatchManagementWidget() {
       .finally(() => {
         setIsLoadingSlots(false);
       });
-  }
+  };
 
   const onSelectSlot = (slot) => {
     setIsLoadingInfo(true);
@@ -98,9 +98,14 @@ function MatchManagementWidget() {
 
   const isLaterThanCurrentTime = (dataTime) => {
     const now = new Date();
-    const toStringCurrentTime = now.toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric", timeZone: "ASIA/Ho_Chi_Minh" });
+    const toStringCurrentTime = now.toLocaleTimeString("en-US", {
+      hour12: false,
+      hour: "numeric",
+      minute: "numeric",
+      timeZone: "ASIA/Ho_Chi_Minh",
+    });
     return dataTime.localeCompare(toStringCurrentTime) > 0;
-  }
+  };
 
   return (
     <div className="pt-4 mt-5 w-100 row justify-content-center">
@@ -190,8 +195,16 @@ function MatchManagementWidget() {
             </select>
           </div>
         </div>
-        <div className="col-12 d-flex align-items-center justify-content-center size-2">
-          Slots
+        <div className="row d-flex align-items-center mb-3">
+          <div className="col-6 size-2">Slots</div>
+          <div className="col-3 map-color">
+            <div className="color"></div>
+            <span>Available</span>
+          </div>
+          <div className="col-3 map-color">
+            <div className="color" style={{ backgroundColor: "#444444" }}></div>
+            <span>Booked</span>
+          </div>
         </div>
         <div className="row ps-2">
           {slots &&
@@ -286,14 +299,21 @@ function MatchManagementWidget() {
               <span className="col-3 fw-bolder">Booked At:</span>
               <span className="col-9">{data.bookedTime}</span>
             </div>
-            {isLaterThanCurrentTime(data.startTime) && 
-            <div className="row mb-1">
-              <button type="button" className="btn btn-danger py-2 mt-2" style={{ borderRadius: 10 }} onClick={() => {
-                setBookingId(data.bookingId);
-                toggleShowCancelBookingModal();
-              }}>Cancel Booking</button>
-            </div>
-            }
+            {isLaterThanCurrentTime(data.startTime) && (
+              <div className="row mb-1">
+                <button
+                  type="button"
+                  className="btn btn-danger py-2 mt-2"
+                  style={{ borderRadius: 10 }}
+                  onClick={() => {
+                    setBookingId(data.bookingId);
+                    toggleShowCancelBookingModal();
+                  }}
+                >
+                  Cancel Booking
+                </button>
+              </div>
+            )}
           </div>
         )}
         {!data && !isLoadingInfo && (

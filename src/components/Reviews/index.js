@@ -1,7 +1,7 @@
 import { Rating } from "react-simple-star-rating";
 import { memo, useEffect, useState } from "react";
 
-import reviewer from "../../assets/images/reviewer.jpg";
+import reviewer from "../../assets/images/user-1.png";
 import { getAllRatingOfYard } from "../../services/yard.service";
 import Pagination from "../Pagination";
 import "./style.scss";
@@ -56,7 +56,7 @@ function Reviews({ yardId }) {
               ratings?.map(rating => (
                 <div key={rating.voteId} className="review">
                   <div className="reviewer-img">
-                    <img alt="avatar" src={rating.accountAvatar ? rating.accountAvatar : reviewer} />
+                    <img alt="avatar" src={rating.accountAvatar || reviewer} />
                   </div>
                   <div className="review-content">
                     <p>

@@ -110,7 +110,7 @@ function ForgotPassword() {
               className="col-3 lh-44 fg-pw__icon-wrapper"
               disabled={!formik.values.re_email}
             >
-              Resend mail
+              Receive code
             </button>
             <span className="signup__filed--error">
               {formik.touched.re_email && formik.errors.re_email

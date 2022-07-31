@@ -32,6 +32,7 @@ import {
   updateYard,
 } from "../../services/yard.service";
 import DisableScreen from "../DisableScreen";
+import yard from "../../assets/images/nodata.jpeg";
 
 const _URL = window.URL || window.webkitURL;
 
@@ -638,11 +639,11 @@ function YardDetails() {
               <div
                 className="upload__img-wrapper mb-2 color-blur"
                 style={{
-                  backgroundImage: `url(${yardPictures[0]["src"]})`,
+                  backgroundImage: `url(${yardPictures[0]?.["src"] ?? yard})`,
                   backgroundSize: "cover",
                 }}
               >
-                {!yardPictures[0] && "Intro image"}
+                {!yardPictures[0]?.["src"] && id === "draft" && "Intro image"}
               </div>
               <input
                 className="outline-none custom-bg-input p-0 w-100"
@@ -656,11 +657,11 @@ function YardDetails() {
               <div
                 className="upload__img-wrapper mb-2 color-blur"
                 style={{
-                  backgroundImage: `url(${yardPictures[1]["src"]})`,
+                  backgroundImage: `url(${yardPictures[1]?.["src"] ?? yard})`,
                   backgroundSize: "cover",
                 }}
               >
-                {!yardPictures[1] && "Intro image"}
+                {!yardPictures[1]?.["src"] && id === "draft" && "Intro image"}
               </div>
               <input
                 className="outline-none custom-bg-input p-0 w-100"
@@ -674,11 +675,11 @@ function YardDetails() {
               <div
                 className="upload__img-wrapper mb-2 color-blur"
                 style={{
-                  backgroundImage: `url(${yardPictures[2]["src"]})`,
+                  backgroundImage: `url(${yardPictures[2]?.["src"] ?? yard})`,
                   backgroundSize: "cover",
                 }}
               >
-                {!yardPictures[2] && "Intro image"}
+                {!yardPictures[2]?.["src"] && id === "draft" && "Intro image"}
               </div>
               <input
                 className="outline-none custom-bg-input p-0 w-100"

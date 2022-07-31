@@ -14,7 +14,7 @@ import DisableElement from "../../components/DisableElement";
 import empty from "../../assets/images/empty.png";
 
 const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
-  const ITEMS_PER_PAGE = 9;
+  const ITEMS_PER_PAGE = 6;
   const [isLoading, setIsLoading] = useState(false);
   const [vouchers, setVouchers] = useState([]);
   const [code, setCode] = useState("");
@@ -43,19 +43,16 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
 
   return (
     <div
-      className="p-5"
+      className="p-5 voucher-storage"
       style={{
-        backgroundColor: "white",
-        width: "90vw",
-        borderRadius: 5,
-        height: 853,
+        height: 700,
       }}
     >
       <h4 className="text-center mb-4 size-2">
         <img src={voucher1} alt="Transaction" className="width-60 pe-3" />
         Available Vouchers
       </h4>
-      <div className="row mt-5 yard__result-container" style={{ height: 576 }}>
+      <div className="row mt-5 yard__result-container" style={{ height: 420, overflow: "auto" }}>
         {isLoading && (
           <div className="w-100 d-flex justify-content-center align-items-center">
             <DisableElement />

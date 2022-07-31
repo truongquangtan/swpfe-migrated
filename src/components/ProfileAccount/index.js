@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { PHONE_PATTERN } from "../../constants/regex";
 import { decrypt, encrypt, encryptKey } from "../../helpers/crypto.helper";
 import { updateProfile } from "../../services/me.service";
+import user from "../../assets/images/user-1.png";
 
 const validation = yup.object({
   fullName: yup
@@ -85,7 +86,7 @@ function ProfileAccount() {
           <div className="profile-avatar-wrapper">
             <img
               className="mb-2 profile-avatar__img color-blur rounded-circle"
-              src={avatarImage.preview || avatarImage.url}
+              src={avatarImage.preview || avatarImage.url || user}
               alt="Your avatar"
             />
             <div className="profile-avatar__upload-lable">
