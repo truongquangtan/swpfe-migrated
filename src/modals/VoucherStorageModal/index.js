@@ -27,8 +27,6 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
     toast.info("Copy to clipboard", TOAST_CONFIG);
   };
 
-  
-
   const fetchVouchers = (page = 1, itemsPerPage = ITEMS_PER_PAGE) => {
     setIsLoading(true);
     searchVouchers({ page, itemsPerPage }, ownerId)
