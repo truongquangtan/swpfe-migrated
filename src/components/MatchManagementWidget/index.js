@@ -97,12 +97,9 @@ function MatchManagementWidget() {
   };
 
   const isLaterThanCurrentTime = (dataTime) => {
-    let now = new Date();
-    let toStringCurrentTime = now.toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric", timeZone: "ASIA/Ho_Chi_Minh" });
-    if (dataTime.localeCompare(toStringCurrentTime) > 0) {
-      return true;
-    }
-    return false;
+    const now = new Date();
+    const toStringCurrentTime = now.toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric", timeZone: "ASIA/Ho_Chi_Minh" });
+    return dataTime.localeCompare(toStringCurrentTime) > 0;
   }
 
   return (
