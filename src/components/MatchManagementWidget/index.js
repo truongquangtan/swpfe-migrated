@@ -96,6 +96,15 @@ function MatchManagementWidget() {
       });
   };
 
+  const isLaterThanCurrentTime = (dataTime) => {
+    let now = new Date();
+    let toStringCurrentTime = now.toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric", timeZone: "ASIA/Ho_Chi_Minh" });
+    if (dataTime.localeCompare(toStringCurrentTime) > 0) {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <div className="pt-4 mt-5 w-100 row justify-content-center">
       <Modal
@@ -280,12 +289,14 @@ function MatchManagementWidget() {
               <span className="col-3 fw-bolder">Booked At:</span>
               <span className="col-9">{data.bookedTime}</span>
             </div>
+            {isLaterThanCurrentTime(data.startTime) && 
             <div className="row mb-1">
-              <button type="button" className="btn btn-danger py-2 mt-2" style={{borderRadius: 10}} onClick={() => {
+              <button type="button" className="btn btn-danger py-2 mt-2" style={{ borderRadius: 10 }} onClick={() => {
                 setBookingId(data.bookingId);
                 toggleShowCancelBookingModal();
               }}>Cancel Booking</button>
             </div>
+            }
           </div>
         )}
         {!data && !isLoadingInfo && (
