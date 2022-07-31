@@ -15,7 +15,7 @@ import empty from "../../assets/images/empty.png";
 import Pagination from "../../components/Pagination";
 
 const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
-  const ITEMS_PER_PAGE = 1;
+  const ITEMS_PER_PAGE = 6;
   const [isLoading, setIsLoading] = useState(false);
   const [vouchers, setVouchers] = useState([]);
   const [code, setCode] = useState("");
