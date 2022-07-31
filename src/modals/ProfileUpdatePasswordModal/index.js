@@ -18,6 +18,7 @@ const ProfileUpdatePasswordModal = ({ toggleModal }) => {
     try {
       const response = await changePasswordRequest(values);
       localStorage.setItem(encryptKey("temporaryToken"), response.token);
+      toggleModal();
       navigate("reset-password");
     } catch (error) {
       toast.error(error?.response?.data?.message, {

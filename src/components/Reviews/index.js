@@ -38,7 +38,7 @@ function Reviews({ yardId }) {
   }
 
   return (
-    <div>
+    <div className="mt-5">
       {!!ratings.length && <h2 className="mb-3">Reviews</h2>}
       {
         loadingRatings && (
