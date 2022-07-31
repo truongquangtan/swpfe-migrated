@@ -76,7 +76,7 @@ function YardRatingWidget() {
         )}
         <div className="overflow-auto h-75 p-3 row justify-content-around">
           {!isLoading &&
-            votes.length > 0 &&
+            votes?.length > 0 &&
             votes.map((vote) => (
               <div key={vote?.bookingId} className="col-6 px-4">
                 <div className="match-container row mb-4">
@@ -114,7 +114,7 @@ function YardRatingWidget() {
                 </div>
               </div>
             ))}
-          {!isLoading && !votes.length && (
+          {!isLoading && !votes?.length && (
             <div className="w-100 pt-5 d-flex justify-content-center align-items-center flex-column">
               <img src={empty} style={{ width: 80 }} />
               <p
