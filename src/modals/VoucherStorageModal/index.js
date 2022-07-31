@@ -12,12 +12,15 @@ import { useEffect } from "react";
 import { VOUCHER_TYPE } from "../../constants/voucher";
 import DisableElement from "../../components/DisableElement";
 import empty from "../../assets/images/empty.png";
+import Pagination from "../../components/Pagination";
 
 const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
   const ITEMS_PER_PAGE = 6;
   const [isLoading, setIsLoading] = useState(false);
   const [vouchers, setVouchers] = useState([]);
   const [code, setCode] = useState("");
+  const [maxPage, setMaxPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const copyToClipBoard = (value) => {
     navigator.clipboard.writeText(value);
@@ -28,7 +31,13 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
     setIsLoading(true);
     searchVouchers({ page, itemsPerPage }, ownerId)
       .then((res) => {
-        setVouchers(res.vouchers);
+        const {page, maxResult, vouchers} = res;
+        setVouchers(vouchers);
+        setMaxPage(
+          maxResult % ITEMS_PER_PAGE === 0 && maxResult !== 0
+            ? maxResult / ITEMS_PER_PAGE
+            : Math.floor(maxResult / ITEMS_PER_PAGE) + 1
+        );
       })
       .finally(() => setIsLoading(false));
   };
@@ -40,6 +49,11 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
   useEffect(() => {
     fetchVouchers(1);
   }, []);
+
+  const onChangePage = (page) => {
+    setCurrentPage(page);
+    fetchVouchers(page)
+  };
 
   return (
     <div
@@ -59,8 +73,8 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
           </div>
         )}
         {!isLoading &&
-          !!vouchers.length &&
-          vouchers.map((voucher) =>
+          !!vouchers?.length &&
+          vouchers?.map((voucher) =>
             voucher.type === VOUCHER_TYPE.CASH ? (
               <div
                 className="voucher-wrapper col-4 p-3 pe-2"
@@ -196,12 +210,12 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
             )
           )}
         {!isLoading &&
-          ITEMS_PER_PAGE - vouchers.length > 0 &&
-          !!vouchers.length &&
-          [...Array(ITEMS_PER_PAGE - vouchers.length).keys()].map((item) => (
+          ITEMS_PER_PAGE - vouchers?.length > 0 &&
+          !!vouchers?.length &&
+          [...Array(ITEMS_PER_PAGE - vouchers?.length).keys()].map((item) => (
             <div className="voucher-wrapper col-4 p-3 pe-2" key={item}></div>
           ))}
-        {!isLoading && !vouchers.length && (
+        {!isLoading && !vouchers?.length && (
           <div className="w-100 d-flex justify-content-center align-items-center flex-column">
             <img src={empty} style={{ width: 80 }} />
             <p
@@ -213,19 +227,7 @@ const VoucherStorageModal = ({ toggleModal, ownerId, onSelect }) => {
           </div>
         )}
       </div>
-      <div className="yard-pagination mt-4">
-        <div>
-          <span className="pagination-arrow">
-            <i className="fas fa-arrow-left"></i>
-          </span>
-          <span className="pagination-statistic">
-            <input type="text" value={1} />/ 10
-          </span>
-          <span className="pagination-arrow">
-            <i className="fas fa-arrow-right"></i>
-          </span>
-        </div>
-      </div>
+      <Pagination maxPage={maxPage} onChangePage={onChangePage} />
       <button
         className="btn btn-primary me-3 px-4"
         disabled={!code}
