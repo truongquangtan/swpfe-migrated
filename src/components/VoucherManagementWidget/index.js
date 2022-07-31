@@ -30,6 +30,7 @@ const filterableFields = [
       { value: "expired", label: "Expired" },
       { value: "active", label: "Active" },
       { value: "inactive", label: "Inactive" },
+      { value: "full", label: "Full" }
     ],
     field: "status",
   },
@@ -240,6 +241,7 @@ function VoucherManagementWidget() {
               <th scope="col">Code</th>
               <th scope="col" style={{ width: "8%" }}>Amount</th>
               <th scope="col" style={{ width: "6%" }}>Quantity</th>
+              <th scope="col" style={{ width: "8%" }}>Usages</th>
               <th scope="col" style={{ width: "22%" }}>
                 Effective Date
               </th>
@@ -300,10 +302,11 @@ function VoucherManagementWidget() {
                     <span>{`${voucher.discount}${voucher.type === VOUCHER_TYPE.CASH ? " VND" : "%"}`}</span>
                   </td>
                   <td>{voucher.maxQuantity}</td>
+                  <td>{voucher.usages}</td>
                   <td className="text-truncate">
                     {`${voucher.startDate} - ${voucher.endDate}`}
                   </td>
-                  <td className={`bold text-uppercase ${voucher.status === 'active' ? "green" : voucher.status === 'inactive' ? "red" : "yellow"}`}>{voucher.status}</td>
+                  <td className={`bold text-uppercase ${voucher.status === 'active' ? "green" : voucher.status === 'inactive' ? "red" : voucher.status === 'full' ? "blue" : "yellow"}`}>{voucher.status}</td>
                 </tr>
               ))}
           </tbody>

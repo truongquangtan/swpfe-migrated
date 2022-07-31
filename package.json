@@ -45,7 +45,11 @@
       "react-app",
       "react-app/jest"
     ],
-    "ignorePatterns": ["build/", "src/", "*.js"]
+    "ignorePatterns": [
+      "build/",
+      "src/",
+      "*.js"
+    ]
   },
   "browserslist": {
     "production": [

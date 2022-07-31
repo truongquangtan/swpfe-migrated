@@ -49,7 +49,7 @@ function Header({ auth }) {
           .then((res) => {
             if (res) {
               toast.success("Logout successfully.", TOAST_CONFIG);
-              localStorage.removeItem(encryptKey("credential"));
+              localStorage.clear();
               navigate("/auth/login");
             }
           })
