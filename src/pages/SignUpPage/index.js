@@ -226,8 +226,7 @@ function SignUpPage() {
                 formik.values.email === EMPTY ||
                 formik.values.password === EMPTY ||
                 formik.values.confirmPassword === EMPTY ||
-                formik.values.fullName === EMPTY ||
-                formik.values.phone === EMPTY
+                formik.values.fullName === EMPTY
               }
             >
               {!formik.isSubmitting ? (
