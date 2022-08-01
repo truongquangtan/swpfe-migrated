@@ -295,7 +295,7 @@ function VoucherManagementWidget() {
                     <b className="trash-icon" onClick={() => showVoucherDetailsModal(voucher)}>{voucher.reference}</b>
                   </td>
                   <td>
-                    <p onClick={() => showVoucherDetailsModal(voucher)}>{voucher.title}</p>
+                    <p className="text-truncate" title={voucher.title} onClick={() => showVoucherDetailsModal(voucher)}>{voucher.title}</p>
                   </td>
                   <td className="text-truncate">{voucher.voucherCode}</td>
                   <td>
