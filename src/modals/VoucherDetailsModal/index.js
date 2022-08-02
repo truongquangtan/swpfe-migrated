@@ -166,7 +166,7 @@ const VoucherDetailsModal = ({ voucher, toggleModal, voucherTypeCreate, fetchVou
 					</div>
 					
 					<div className="py-2">
-						{voucher.status !== VOUCHER_STATUS.INACTIVE && (
+						{voucher?.status !== VOUCHER_STATUS.INACTIVE && (
 							<button
 								className="btn btn-primary me-3 px-4"
 							>
