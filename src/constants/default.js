@@ -1,4 +1,4 @@
-const SERVICE_URL = "http://backendappbooking-env.eba-4mg2gkmj.ap-southeast-1.elasticbeanstalk.com/api";
+const SERVICE_URL = "https://d2bawuzpgqlp7v.cloudfront.net/api";
 const EMPTY = "";
 const REQUEST_EMAIL = "Enter your email";
 const REQUEST_PASSWORD = "Enter your password";
