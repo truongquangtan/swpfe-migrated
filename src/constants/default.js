@@ -1,4 +1,4 @@
-const SERVICE_URL = "https://swp391-backend.herokuapp.com/api";
+const SERVICE_URL = "http://backendappbooking-env.eba-4mg2gkmj.ap-southeast-1.elasticbeanstalk.com/api";
 const EMPTY = "";
 const REQUEST_EMAIL = "Enter your email";
 const REQUEST_PASSWORD = "Enter your password";
